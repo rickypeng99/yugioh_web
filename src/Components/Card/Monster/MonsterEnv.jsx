@@ -1,7 +1,10 @@
 import React from 'react';
 import { ATTRIBUTE, ENVIRONMENT } from '../utils/constant';
 import { IMPACT_DICT } from '../utils/impact';
-import { initializeMonsterCard } from '/MonsterType';
+
+/**
+ * Real-time environment container for a monster card
+ */
 class MonsterEnv extends React.Component {
     constructor(props) {
         super(props);
@@ -12,16 +15,13 @@ class MonsterEnv extends React.Component {
             current_attribute: ATTRIBUTE.LIGHT,
             current_place: ENVIRONMENT.DECK
         }
-
-        this.useEffect = this.useEffect.bind(this);
-        this.effected = this.effected.bind(this);
     }
 
     componentDidMount() {
         this.card_type = this.props.card_type;
 
         // create object based on type
-        let card = initializeMonsterCard[this.card_type](this.props.options);
+        let card = this.props.card;
 
         this.setState({
             card: card,
@@ -81,20 +81,20 @@ class MonsterEnv extends React.Component {
     /**
      * A monster uses its effect
      */
-    useEffect() {
+    useEffect = () => {
         let environments = this.props.environments;
         let consequences = [];
         for (let environment of environments) {
             consequences.push(this.state.card.useEffect(environment));
         }
         // broadcast the effects to other cards
-        this.props.useEffect(this.props.id, consequences);
+        // this.props.useEffect(this.props.id, consequences);
     }
 
     /**
      * A monster is being effected by an effect.
      */
-    effected(consequence) {
+    effected = (consequence) => {
         // consequences will be returned before the effected() is called
         if (!consequence) return;
         for (let impact_key of Object.keys(consequence)) {
