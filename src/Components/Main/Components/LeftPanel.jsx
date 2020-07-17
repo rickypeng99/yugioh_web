@@ -17,6 +17,7 @@ class LeftPanel extends React.Component {
                 <div className="card_pic_container">
                     <div className="card_pic_box">
                         {/* insert card image here */}
+                        <img style={{height: '100%', width: '100%'}}src='https://ygoprodeck.com/pics/20721928.jpg'/>
                     </div>
                 </div>
                 <div className="card_detail_box">

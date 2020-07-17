@@ -32,7 +32,9 @@ class Game extends React.Component {
     render() {
         return(
             <div className="game_container">
-                <Field></Field>
+                <div className="field_container">
+                    <Field/>
+                </div>
             </div>
         )   
     }

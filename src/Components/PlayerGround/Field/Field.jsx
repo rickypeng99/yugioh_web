@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Side from './Side/Side';
 import './Field.css';
 class Field extends React.Component {
     constructor(props) {
@@ -13,7 +14,9 @@ class Field extends React.Component {
     render() {
         return(
             <div className="field_box">
-                <p>fuck</p>
+                <Side side="OPPONENT"></Side>
+                <div style={{height: "30px"}}></div>
+                <Side side="MINE"></Side>
             </div>
         )
     }
