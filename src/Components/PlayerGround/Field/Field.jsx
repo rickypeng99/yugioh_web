@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import './Field.css';
 class Field extends React.Component {
     constructor(props) {
         super(props);
@@ -9,27 +10,16 @@ class Field extends React.Component {
 
     }
 
-    componentDidMount() {
-        // initialize environment
-        this.initializeEnvironment(this.props.raw_environment);
+    render() {
+        return(
+            <div className="field_box">
+                <p>fuck</p>
+            </div>
+        )
     }
 
-    shouldComponentUpdate(nextProps) {
-        if (nextProps.environment.statusKey !== this.props.environment.statusKey) {
-            this.setState({
-                environment: nextProps.environment
-            })
-        }
-    }
-
-    initializeEnvironment = () => {
-
-    }
 }
 
-const mapStateToProps = state => {
-    const { environment } = state.environment;
-    return { environment };
-};
+
 
 export default Field;

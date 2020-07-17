@@ -1,7 +1,7 @@
 import React from 'react';
 import Game from '../PlayerGround/Game';
-
-
+import LeftPanel from './Components/LeftPanel';
+import './Main.css';
 
 class Main extends React.Component {
     constructor(props) {
@@ -27,7 +27,10 @@ class Main extends React.Component {
 
         if (loaded) {
             return(
-                <Game raw_environment={raw_environment} />
+                <div className="main_container">
+                    <LeftPanel />
+                    <Game raw_environment={raw_environment} />
+                </div>
             )
         } else {
             return(

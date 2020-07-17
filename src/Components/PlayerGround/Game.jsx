@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { initialize_environment } from '../../Store/actions/environmentActions';
+import Field from './Field/Field.jsx';
+import './Game.css';
 /**
  * Highest component for one yugioh game
  */
@@ -19,11 +21,20 @@ class Game extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
+        console.log(nextProps);
         if (nextProps.environment.statusKey !== this.props.environment.statusKey) {
             this.setState({
                 environment: nextProps.environment
             })
         }
+    }
+
+    render() {
+        return(
+            <div className="game_container">
+                <Field></Field>
+            </div>
+        )   
     }
 
     initializeEnvironment = (raw) => {
@@ -55,12 +66,15 @@ class Game extends React.Component {
                 monsters: {}
             },
         }
-        this.props.dispatch(environment);
+        this.props.initialize(environment);
     }
+
 }
 
 const mapStateToProps = state => {
-    const { environment } = state.environment;
+    console.log(state);
+    const { environment } = state.environmentReducer;
+    console.log(environment);
     return { environment };
 };
 

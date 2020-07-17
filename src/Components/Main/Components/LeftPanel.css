@@ -1,0 +1,19 @@
+.left_panel {
+    width: 12%;
+    height: 100%;
+    padding: 30px;
+    border-right: 0.5px solid #6e6e6e;
+    height: 100vh;
+}
+
+/* 164 pixels wide by 242 pixels tall */
+.card_pic_box {
+    border: 5px solid #6e6e6e;
+    width: 164px;
+    height: 242px; 
+}
+
+.card_pic_container {
+    display: flex;
+    justify-content: center;
+}

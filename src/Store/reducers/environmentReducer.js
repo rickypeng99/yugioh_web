@@ -1,7 +1,9 @@
 import { INITIALIZE_ENVIRONMENT } from "../actions/actionTypes";
 
 const initialState = {
-    environment: {},
+    environment: {
+        statusKey: 0,
+    },
 }
 
 export default function(state = initialState, action) {
@@ -9,7 +11,10 @@ export default function(state = initialState, action) {
         case INITIALIZE_ENVIRONMENT:
             const { environment } = action.payload;
             return {
-                environment: environment
+                environment: {
+                    ...state.environment,
+                    ...environment
+                }
             };
         default:    
             return state;
