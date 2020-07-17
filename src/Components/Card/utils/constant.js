@@ -1,35 +1,34 @@
 export const ENVIRONMENT = {
-    DECK: 1,
-    EXTRA_DECK: 2,
-    MONTER_FIELD: 3,
-    SPELL_FIELD: 4,
-    HAND: 5,
-    GRAVEYARD: 6,
-    BANISHED: 7,
+    DECK: 'DECK',
+    EXTRA_DECK: 'EXTRA_DECK',
+    MONSTER_FIELD: 'MONSTER_FIELD',
+    SPELL_FIELD: 'SPELL_FIELD',
+    HAND: 'HAND',
+    GRAVEYARD: 'GRAVEYARD',
+    BANISHED: 'BANISHED',
     // link and pendulum will be updated in the future
 }
 
 export const CARD_TYPE = {
     MONSTER: {
-        NORMAL: 1,
-        RITUAL: 2,
-        FUSION: 3,
-        SYNCHRO: 4,
-        // XYZ: 5,
-        // PENDULUM: 7,
-        // LINK: 7
+        NORMAL: 'NORMAL',
+        EFFECT: 'EFFECT',
+        RITUAL: 'RITUAL',
+        FUSION: 'FUSION',
+        SYNCHRO: 'SYNCHRO',
+        // xyz, pendulum and link will be updated in the future
     },
     SPELL: {
-        NORMAL: 8,
-        QUICK: 9,
-        EQUIPMENT: 10,
-        CONTINUOUS: 11,
-        ENVIRONMENT: 12,   
+        NORMAL: 'NORMAL',
+        QUICK: 'QUICK',
+        EQUIPMENT: 'EQUIPMENT',
+        CONTINUOUS: 'CONTINUOUS',
+        ENVIRONMENT: 'ENVIRONMENT',   
     },
     TRAP: {
-        NORMAL: 13,
-        CONTINUOUS: 14,
-        COUNTER: 15
+        NORMAL: 'NORMAL',
+        CONTINUOUS: 'CONTINUOUS',
+        COUNTER: 'COUNTER',
     },
 }
 
@@ -38,13 +37,13 @@ export const CARD_TYPE = {
  * Monster constant
  */
 export const ATTRIBUTE = {
-    LIGHT: 1,
-    DARK: 2,
-    EARTH: 3,
-    FIRE: 4,
-    WATER: 5,
-    WIND: 6,
-    DIVINE: 7,
+    LIGHT: 'LIGHT',
+    DARK: 'DARK',
+    EARTH: 'EARTH',
+    FIRE: 'FIRE',
+    WATER: 'WATER',
+    WIND: 'WIND',
+    DIVINE: 'DIVINE',
 }
 
 

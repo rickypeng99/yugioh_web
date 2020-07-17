@@ -28,25 +28,32 @@ class Game extends React.Component {
 
     initializeEnvironment = (raw) => {
         let environment = {
-            field: {
+            'HAND': {
                 monsters: {},
+                spells: {},
+                traps: {},
+            },
+            'MONSTER_FIELD': {
+                monsters: {},
+            },
+            'SPELL_FIELD': {
                 spells: {},
                 traps: {},
                 environment_spell: {},
             },
-            graveyard: {
+            'GRAVEYARD': {
                 monsters: {},
                 spells: {},
                 traps: {},
             },
-            deck: {
+            'DECK': {
                 monsters: {},
                 spells: {},
                 traps: {},
             },
-            extra_deck: {
+            'EXTRA_DECK': {
                 monsters: {}
-            },    
+            },
         }
         this.props.dispatch(environment);
     }

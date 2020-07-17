@@ -31,17 +31,20 @@ class MonsterEnv extends React.Component {
         })
     }
 
-    componentDidUpdate(prevProps) {
-        // monster needs to react to some situations
-        if (prevProps.consequence !== this.props.consequence) {
-            if (this.props.consequence.type === 'effect') {
-                // monster faces an effect
-                this.effected(this.props.consequence);
-            } else {
-                // monster faces a battle
-                this.beingAttacked(this.props.consequence);
+    shouldComponentUpdate(nextProps) {
+        const {current_place} = this.state;
+        if (nextProps.environment.current_place.monsters[this.props.id].statusKey != current_place.monsters[this.props.id].statusKey) {
+            // status changes
+            let consequence = nextProps.environment.current_place.monsters[this.props.id].consequence;
+            if (consequence) {
+                // let "this" in the opponent's card's effect points to the current card
+                this.consequence.apply(this);
             }
         }
+    }
+
+    componentDidUpdate(prevProps) {
+        // monster needs to react to some situations
     }
 
     /**

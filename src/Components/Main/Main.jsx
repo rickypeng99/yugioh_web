@@ -1,6 +1,8 @@
 import React from 'react';
 import Game from '../PlayerGround/Game';
 
+
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +14,7 @@ class Main extends React.Component {
     componentDidMount() {
         this.raw_environment = {
             // put the cards and players in here
-        }
+        };
         this.setState({
             loaded: true
         })
