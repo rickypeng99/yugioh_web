@@ -1,0 +1,61 @@
+.slider_container {
+    height: 20%;
+}
+
+.settings_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.size_button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select:none;
+}
+
+.size_button:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.translate_button_containe {
+    margin: 10px;
+}
+
+.vertical_container {
+    display: flex;
+    justify-content: center;
+}
+
+.horizontal_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.translate_button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select:none;
+    margin: 5px;
+}
+
+.translate_button:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}

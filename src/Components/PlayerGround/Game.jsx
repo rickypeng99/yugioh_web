@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { initialize_environment } from '../../Store/actions/environmentActions';
 import Field from './Field/Field.jsx';
-import Slider from '@material-ui/core/Slider';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Settings from './Components/Settings.jsx';
 
 import './Game.css';
 /**
@@ -13,7 +12,6 @@ class Game extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            environment: {},
             transformRotateX: '45deg',
             scale: 1.0,
             x_pos: 0, // transform-origin: 50%, 50%
@@ -28,50 +26,39 @@ class Game extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextState.transformRotateX != this.state.transformRotateX) {
-            console.log("shouldComponentUpdate: game: changedeg" + this.state.transformRotateX);
-            console.log("shouldComponentUpdate: game: changedeg" + nextState.transformRotateX);
-            return true;
+        if (nextProps.environment.statusKey !== this.environment.statusKey) {
+            this.environment = nextProps.environment;
         }
-        // if (nextProps.environment.statusKey !== this.props.environment.statusKey) {
-        //     console.log("shouldComponentUpdate: game: changeenv")
-        //     this.setState({
-        //         environment: nextProps.environment
-        //     })
-        // }
-        return false;
+        return true;
     }
 
 
     initializeEnvironment = (raw) => {
         let environment = {
             'HAND': {
-                monsters: {},
-                spells: {},
-                traps: {},
+                cards: [],
             },
             'MONSTER_FIELD': {
-                monsters: {},
+                cards: [],
             },
             'SPELL_FIELD': {
-                spells: {},
-                traps: {},
-                environment_spell: {},
+                cards: [],
             },
             'GRAVEYARD': {
-                monsters: {},
-                spells: {},
-                traps: {},
+                cards: [],
             },
             'DECK': {
-                monsters: {},
-                spells: {},
-                traps: {},
+                cards: [],
             },
             'EXTRA_DECK': {
-                monsters: {}
+                cards: [],
             },
+            monsters: {}, 
+            spells: {},
+            traps: {},
+            environment_spell: {},            
         }
+        this.environment = environment;
         this.props.initialize(environment);
     }
 
@@ -126,62 +113,7 @@ class Game extends React.Component {
                 <div className="field_container">
                     <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos}/>
                 </div>
-                <div className="settings_container">
-                    <div className="translate_button_container">
-                        <div className='vertical_container'>
-                            <div className='translate_button' onClick={() => this.onChangePosition('up')}>
-                                <span className="material-icons">
-                                    expand_less
-                                </span>
-                            </div>
-                        </div>
-                        <div className='horizontal_container'>
-                            <div className='translate_button' onClick={() => this.onChangePosition('left')}>
-                                <span className="material-icons">
-                                    navigate_before
-                                </span>
-                            </div>
-                            {/* adjusting the poisition back to the original */}
-                            <div className='translate_button' onClick={() => this.onChangePosition('return')}>
-                                <span className="material-icons">
-                                    adjust
-                                </span>
-                            </div>
-                            <div className='translate_button' onClick={() => this.onChangePosition('right')}>
-                                <span className="material-icons">
-                                    navigate_next
-                                </span>
-                            </div>
-                        </div>
-                        <div className='vertical_container'>
-                            <div className='translate_button' onClick={() => this.onChangePosition('down')}>
-                                <span className="material-icons">
-                                    expand_more
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="size_button" onClick={() => this.onChangeSize('increase')}>
-                        <span className="material-icons">
-                            add
-                        </span>
-                    </div>
-                    <div className="size_button" onClick={() => this.onChangeSize('decrease')}>
-                        <span className="material-icons">
-                            remove
-                        </span>
-                    </div>
-                    <div className="slider_container">
-                        <Slider
-                            orientation="vertical"
-                            defaultValue={45}
-                            aria-labelledby="vertical-slider"
-                            onChange={this.getTransformRotateXValue}
-                        />
-                    </div>
-
-                </div>
-
+                <Settings onChangePosition={this.onChangePosition} onChangeSize={this.onChangeSize} getTransformRotateXValue={this.getTransformRotateXValue}/>
             </div>
         )
     }

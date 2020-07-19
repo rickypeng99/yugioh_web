@@ -12,6 +12,7 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
+        // for testings
         this.raw_environment = {
             // put the cards and players in here
         };

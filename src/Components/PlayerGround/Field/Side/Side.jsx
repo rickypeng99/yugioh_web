@@ -14,25 +14,16 @@ const sides = {
 class Side extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {
-            side: sides.MINE,
-            environment: undefined,
-        };
     }
 
     componentDidMount() {
-        this.setState({side: this.props.side})
-        if (this.props.environment) {
-            this.setState({
-                environment: this.props.environment,
-            });
-        }
+        this.side = this.props.side;
+        this.environment = this.props.environment;
     }
 
     render() {
-
-        const { environment } = this.state;
-        if (environment) {
+        const environment = this.environment;
+        if (this.environment) {
             return <div className="side_box">{this.field(environment)}</div>;
         } else {
 
@@ -43,13 +34,14 @@ class Side extends React.Component {
     }
 
     initializeSide = () => {
-        const { side } = this.state;
+        const { side } = this;
 
+        // for testing
         function ConditionImage(props) {
             const { index, side } = props;
-            const opponent_spell = [1, 2];
-            const mine_spell = [6, 7, 8];
-            if ((index == 7 && side == sides.OPPONENT) || (index == 2 && side == sides.MINE)) {
+            const opponent_spell = [2, 3];
+            const mine_spell = [9, 10, 11];
+            if ((index == 10 && side == sides.OPPONENT) || (index == 3 && side == sides.MINE)) {
                 return(
                     <img style={{height: '100%', width: '100%', position: 'absolute'}} src={'https://ygoprodeck.com/pics/20721928.jpg'}/>
                 )
@@ -64,10 +56,19 @@ class Side extends React.Component {
         }
 
         return (environment) => {
-            let cardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            let cardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            let leftExtraIndex = [0, 7];
+            let rightExtraIndex = [6, 13];
+            const cardBoxStyle = (index) => {
+                return {
+                    transform: side == sides.MINE ? "rotate(0deg)" : "rotate(180deg)",
+                    marginRight: leftExtraIndex.includes(index) ? "20px" : "0px",
+                    marginLeft: rightExtraIndex.includes(index) ? "20px" : "0px",
+                }
+            }
             return cardArray.map((card, index) => {
                 return (
-                    <div className="card_box" key={"side-" + side + index} style={{transform: side == sides.MINE ? "rotate(0deg)" : "rotate(180deg)"}}>
+                    <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>
                         <div className="card_mask"/>
                         <ConditionImage index={index} side={side}/>
                     </div>

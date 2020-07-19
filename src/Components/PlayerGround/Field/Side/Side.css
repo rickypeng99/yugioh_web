@@ -1,6 +1,8 @@
 .card_box {
     border: 1px solid #6e6e6e;
     position: relative;
+    user-select: none;
+
 }
 
 .card_mask {
@@ -16,9 +18,10 @@
     background-color: rgba(255, 255, 255, 0.6);
 }
 
+/* 0, 6, 7, 13 */
 .side_box {
     display: grid;
-    grid-template-columns: repeat(5, 120px);
+    grid-template-columns: 140px repeat(5, 120px) 140px;
     grid-template-rows: repeat(2, 174px);
     column-gap: 15px;
     row-gap: 15px;
