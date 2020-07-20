@@ -66,6 +66,7 @@ class Settings extends React.Component {
                         defaultValue={45}
                         aria-labelledby="vertical-slider"
                         onChange={this.getTransformRotateXValue}
+                        max={80}
                     />
                 </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { initialize_environment } from '../../Store/actions/environmentActions';
+import { normal_monster_database } from '../Card/Monster/MonsterData/index';
 import Field from './Field/Field.jsx';
 import Settings from './Components/Settings.jsx';
 
@@ -12,9 +13,9 @@ class Game extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            transformRotateX: '45deg',
-            scale: 1.0,
-            x_pos: 0, // transform-origin: 50%, 50%
+            transformRotateX: '45deg', // rotateX(45deg)
+            scale: 1.0, // scale(1.0)
+            x_pos: 0, // translate(0px, 0px)
             y_pos: 0
         }
 
@@ -28,30 +29,48 @@ class Game extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.environment.statusKey !== this.environment.statusKey) {
             this.environment = nextProps.environment;
+            // console.log(this.environment)
         }
         return true;
     }
 
 
-    initializeEnvironment = (raw) => {
+    initializeEnvironment = (raw_environment) => {
+        console.log(raw_environment);
+        console.log(normal_monster_database);
         let environment = {
             'HAND': {
-                cards: [],
+                my_cards: raw_environment.hands[0].map((card, index) => {
+                    // create an object based on id
+                    return normal_monster_database[card]();
+                }),
+                opponent_cards: raw_environment.hands[1].map((card, index) => {
+                    return normal_monster_database[card]();
+                }),
             },
             'MONSTER_FIELD': {
-                cards: [],
+                my_cards: [],
+                opponent_cards: []
             },
             'SPELL_FIELD': {
-                cards: [],
+                my_cards: [],
+                opponent_cards: []
             },
             'GRAVEYARD': {
-                cards: [],
+                my_cards: [],
+                opponent_cards: []
             },
             'DECK': {
-                cards: [],
+                my_cards: raw_environment.decks[0].map((card, index) => {
+                    return normal_monster_database[card]();
+                }),
+                opponent_cards: raw_environment.decks[1].map((card, index) => {
+                    return normal_monster_database[card]();
+                }),
             },
             'EXTRA_DECK': {
-                cards: [],
+                my_cards: [],
+                opponent_cards: []
             },
             monsters: {}, 
             spells: {},
@@ -64,14 +83,14 @@ class Game extends React.Component {
 
     getTransformRotateXValue = (event, value) => {
         let valueString = `${value}deg`;
-        if (valueString != this.state.transformRotateX) {
+        if (valueString !== this.state.transformRotateX) {
             this.setState({ transformRotateX: valueString });
         }
     };
 
     onChangeSize = (value) => {
         const scale = this.state.scale;
-        if (value == 'increase') {
+        if (value === 'increase') {
             if (scale < 1.4) {
                 this.setState({ scale: scale + 0.1 });
                 this.forceUpdate();
@@ -87,16 +106,16 @@ class Game extends React.Component {
     onChangePosition = (value) => {
         const { x_pos, y_pos } = this.state;
         const MOVE_AMOUNT = 10;
-        if (value == 'up') {
+        if (value === 'up') {
             this.setState({ y_pos: y_pos - MOVE_AMOUNT });
             this.forceUpdate();
-        } else if (value == 'down') {
+        } else if (value === 'down') {
             this.setState({ y_pos: y_pos + MOVE_AMOUNT });
             this.forceUpdate();
-        } else if (value == 'left') {
+        } else if (value === 'left') {
             this.setState({ x_pos: x_pos - MOVE_AMOUNT });
             this.forceUpdate();
-        } else if (value == 'right') {
+        } else if (value === 'right') {
             this.setState({ x_pos: x_pos + MOVE_AMOUNT });
             this.forceUpdate();
         } else {

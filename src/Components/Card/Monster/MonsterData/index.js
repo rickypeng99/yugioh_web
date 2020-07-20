@@ -1,13 +1,14 @@
 /**
  * Dictionaries that stores all monster's data
  */
-import { CARD_TYPE, ATTRIBUTE } from '../../src/Components/Card/utils/constant';
-import initialize_monster_card from '../../src/Components/Card/Monster/MonsterType';
+import { CARD_TYPE, ATTRIBUTE } from '../../utils/constant';
+import initialize_monster_card from '../MonsterType';
 
  export const normal_monster_database = {
     // E.hero sparkman
     20721928: () => {
         let options = {
+            key: 20721928,
             atk: 1600,
             def: 1400,
             name: 'Elemental Hero Sparkman',

@@ -60,12 +60,17 @@ class Side extends React.Component {
             let leftExtraIndex = [0, 7];
             let rightExtraIndex = [6, 13];
             const cardBoxStyle = (index) => {
-                return {
-                    transform: side == sides.MINE ? "rotate(0deg)" : "rotate(180deg)",
+                const result = {};
+                if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
+                    result.width = "100px";
+                    result.height = "145px";
+                }
+                return Object.assign(result, {
+                    transform: side === sides.MINE ? "rotate(0deg)" : "rotate(180deg)",
                     marginRight: leftExtraIndex.includes(index) ? "20px" : "0px",
                     marginLeft: rightExtraIndex.includes(index) ? "20px" : "0px",
-                }
-            }
+                })
+            };
             return cardArray.map((card, index) => {
                 return (
                     <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>

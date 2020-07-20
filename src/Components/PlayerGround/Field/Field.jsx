@@ -12,13 +12,13 @@ class Field extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        if (nextProps.transformRotateX != this.transformRotateX) {
+        if (nextProps.transformRotateX !== this.transformRotateX) {
             this.transformRotateX = nextProps.transformRotateX
         } 
-        if (nextProps.scale != this.scale) {
+        if (nextProps.scale !== this.scale) {
             this.scale = nextProps.scale;
         }
-        if (nextProps.x_pos != this.x_pos || nextProps.y_pos != this.y_pos) {
+        if (nextProps.x_pos !== this.x_pos || nextProps.y_pos !== this.y_pos) {
             this.x_pos = nextProps.x_pos;
             this.y_pos = nextProps.y_pos;
         }
@@ -29,7 +29,7 @@ class Field extends React.Component {
 
     render() {
         const fieldStyle = {
-            transform: this.transformRotateX && this.scale && this.x_pos != undefined && this.y_pos != undefined ? "perspective(1000px) rotateX(" + this.transformRotateX + ") scale(" + this.scale + ") translate(" + this.x_pos + "px, " + this.y_pos + "px)" : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
+            transform: this.transformRotateX && this.scale && this.x_pos != undefined && this.y_pos !== undefined ? "perspective(1000px) rotateX(" + this.transformRotateX + ") scale(" + this.scale + ") translate(" + this.x_pos + "px, " + this.y_pos + "px)" : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
         }
         return (
             <div className="field_wrap">
