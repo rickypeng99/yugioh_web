@@ -109,7 +109,7 @@ class MonsterView extends React.Component {
         const {card} = this.state;
         if (card) {
             return (
-                <img style={{width: '10%'}} src={'https://ygoprodeck.com/pics/' + card.card.key + '.jpg'}/>
+                <img style={{width: '10%', marginRight: '10px'}} src={'https://ygoprodeck.com/pics/' + card.card.key + '.jpg'}/>
             )
         } else {
             return (

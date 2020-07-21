@@ -12,7 +12,7 @@ import './Game.css';
  * Highest component for one yugioh game
  */
 class Game extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             transformRotateX: '45deg', // rotateX(45deg)
@@ -131,12 +131,15 @@ class Game extends React.Component {
         return (
             <div className="game_container">
                 <div className="field_settings_container">
-                    <div className="field_container">
-                        <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} />
+                    <div className="hand_field_container">
+                        <Hand side='OPPONENT' />
+                        <div className="field_container">
+                            <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} />
+                        </div>
+                        <Hand side='MINE' />
                     </div>
                     <Settings onChangePosition={this.onChangePosition} onChangeSize={this.onChangeSize} getTransformRotateXValue={this.getTransformRotateXValue} />
                 </div>
-                <Hand />
             </div>
 
         )

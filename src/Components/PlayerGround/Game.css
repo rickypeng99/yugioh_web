@@ -1,8 +1,10 @@
 .game_container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    /* display: flex;
+    flex-direction: column; */
     width: 100%;
+    /* position: relative; */
+    height: 100vh;
+    background: #f2f2f2;
 
 }
 
@@ -17,5 +19,13 @@
 .field_settings_container {
     display: flex;
     width: 100%;
-    background: #f2f2f2;
+    height: 100%;
+}
+
+.hand_field_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    height: 100%;
 }

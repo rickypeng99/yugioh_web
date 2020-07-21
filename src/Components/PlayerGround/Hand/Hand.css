@@ -1,10 +1,27 @@
-.hand_container {
-    position: relative;
+.hand_container_mine {
+    position: absolute;
     display: flex;
     width: 100%;
-    height: 100%;
     z-index: 3;
-    top: -100px;
+    bottom: 50px;
     justify-content: center;
-    gap: 10px;
 }
+
+.hand_container_opponent {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    z-index: 3;
+    top: 50px;
+    justify-content: center;
+}
+
+.hand_container_mine > img {
+    transition: transform 0.5s;
+}
+
+.hand_container_mine > img:hover {
+    cursor: pointer;
+    transform: translate(0, -20px);
+}
+
