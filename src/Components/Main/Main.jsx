@@ -28,8 +28,8 @@ class Main extends React.Component {
                 deck_second_player.slice(5)
             ],
             hands: [
-                deck_first_player.slice(0, 4),
-                deck_second_player.slice(0, 4)
+                deck_first_player.slice(0, 5),
+                deck_second_player.slice(0, 5)
             ]
         };
 

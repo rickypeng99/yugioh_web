@@ -1,35 +1,18 @@
 import React from 'react';
-import { ATTRIBUTE, ENVIRONMENT } from '../utils/constant';
-import { IMPACT_DICT } from '../utils/impact';
-
 /**
  * Real-time environment container for a monster card
  */
-class MonsterEnv extends React.Component {
+class MonsterView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            card: undefined,
-            current_atk: 0,
-            current_def: 0,
-            current_attribute: undefined,
-            current_place: undefined
+            card: undefined
         }
     }
 
     componentDidMount() {
-        this.card_type = this.props.card_type;
-
-        let previousState = this.props.environment.monsters[this.props.card.id];
-        let card = previousState ? previousState : this.props.card;
-
-        this.setState({
-            card: card,
-            current_atk: card.atk,
-            current_def: card.def,
-            current_attribute: card.attribute,
-            current_place: card.starting_positon
-        })
+        this.environment = this.props.environment;
+        this.setState({card: this.props.card});
     }
 
     shouldComponentUpdate(nextProps) {
@@ -42,7 +25,7 @@ class MonsterEnv extends React.Component {
         //         this.consequence.apply(this);
         //     }
         // }
-        if (nextProps.environment.statusKey != this.environment.statusKey) {
+        if (nextProps.environment.statusKey !== this.environment.statusKey) {
             this.environment = nextProps.environment;
         }
         return true;
@@ -126,7 +109,7 @@ class MonsterEnv extends React.Component {
         const {card} = this.state;
         if (card) {
             return (
-                <img style={{height: '100%', width: '100%', position: 'absolute'}} src={'https://ygoprodeck.com/pics/' + card.id + '.jpg'}/>
+                <img style={{width: '10%'}} src={'https://ygoprodeck.com/pics/' + card.card.key + '.jpg'}/>
             )
         } else {
             return (
@@ -138,17 +121,4 @@ class MonsterEnv extends React.Component {
 
 }
 
-
-const mapStateToProps = state => {
-    const { environment } = state.environmentReducer;
-    return { environment };
-};
-
-const mapDispatchToProps = dispatch => ({
-    initialize: (environment) => dispatch(initialize_environment(environment)),
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MonsterEnv);
+export default MonsterView;

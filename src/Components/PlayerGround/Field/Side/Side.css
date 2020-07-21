@@ -21,7 +21,7 @@
 /* 0, 6, 7, 13 */
 .side_box {
     display: grid;
-    grid-template-columns: 140px repeat(5, 120px) 140px;
+    grid-template-columns: 120px repeat(5, 120px) 140px;
     grid-template-rows: repeat(2, 174px);
     column-gap: 5px;
     row-gap: 5px;

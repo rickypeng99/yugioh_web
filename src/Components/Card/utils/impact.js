@@ -1,4 +1,4 @@
-import {ENVIRONMENT} from '/constant.js'
+import {ENVIRONMENT} from './constant.js'
 
 export const IMPACT_DICT = {
     'DESTROY': () => {

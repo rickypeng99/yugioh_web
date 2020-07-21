@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { initialize_environment } from '../../Store/actions/environmentActions';
 import { normal_monster_database } from '../Card/Monster/MonsterData/index';
+import MonsterEnv from '../Card/Monster/MonsterEnv.js';
 import Field from './Field/Field.jsx';
+import Hand from './Hand/Hand.jsx';
 import Settings from './Components/Settings.jsx';
 
 import './Game.css';
@@ -10,7 +12,7 @@ import './Game.css';
  * Highest component for one yugioh game
  */
 class Game extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             transformRotateX: '45deg', // rotateX(45deg)
@@ -36,16 +38,14 @@ class Game extends React.Component {
 
 
     initializeEnvironment = (raw_environment) => {
-        console.log(raw_environment);
-        console.log(normal_monster_database);
         let environment = {
             'HAND': {
                 my_cards: raw_environment.hands[0].map((card, index) => {
-                    // create an object based on id
-                    return normal_monster_database[card]();
+                    // create an object based on id, inject it into monsterenv
+                    return new MonsterEnv(normal_monster_database[card]());
                 }),
                 opponent_cards: raw_environment.hands[1].map((card, index) => {
-                    return normal_monster_database[card]();
+                    return new MonsterEnv(normal_monster_database[card]());
                 }),
             },
             'MONSTER_FIELD': {
@@ -72,10 +72,11 @@ class Game extends React.Component {
                 my_cards: [],
                 opponent_cards: []
             },
-            monsters: {}, 
+            monsters: {},
             spells: {},
             traps: {},
-            environment_spell: {},            
+            environment_spell: {},
+            statusKey: Math.random(),
         }
         this.environment = environment;
         this.props.initialize(environment);
@@ -129,11 +130,15 @@ class Game extends React.Component {
         const { transformRotateX, scale, x_pos, y_pos } = this.state;
         return (
             <div className="game_container">
-                <div className="field_container">
-                    <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos}/>
+                <div className="field_settings_container">
+                    <div className="field_container">
+                        <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} />
+                    </div>
+                    <Settings onChangePosition={this.onChangePosition} onChangeSize={this.onChangeSize} getTransformRotateXValue={this.getTransformRotateXValue} />
                 </div>
-                <Settings onChangePosition={this.onChangePosition} onChangeSize={this.onChangeSize} getTransformRotateXValue={this.getTransformRotateXValue}/>
+                <Hand />
             </div>
+
         )
     }
 

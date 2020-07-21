@@ -1,8 +1,9 @@
 .game_container {
     display: flex;
-    width: 100%;
-    background: #f2f2f2;
+    flex-direction: column;
     height: 100vh;
+    width: 100%;
+
 }
 
 .field_container {
@@ -13,3 +14,8 @@
     flex-grow: 9;
 }
 
+.field_settings_container {
+    display: flex;
+    width: 100%;
+    background: #f2f2f2;
+}

@@ -9,6 +9,7 @@ export const ENVIRONMENT = {
     // link and pendulum will be updated in the future
 }
 
+
 export const CARD_TYPE = {
     MONSTER: {
         NORMAL: 'NORMAL',
