@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { initialize_environment } from '../../Store/actions/environmentActions';
+import ENV from '../../Store/actions/environment/environmentActions';
 import { normal_monster_database } from '../Card/Monster/MonsterData/index';
 import MonsterEnv from '../Card/Monster/MonsterEnv.js';
 import Field from './Field/Field.jsx';
@@ -153,7 +153,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    initialize: (environment) => dispatch(initialize_environment(environment)),
+    initialize: (environment) => dispatch(ENV.initialize_environment(environment)),
 });
 
 export default connect(

@@ -32,7 +32,6 @@ class Hand extends React.Component {
 
     render() {
         const {side, environment} = this;
-        console.log(environment);
         if (environment) {
             const hand_array = side == sides.MINE ? environment[ENVIRONMENT.HAND].my_cards.map((cardEnv, index) => {
                 if (monster_types[0].includes(cardEnv.card.card_type)) {

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+
 import './Side.css'
 
 const sides = {
@@ -21,6 +23,13 @@ class Side extends React.Component {
         this.environment = this.props.environment;
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.environment.statusKey !== this.environment.statusKey) {
+            this.environment = nextProps.environment;
+        }
+        return true;
+    }
+
     render() {
         const environment = this.environment;
         if (this.environment) {
@@ -33,7 +42,7 @@ class Side extends React.Component {
         }
     }
 
-    initializeSide = () => {
+    initializeSide = (environment) => {
         const { side } = this;
 
         // for testing
@@ -55,8 +64,9 @@ class Side extends React.Component {
             
         }
 
+
         return (environment) => {
-            let cardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            let cardArray = environment['MONSTER_FIELD'].my_cards.concat(environment['SPELL_FIELD'].my_cards);
             let leftExtraIndex = [0, 7];
             let rightExtraIndex = [6, 13];
             const cardBoxStyle = (index) => {
@@ -83,4 +93,15 @@ class Side extends React.Component {
     };
 }
 
-export default Side;
+const mapStateToProps = state => {
+    const { environment } = state.environmentReducer;
+    return { environment };
+};
+
+const mapDispatchToProps = dispatch => ({
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Side);
