@@ -4,6 +4,7 @@ import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import MonsterView from '../../Card/Monster/MonsterView';
 import { normal_summon, set_summon } from '../../../Store/actions/environmentActions';
+import { CSSTransitionGroup } from 'react-transition-group' // ES6
 
 import './Hand.css'
 
@@ -55,13 +56,13 @@ class Hand extends React.Component {
                         index: cardIndex
                     }
                     return (
-                        <div className = "hand_card" onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()}>
+                        <div className = "hand_card" key = {"hand_card_" + cardEnv.card.key + "_" + cardEnv.unique_count} onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()}>
                             <div className={hasOptions}>
                                 <div className={can_normal_summon} onClick={this.normalSummonOnclick(info)}>Summon</div>
                                 <div className={can_special_summon}>Special</div>
                                 <div className={can_set} onClick={this.setSummonOnclick(info)}>Set</div>
                             </div>
-                            <MonsterView card={cardEnv} key={cardEnv.card.key + Math.random()} />
+                            <MonsterView card={cardEnv} />
                         </div>
                     )
                 } else if (is_spell(cardEnv.card.card_type)) {
@@ -77,9 +78,15 @@ class Hand extends React.Component {
                 )
             })
             return(
-                <div className={side == SIDE.MINE ? "hand_container_mine" : "hand_container_opponent"}>
-                    {hand_array}
-                </div>
+                
+                    <CSSTransitionGroup
+                        transitionName="example"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={300}
+                        className={side == SIDE.MINE ? "hand_container_mine" : "hand_container_opponent"}>
+                        {hand_array}
+                    </CSSTransitionGroup>
+                
             )
         } else {
             return <p>loading</p>

@@ -22,7 +22,6 @@ class Game extends React.Component {
             x_pos: 0, // translate(0px, 0px)
             y_pos: -180
         }
-
     }
 
     componentDidMount() {
@@ -48,6 +47,7 @@ class Game extends React.Component {
                 [ENVIRONMENT.HAND]: 
                     raw_environment.hands[0].map((card_key, index) => {
                         // create an object based on id, inject it into monsterenv
+                        this.current_game_unique_count++;
                         return load_card_to_environment(create_card(card_key));
                     }),
                 [ENVIRONMENT.MONSTER_FIELD]:
@@ -67,6 +67,7 @@ class Game extends React.Component {
                 [ENVIRONMENT.HAND]: 
                     raw_environment.hands[1].map((card_key, index) => {
                         // create an object based on id, inject it into monsterenv
+                        this.current_game_unique_count++;
                         return load_card_to_environment(create_card(card_key));
                     }),
                 [ENVIRONMENT.MONSTER_FIELD]:
