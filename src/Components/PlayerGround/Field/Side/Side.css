@@ -23,7 +23,7 @@
     display: grid;
     grid-template-columns: 120px repeat(5, 120px) 120px;
     grid-template-rows: repeat(2, 174px);
-    column-gap: 35px;
+    column-gap: 60px;
     row-gap: 5px;
 } 
 
@@ -31,7 +31,7 @@
     display: grid;
     grid-template-columns: 120px repeat(5, 120px) 120px;
     grid-template-rows: repeat(2, 174px);
-    column-gap: 35px;
+    column-gap: 60px;
     row-gap: 5px;
     transform: rotate(180deg);
 } 

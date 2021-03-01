@@ -20,7 +20,7 @@ class Game extends React.Component {
             transformRotateX: '45deg', // rotateX(45deg)
             scale: 1.0, // scale(1.0)
             x_pos: 0, // translate(0px, 0px)
-            y_pos: 0
+            y_pos: -180
         }
 
     }

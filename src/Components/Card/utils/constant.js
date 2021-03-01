@@ -41,6 +41,13 @@ export const CARD_TYPE = {
 
 }
 
+export const CARD_POS = {
+    FACE: 'FACE',
+    DEFENSE: 'DEFENSE',
+    SET: 'SET',
+    UNSURE: 'UNSURE'
+}
+
 
 /**
  * Monster constant

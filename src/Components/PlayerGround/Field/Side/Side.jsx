@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import MonsterView from "../../../Card/Monster/MonsterView";
-import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../../Card/utils/constant';
+import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
 import './Side.css'
 
 
@@ -59,12 +59,17 @@ class Side extends React.Component {
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
                 if (cardEnv.card) {
-                    return <MonsterView card={cardEnv} />
+                    if (cardEnv.current_pos == CARD_POS.FACE) {
+                        return <MonsterView card={cardEnv} />
+                    } else {
+                        return <img style={{width: '100%', transform: 'rotate(90deg)'}} src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
+
+                    }
                 }
             }
             return (
                 <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>
-                    <div className="card_mask"/>
+                    <div className="card_mask" style={{transform: cardEnv.current_pos == CARD_POS.SET ? 'rotate(90deg)' : 'rotate(0deg)'}}/>
                     {cardView()}
                 </div>
             );

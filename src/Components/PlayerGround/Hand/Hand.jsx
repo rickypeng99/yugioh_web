@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import MonsterView from '../../Card/Monster/MonsterView';
-import { normal_summon } from '../../../Store/actions/environmentActions';
+import { normal_summon, set_summon } from '../../../Store/actions/environmentActions';
 
 import './Hand.css'
 
@@ -26,9 +26,18 @@ class Hand extends React.Component {
         this.setState({cardClicked: -1})
     }
 
-    normalSummonOnclick = (info) => {
-        console.log(info)
+    normalSummonOnclick = (info) => event => {
         this.props.dispatch_normal_summon(info)
+        this.setState({cardClicked: -1})
+        event.stopPropagation();
+
+    }
+
+    setSummonOnclick = (info) => event =>{
+        this.props.dispatch_set_summon(info)
+        this.setState({cardClicked: -1})
+        event.stopPropagation();
+
     }
 
     render() {
@@ -42,14 +51,15 @@ class Hand extends React.Component {
                     const can_special_summon = cardEnv.card.can_special_summon(cardEnv.card, environment)? "show_summon" : "no_hand_option"
                     const info = {
                         side: side,
-                        card: cardEnv
+                        card: cardEnv,
+                        index: cardIndex
                     }
                     return (
                         <div className = "hand_card" onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()}>
                             <div className={hasOptions}>
-                                <div className={can_normal_summon} onClick={()=>this.normalSummonOnclick(info)}>Summon</div>
+                                <div className={can_normal_summon} onClick={this.normalSummonOnclick(info)}>Summon</div>
                                 <div className={can_special_summon}>Special</div>
-                                <div className={can_set}>Set</div>
+                                <div className={can_set} onClick={this.setSummonOnclick(info)}>Set</div>
                             </div>
                             <MonsterView card={cardEnv} key={cardEnv.card.key + Math.random()} />
                         </div>
@@ -86,7 +96,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
-    dispatch_normal_summon: (info) => dispatch(normal_summon(info))
+    dispatch_normal_summon: (info) => dispatch(normal_summon(info)),
+    dispatch_set_summon: (info) => dispatch(set_summon(info))
 });
 
 export default connect(
