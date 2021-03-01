@@ -30,30 +30,29 @@ class Side extends React.Component {
         let field_cards = []
 
 
-        const cards = side == SIDE.MINE ? environment[ENVIRONMENT.MONSTER_FIELD].my_cards.concat(environment[ENVIRONMENT.SPELL_FIELD].my_cards)
-            :  environment[ENVIRONMENT.MONSTER_FIELD].opponent_cards.concat(environment[ENVIRONMENT.SPELL_FIELD].opponent_cards)
+        const cards = environment[side][ENVIRONMENT.MONSTER_FIELD].concat(environment[side][ENVIRONMENT.SPELL_FIELD])        
         let count = 0
         
         for (let i = 0; i < 14; i++) {
             if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
-                field_cards.push('placeholder')
+                field_cards.push(CARD_TYPE.PLACEHOLDER)
             } else {
                 field_cards.push(cards[count])
                 count++
             }
         }
 
-
         const cardBoxStyle = (index) => {
             const result = {};
             if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
                 result.width = "80%";
                 result.height = "80%";
+                result.margin = "auto"
             }
             return Object.assign(result, {
                 transform: side === SIDE.MINE ? "rotate(0deg)" : "rotate(180deg)",
-                marginRight: leftExtraIndex.includes(index) ? "5px" : "0px",
-                marginLeft: rightExtraIndex.includes(index) ? "5px" : "0px",
+                // marginRight: leftExtraIndex.includes(index) ? "5px" : "0px",
+                // marginLeft: rightExtraIndex.includes(index) ? "5px" : "0px",
             })
         };
 

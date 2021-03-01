@@ -23,6 +23,7 @@ export const CARD_TYPE = {
         FUSION: 'MONSTER_FUSION',
         SYNCHRO: 'MONSTER_SYNCHRO',
         // xyz, pendulum and link will be updated in the future
+
     },
     SPELL: {
         NORMAL: 'SPELL_NORMAL',
@@ -36,6 +37,8 @@ export const CARD_TYPE = {
         CONTINUOUS: 'TRAP_CONTINUOUS',
         COUNTER: 'TRAP_COUNTER',
     },
+    PLACEHOLDER: 'PLACEHOLDER'
+
 }
 
 

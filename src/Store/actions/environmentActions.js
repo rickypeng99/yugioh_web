@@ -1,4 +1,4 @@
-import { INITIALIZE_ENVIRONMENT } from "./actionTypes";
+import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON } from "./actionTypes";
 /**
  * Initialize the environment, only called by Game.jsx
  * @param {*} environment 
@@ -10,3 +10,10 @@ export const initialize_environment = environment => ({
         environment
     }
 });
+
+export const normal_summon = info => ({
+    type: NORMAL_SUMMON,
+    payload: {
+        info
+    }
+})

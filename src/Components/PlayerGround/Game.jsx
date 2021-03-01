@@ -4,7 +4,7 @@ import { initialize_environment } from '../../Store/actions/environmentActions';
 // import { monster_database } from '../Card/Monster/MonsterData/index';
 // import MonsterEnv from '../Card/Monster/MonsterEnv.js';
 import { create_card, load_card_to_environment } from '../Card/utils/utils'
-import { ENVIRONMENT } from '../Card/utils/constant'
+import { CARD_TYPE, SIDE, ENVIRONMENT } from '../Card/utils/constant'
 import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
 import Settings from './Components/Settings.jsx';
@@ -33,49 +33,54 @@ class Game extends React.Component {
 
 
     initializeEnvironment = (raw_environment) => {
-        const PLACEHOLDER = 'PLACEHOLDER'
-        let placeholderArray = []
-        for(let i = 0; i < 5; i++) {
-            placeholderArray.push(PLACEHOLDER)
+        const make_placeholders = () => {
+            let placeholderArray = []
+            for(let i = 0; i < 5; i++) {
+                placeholderArray.push(CARD_TYPE.PLACEHOLDER)
+            }
+            return placeholderArray;
         }
+        
 
         let environment = {
-            'HAND': {
-                my_cards: raw_environment.hands[0].map((card_key, index) => {
-                    // create an object based on id, inject it into monsterenv
-                    return load_card_to_environment(create_card(card_key));
-                }),
-                opponent_cards: raw_environment.hands[1].map((card_key, index) => {
-                    return load_card_to_environment(create_card(card_key));
-                }),
+
+            [SIDE.MINE]: {
+                [ENVIRONMENT.HAND]: 
+                    raw_environment.hands[0].map((card_key, index) => {
+                        // create an object based on id, inject it into monsterenv
+                        return load_card_to_environment(create_card(card_key));
+                    }),
+                [ENVIRONMENT.MONSTER_FIELD]:
+                    make_placeholders(),
+                [ENVIRONMENT.SPELL_FIELD]:
+                    make_placeholders(),
+                [ENVIRONMENT.GRAVEYARD]:
+                    {},
+                [ENVIRONMENT.DECK]:
+                    raw_environment.decks[0].map((card_key) => {
+                        return create_card(card_key)
+                    }),
+                [ENVIRONMENT.EXTRA_DECK]:
+                    {},
             },
-            'MONSTER_FIELD': {
-                // my_cards: raw_environment.hands[0].map((card_key, index) => {
-                //     // create an object based on id, inject it into monsterenv
-                //     return load_card_to_environment(create_card(card_key));
-                // }),
-                my_cards: placeholderArray,
-                opponent_cards: placeholderArray
-            },
-            'SPELL_FIELD': {
-                my_cards: placeholderArray,
-                opponent_cards: placeholderArray
-            },
-            'GRAVEYARD': {
-                my_cards: [],
-                opponent_cards: []
-            },
-            'DECK': {
-                my_cards: raw_environment.decks[0].map((card_key) => {
-                    return create_card(card_key)
-                }),
-                opponent_cards: raw_environment.decks[1].map((card_key) => {
-                    return create_card(card_key)
-                }),
-            },
-            'EXTRA_DECK': {
-                my_cards: [],
-                opponent_cards: []
+            [SIDE.OPPONENT]: {
+                [ENVIRONMENT.HAND]: 
+                    raw_environment.hands[1].map((card_key, index) => {
+                        // create an object based on id, inject it into monsterenv
+                        return load_card_to_environment(create_card(card_key));
+                    }),
+                [ENVIRONMENT.MONSTER_FIELD]:
+                    make_placeholders(),
+                [ENVIRONMENT.SPELL_FIELD]:
+                    make_placeholders(),
+                [ENVIRONMENT.GRAVEYARD]:
+                    {},
+                [ENVIRONMENT.DECK]:
+                    raw_environment.decks[1].map((card_key) => {
+                        return create_card(card_key)
+                    }),
+                [ENVIRONMENT.EXTRA_DECK]:
+                    {},
             },
             monsters: {},
             spells: {},
@@ -99,12 +104,12 @@ class Game extends React.Component {
         if (value === 'increase') {
             if (scale < 1.4) {
                 this.setState({ scale: scale + 0.1 });
-                this.forceUpdate();
+                //this.forceUpdate();
             }
         } else {
             if (scale > 0.7) {
                 this.setState({ scale: scale - 0.1 });
-                this.forceUpdate();
+                //this.forceUpdate();
             }
         }
     }
@@ -114,19 +119,19 @@ class Game extends React.Component {
         const MOVE_AMOUNT = 10;
         if (value === 'up') {
             this.setState({ y_pos: y_pos - MOVE_AMOUNT });
-            this.forceUpdate();
+            //this.forceUpdate();
         } else if (value === 'down') {
             this.setState({ y_pos: y_pos + MOVE_AMOUNT });
-            this.forceUpdate();
+            //this.forceUpdate();
         } else if (value === 'left') {
             this.setState({ x_pos: x_pos - MOVE_AMOUNT });
-            this.forceUpdate();
+            //this.forceUpdate();
         } else if (value === 'right') {
             this.setState({ x_pos: x_pos + MOVE_AMOUNT });
-            this.forceUpdate();
+            //this.forceUpdate();
         } else {
             this.setState({ x_pos: 0, y_pos: 0 });
-            this.forceUpdate();
+            //this.forceUpdate();
         }
     }
 
