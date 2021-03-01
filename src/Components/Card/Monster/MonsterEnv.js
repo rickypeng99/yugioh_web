@@ -1,5 +1,5 @@
 /**
- * Decorator class for monster cards
+ * Decorator class for monster cards (real-time environment)
  */
 
 

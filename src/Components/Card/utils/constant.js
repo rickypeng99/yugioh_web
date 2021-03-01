@@ -9,27 +9,32 @@ export const ENVIRONMENT = {
     // link and pendulum will be updated in the future
 }
 
+export const SIDE = {
+    MINE: 'MINE',
+    OPPONENT: 'OPPONENT'
+}
+
 
 export const CARD_TYPE = {
     MONSTER: {
-        NORMAL: 'NORMAL',
-        EFFECT: 'EFFECT',
-        RITUAL: 'RITUAL',
-        FUSION: 'FUSION',
-        SYNCHRO: 'SYNCHRO',
+        NORMAL: 'MONSTER_NORMAL',
+        EFFECT: 'MONSTER_EFFECT',
+        RITUAL: 'MONSTER_RITUAL',
+        FUSION: 'MONSTER_FUSION',
+        SYNCHRO: 'MONSTER_SYNCHRO',
         // xyz, pendulum and link will be updated in the future
     },
     SPELL: {
-        NORMAL: 'NORMAL',
-        QUICK: 'QUICK',
-        EQUIPMENT: 'EQUIPMENT',
-        CONTINUOUS: 'CONTINUOUS',
-        ENVIRONMENT: 'ENVIRONMENT',   
+        NORMAL: 'SPELL_NORMAL',
+        QUICK: 'SPELL_QUICK',
+        EQUIPMENT: 'SPELL_EQUIPMENT',
+        CONTINUOUS: 'SPELL_CONTINUOUS',
+        ENVIRONMENT: 'SPELL_ENVIRONMENT',   
     },
     TRAP: {
-        NORMAL: 'NORMAL',
-        CONTINUOUS: 'CONTINUOUS',
-        COUNTER: 'COUNTER',
+        NORMAL: 'TRAP_NORMAL',
+        CONTINUOUS: 'TRAP_CONTINUOUS',
+        COUNTER: 'TRAP_COUNTER',
     },
 }
 

@@ -4,9 +4,8 @@ class NormalMonster extends Monster {
     constructor(options){
        super(options);
        this.card_type = CARD_TYPE.MONSTER.NORMAL;
-       this.starting_positon = ENVIRONMENT.DECK;
+       this.positon = ENVIRONMENT.DECK;
        // a function that determines if a monster can be normally summoned (based on the environment)
-       this.can_normal_summon = options.can_normal_summon;
     }
 }
 

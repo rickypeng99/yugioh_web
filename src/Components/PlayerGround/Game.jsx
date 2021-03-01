@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { initialize_environment } from '../../Store/actions/environmentActions';
-import { normal_monster_database } from '../Card/Monster/MonsterData/index';
-import MonsterEnv from '../Card/Monster/MonsterEnv.js';
+// import { monster_database } from '../Card/Monster/MonsterData/index';
+// import MonsterEnv from '../Card/Monster/MonsterEnv.js';
+import { create_card, load_card_to_environment } from '../Card/utils/utils'
+import { ENVIRONMENT } from '../Card/utils/constant'
 import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
 import Settings from './Components/Settings.jsx';
@@ -28,44 +30,47 @@ class Game extends React.Component {
         this.initializeEnvironment(this.props.raw_environment);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.environment.statusKey !== this.environment.statusKey) {
-            this.environment = nextProps.environment;
-            // console.log(this.environment)
-        }
-        return true;
-    }
 
 
     initializeEnvironment = (raw_environment) => {
+        const PLACEHOLDER = 'PLACEHOLDER'
+        let placeholderArray = []
+        for(let i = 0; i < 5; i++) {
+            placeholderArray.push(PLACEHOLDER)
+        }
+
         let environment = {
             'HAND': {
-                my_cards: raw_environment.hands[0].map((card, index) => {
+                my_cards: raw_environment.hands[0].map((card_key, index) => {
                     // create an object based on id, inject it into monsterenv
-                    return new MonsterEnv(normal_monster_database[card]());
+                    return load_card_to_environment(create_card(card_key));
                 }),
-                opponent_cards: raw_environment.hands[1].map((card, index) => {
-                    return new MonsterEnv(normal_monster_database[card]());
+                opponent_cards: raw_environment.hands[1].map((card_key, index) => {
+                    return load_card_to_environment(create_card(card_key));
                 }),
             },
             'MONSTER_FIELD': {
-                my_cards: [],
-                opponent_cards: []
+                // my_cards: raw_environment.hands[0].map((card_key, index) => {
+                //     // create an object based on id, inject it into monsterenv
+                //     return load_card_to_environment(create_card(card_key));
+                // }),
+                my_cards: placeholderArray,
+                opponent_cards: placeholderArray
             },
             'SPELL_FIELD': {
-                my_cards: [],
-                opponent_cards: []
+                my_cards: placeholderArray,
+                opponent_cards: placeholderArray
             },
             'GRAVEYARD': {
                 my_cards: [],
                 opponent_cards: []
             },
             'DECK': {
-                my_cards: raw_environment.decks[0].map((card, index) => {
-                    return normal_monster_database[card]();
+                my_cards: raw_environment.decks[0].map((card_key) => {
+                    return create_card(card_key)
                 }),
-                opponent_cards: raw_environment.decks[1].map((card, index) => {
-                    return normal_monster_database[card]();
+                opponent_cards: raw_environment.decks[1].map((card_key) => {
+                    return create_card(card_key)
                 }),
             },
             'EXTRA_DECK': {
@@ -76,9 +81,9 @@ class Game extends React.Component {
             spells: {},
             traps: {},
             environment_spell: {},
-            statusKey: Math.random(),
+            // statusKey: Math.random(),
         }
-        this.environment = environment;
+        console.log(environment)
         this.props.initialize(environment);
     }
 

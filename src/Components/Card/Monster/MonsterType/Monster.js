@@ -19,6 +19,9 @@
 
         // card-picture: right now just uses an url
         this.card_pic = options.card_pic;   
+
+        this.can_normal_summon = options.can_normal_summon;
+        this.can_special_summon = options.can_special_summon;
      }
 
 

@@ -11,25 +11,12 @@ class Field extends React.Component {
 
     }
 
-    shouldComponentUpdate(nextProps) {
-        if (nextProps.transformRotateX !== this.transformRotateX) {
-            this.transformRotateX = nextProps.transformRotateX
-        } 
-        if (nextProps.scale !== this.scale) {
-            this.scale = nextProps.scale;
-        }
-        if (nextProps.x_pos !== this.x_pos || nextProps.y_pos !== this.y_pos) {
-            this.x_pos = nextProps.x_pos;
-            this.y_pos = nextProps.y_pos;
-        }
-        return true;
-
-    }
-
-
     render() {
+
+        const {transformRotateX, scale, x_pos, y_pos} = this.props
+
         const fieldStyle = {
-            transform: this.transformRotateX && this.scale && this.x_pos != undefined && this.y_pos !== undefined ? "perspective(1000px) rotateX(" + this.transformRotateX + ") scale(" + this.scale + ") translate(" + this.x_pos + "px, " + this.y_pos + "px)" : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
+            transform: transformRotateX && scale && x_pos != undefined && y_pos !== undefined ? "perspective(1000px) rotateX(" + transformRotateX + ") scale(" + scale + ") translate(" + x_pos + "px, " + y_pos + "px)" : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
         }
         return (
             <div className="field_wrap">

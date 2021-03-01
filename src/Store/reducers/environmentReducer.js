@@ -1,9 +1,7 @@
 import { INITIALIZE_ENVIRONMENT } from "../actions/actionTypes";
 
 const initialState = {
-    environment: {
-        statusKey: 0,
-    },
+    environment: undefined,
 }
 
 export default function(state = initialState, action) {

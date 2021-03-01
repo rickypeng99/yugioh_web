@@ -7,7 +7,6 @@ export const initialize_environment = environment => ({
     type: INITIALIZE_ENVIRONMENT,
     payload: {
         // initialized status
-        statusKey: 0,
         environment
     }
 });

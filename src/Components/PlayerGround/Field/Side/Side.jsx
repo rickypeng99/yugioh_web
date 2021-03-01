@@ -1,10 +1,8 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import MonsterView from "../../../Card/Monster/MonsterView";
+import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../../Card/utils/constant';
 import './Side.css'
-
-const sides = {
-    MINE: "MINE",
-    OPPONENT: "OPPONENT",
-};
 
 
 
@@ -16,71 +14,75 @@ class Side extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
-        this.side = this.props.side;
-        this.environment = this.props.environment;
-    }
 
     render() {
-        const environment = this.environment;
-        if (this.environment) {
-            return <div className="side_box">{this.field(environment)}</div>;
-        } else {
-
-            // initialize field skeleton
-            this.field = this.initializeSide();
-            return <div className="side_box">{this.field()}</div>;
-        }
+        return <div className={"side_box_" + this.props.side}>{this.initializeSide()}</div>;
     }
 
     initializeSide = () => {
-        const { side } = this;
+        const { side, environment} = this.props;
 
-        // for testing
-        function ConditionImage(props) {
-            const { index, side } = props;
-            const opponent_spell = [2, 3];
-            const mine_spell = [9, 10, 11];
-            if ((index == 10 && side == sides.OPPONENT) || (index == 3 && side == sides.MINE)) {
-                return(
-                    <img style={{height: '100%', width: '100%', position: 'absolute'}} src={'https://ygoprodeck.com/pics/20721928.jpg'}/>
-                )
-            } else if((opponent_spell.includes(index) && side == sides.OPPONENT) || (mine_spell.includes(index) && side == sides.MINE)) {
-                return (
-                    <img style={{height: '100%', width: '100%', position: 'absolute'}} src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
-                )
-            }  else {
-                return <p></p>
+        if (!environment) {
+            return <p>Loading</p>
+        }
+        let leftExtraIndex = [0, 7];
+        let rightExtraIndex = [6, 13];
+        let field_cards = []
+
+
+        const cards = side == SIDE.MINE ? environment[ENVIRONMENT.MONSTER_FIELD].my_cards.concat(environment[ENVIRONMENT.SPELL_FIELD].my_cards)
+            :  environment[ENVIRONMENT.MONSTER_FIELD].opponent_cards.concat(environment[ENVIRONMENT.SPELL_FIELD].opponent_cards)
+        let count = 0
+        
+        for (let i = 0; i < 14; i++) {
+            if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
+                field_cards.push('placeholder')
+            } else {
+                field_cards.push(cards[count])
+                count++
             }
-            
         }
 
-        return (environment) => {
-            let cardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-            let leftExtraIndex = [0, 7];
-            let rightExtraIndex = [6, 13];
-            const cardBoxStyle = (index) => {
-                const result = {};
-                if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
-                    result.width = "100px";
-                    result.height = "145px";
-                }
-                return Object.assign(result, {
-                    transform: side === sides.MINE ? "rotate(0deg)" : "rotate(180deg)",
-                    marginRight: leftExtraIndex.includes(index) ? "20px" : "0px",
-                    marginLeft: rightExtraIndex.includes(index) ? "20px" : "0px",
-                })
-            };
-            return cardArray.map((card, index) => {
-                return (
-                    <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>
-                        <div className="card_mask"/>
-                        <ConditionImage index={index} side={side}/>
-                    </div>
-                );
-            });
+
+        const cardBoxStyle = (index) => {
+            const result = {};
+            if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
+                result.width = "80%";
+                result.height = "80%";
+            }
+            return Object.assign(result, {
+                transform: side === SIDE.MINE ? "rotate(0deg)" : "rotate(180deg)",
+                marginRight: leftExtraIndex.includes(index) ? "5px" : "0px",
+                marginLeft: rightExtraIndex.includes(index) ? "5px" : "0px",
+            })
         };
+
+        return field_cards.map((cardEnv, index) => {
+            const cardView = () => {
+                if (cardEnv.card) {
+                    return <MonsterView card={cardEnv} />
+                }
+            }
+            return (
+                <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>
+                    <div className="card_mask"/>
+                    {cardView()}
+                </div>
+            );
+        });
     };
 }
 
-export default Side;
+const mapStateToProps = state => {
+    const { environment } = state.environmentReducer;
+    return { environment };
+};
+
+const mapDispatchToProps = dispatch => ({
+    // initialize: (environment) => dispatch(initialize_environment(environment)),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Side);
