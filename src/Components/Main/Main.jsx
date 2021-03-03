@@ -1,6 +1,6 @@
 import React from 'react';
 import Game from '../PlayerGround/Game';
-import LeftPanel from './Components/LeftPanel';
+import LeftPanel from './LeftPanel/LeftPanel';
 import './Main.css';
 
 class Main extends React.Component {
@@ -13,12 +13,13 @@ class Main extends React.Component {
 
     componentDidMount() {
         // for testings
-        // 10 ehero sparkman
+        // 5 different eheros
+        const heros = [20721928, 21844576, 58932615, 84327329, 89943723]
         let deck_first_player = [];
         let deck_second_player = [];
         for (let i = 0; i < 10; i++) {
-            deck_first_player.push(20721928);
-            deck_second_player.push(20721928);
+            deck_first_player.push(heros[i%5]);
+            deck_second_player.push(heros[i%5]);
         }
 
         this.raw_environment = {

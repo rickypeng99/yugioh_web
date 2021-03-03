@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
-import MonsterView from '../../Card/Monster/MonsterView';
+import CardView from '../../Card/CardView';
 import { normal_summon, set_summon } from '../../../Store/actions/environmentActions';
+import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 
 import './Hand.css'
@@ -41,6 +42,12 @@ class Hand extends React.Component {
 
     }
 
+    onMouseEnterHandler = (info) => {
+        if (info.cardEnv.card) {
+            this.props.mouse_in_view(info);
+        }
+    }
+
     render() {
         const {side, environment} = this.props;
         if (environment) {
@@ -55,14 +62,18 @@ class Hand extends React.Component {
                         card: cardEnv,
                         index: cardIndex
                     }
+
+                    const info_in = {
+                        cardEnv: cardEnv
+                    }
                     return (
-                        <div className = "hand_card" key = {"hand_card_" + cardEnv.card.key + "_" + cardEnv.unique_count} onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()}>
+                        <div className = "hand_card" key = {"hand_card_" + cardEnv.card.key + "_" + cardEnv.unique_count} onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()} onMouseEnter={()=>this.onMouseEnterHandler(info_in)}>
                             <div className={hasOptions}>
                                 <div className={can_normal_summon} onClick={this.normalSummonOnclick(info)}>Summon</div>
                                 <div className={can_special_summon}>Special</div>
                                 <div className={can_set} onClick={this.setSummonOnclick(info)}>Set</div>
                             </div>
-                            <MonsterView card={cardEnv} />
+                            <CardView card={cardEnv} />
                         </div>
                     )
                 } else if (is_spell(cardEnv.card.card_type)) {
@@ -97,14 +108,16 @@ class Hand extends React.Component {
 
 
 const mapStateToProps = state => {
-    const { environment } = state.environmentReducer;
-    return { environment };
+    const { left_panel_cardEnv } = state.mouseReducer
+    const { environment } = state.environmentReducer
+    return { left_panel_cardEnv, environment };
 };
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
+    mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
     dispatch_normal_summon: (info) => dispatch(normal_summon(info)),
-    dispatch_set_summon: (info) => dispatch(set_summon(info))
+    dispatch_set_summon: (info) => dispatch(set_summon(info)),
 });
 
 export default connect(

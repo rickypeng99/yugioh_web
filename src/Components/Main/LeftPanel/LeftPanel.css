@@ -1,0 +1,51 @@
+.left_panel {
+    max-width: 300px;
+    min-width: 300px;
+    height: 100%;
+    z-index: 4;
+    /* box-shadow:  2px 2px 10px #888888; */
+    /* height: 100vh; */
+}
+
+/* 164 pixels wide by 242 pixels tall */
+.card_pic_box {
+    width: 100%;
+    height: 100%;
+}
+
+.card_pic_container {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.heading-name {
+    font-weight: 700;
+    display: inline;
+    font-size: 20px;
+    font-family: Lato,sans-serif;
+}
+
+.specific {
+    display: flex;
+}
+
+.specific_type {
+    align-self: flex-start;
+}
+
+.specific_others {
+    display: flex;
+    margin-left: auto;
+}
+
+.specific_others_icon {
+    width: 20px;
+    height: 20px;
+    align-self: center;
+    margin: 3px;
+}

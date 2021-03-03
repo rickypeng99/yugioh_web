@@ -18,6 +18,8 @@
     z-index: 3;
     bottom: 50px;
     justify-content: center;
+    user-select: none;
+
 }
 
 .hand_container_opponent {
@@ -27,6 +29,8 @@
     z-index: 3;
     top: 50px;
     justify-content: center;
+    user-select: none;
+
 }
 
 /* .hand_container_mine > img {
@@ -67,18 +71,18 @@
 
 .example-enter {
     opacity: 0.01;
-  }
+}
   
-  .example-enter.example-enter-active {
+.example-enter.example-enter-active {
     opacity: 1;
     transition: opacity 500ms ease-in;
-  }
-  
-  .example-leave {
+}
+
+.example-leave {
     opacity: 1;
-  }
-  
-  .example-leave.example-leave-active {
+}
+
+.example-leave.example-leave-active {
     opacity: 0.01;
     transition: opacity 300ms ease-in;
-  }
+}

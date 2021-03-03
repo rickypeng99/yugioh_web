@@ -14,7 +14,7 @@
         this.name = options.name;
         this.level = options.level;
         this.attribute = options.attribute;
-        this.type = options.type;
+        this.race = options.race;
         this.description = options.description;
 
         // card-picture: right now just uses an url

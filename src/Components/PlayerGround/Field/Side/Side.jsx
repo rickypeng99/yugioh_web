@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import MonsterView from "../../../Card/Monster/MonsterView";
+import CardView from "../../../Card/CardView";
 import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
+import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
 import './Side.css'
 
 
@@ -12,6 +13,12 @@ import './Side.css'
 class Side extends React.Component {
     constructor (props) {
         super(props);
+    }
+
+    onMouseEnterHandler = (info) => {
+        if (info.cardEnv.card) {
+            this.props.mouse_in_view(info);
+        }
     }
 
 
@@ -60,15 +67,18 @@ class Side extends React.Component {
             const cardView = () => {
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
-                        return <MonsterView card={cardEnv} />
+                        return <CardView card={cardEnv} />
                     } else {
                         return <img style={{width: '100%', transform: 'rotate(90deg)'}} src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
 
                     }
                 }
             }
+            const info = {
+                cardEnv: cardEnv
+            }
             return (
-                <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)}>
+                <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)} onMouseEnter={()=>this.onMouseEnterHandler(info)}>
                     <div className="card_mask" style={{transform: cardEnv.current_pos == CARD_POS.SET ? 'rotate(90deg)' : 'rotate(0deg)'}}/>
                     {cardView()}
                 </div>
@@ -78,12 +88,14 @@ class Side extends React.Component {
 }
 
 const mapStateToProps = state => {
-    const { environment } = state.environmentReducer;
-    return { environment };
+    const { left_panel_cardEnv } = state.mouseReducer
+    const { environment } = state.environmentReducer
+    return { left_panel_cardEnv, environment };
 };
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
+    mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
 });
 
 export default connect(

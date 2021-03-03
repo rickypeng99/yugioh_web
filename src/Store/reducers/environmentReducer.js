@@ -1,5 +1,4 @@
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../actions/actionTypes";
-import { ENVIRONMENT, CARD_TYPE, CARD_POS } from '../../Components/Card/utils/constant';
 import { summon } from './utils'
 const initialState = {
     environment: undefined,

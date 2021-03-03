@@ -33,8 +33,8 @@ class Settings extends React.Component {
                         {/* adjusting the poisition back to the original */}
                         <div className='translate_button' onClick={() => this.onChangePosition('return')}>
                             <span className="material-icons">
-                                adjust
-                                </span>
+                                cached
+                            </span>
                         </div>
                         <div className='translate_button' onClick={() => this.onChangePosition('right')}>
                             <span className="material-icons">

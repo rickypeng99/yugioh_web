@@ -7,7 +7,8 @@ import { create_card, load_card_to_environment } from '../Card/utils/utils'
 import { CARD_TYPE, SIDE, ENVIRONMENT } from '../Card/utils/constant'
 import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
-import Settings from './Components/Settings.jsx';
+import Settings from './Settings/Settings.jsx';
+import PhaseSelector from './PhaseSelector/PhaseSelector'
 
 import './Game.css';
 /**
@@ -142,6 +143,7 @@ class Game extends React.Component {
         return (
             <div className="game_container">
                 <div className="field_settings_container">
+                    <PhaseSelector />
                     <div className="hand_field_container">
                         <Hand side='OPPONENT' />
                         <div className="field_container">

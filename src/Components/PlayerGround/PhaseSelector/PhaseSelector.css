@@ -1,0 +1,27 @@
+.turn_selector_container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.phase_button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select:none;
+}
+
+.phase_button:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
