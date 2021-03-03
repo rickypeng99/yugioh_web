@@ -11,21 +11,18 @@ class LeftPanel extends React.Component {
 
     // 164 pixels wide by 242 pixels tall
     render() {
-        if (this.props.left_panel_cardEnv) {
+        const card_url = this.props.left_panel_cardEnv ? 'https://ygoprodeck.com/pics/'+ this.props.left_panel_cardEnv.card.key +'.jpg' : 'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'
             return(
                 <div className="left_panel">
                     <div className="card_pic_container">
                         <div className="card_pic_box">
                             {/* insert card image here */}
-                            <img style={{height: '100%', width: '100%'}}src={'https://ygoprodeck.com/pics/'+ this.props.left_panel_cardEnv.card.key +'.jpg'}/>
+                            <img style={{height: '100%', width: '100%'}}src={card_url}/>
                         </div>
                     </div>
                     <Detail cardEnv={this.props.left_panel_cardEnv} />
                 </div>
-           )
-        } else {
-            return <p>fuck</p>
-        }
+           ) 
       
     }
 
