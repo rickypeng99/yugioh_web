@@ -9,6 +9,8 @@ import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
 import Settings from './Settings/Settings.jsx';
 import PhaseSelector from './PhaseSelector/PhaseSelector'
+import HealthBar from './HealthBar/HealthBar'
+
 
 import './Game.css';
 /**
@@ -143,6 +145,8 @@ class Game extends React.Component {
         return (
             <div className="game_container">
                 <div className="field_settings_container">
+                    <HealthBar side='MINE' />
+                    <HealthBar side='OPPONENT' />
                     <PhaseSelector />
                     <div className="hand_field_container">
                         <Hand side='OPPONENT' />

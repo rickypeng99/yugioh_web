@@ -1,0 +1,40 @@
+.health_bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
+    top: 10px;
+    width: 300px;
+    z-index: 5;
+    user-select: none;
+}
+
+.health_bar_MINE {
+    left: 10px;
+}
+
+.health_bar_OPPONENT {
+    right: 10px;
+}
+
+.health_bar_avatar_username_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.health_bar_avatar {
+    height: 80px;
+    width: 80px;
+}
+
+.health_bar_username_container {
+    vertical-align: middle;
+}
+
+.health_bar_username {
+    font-weight: 700;
+    display: inline;
+    font-size: 20px;
+    font-family: Lato,sans-serif;
+}
