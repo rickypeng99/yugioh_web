@@ -34,6 +34,13 @@
     display: flex;
 }
 
+.specific_atk_def {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5%;
+    user-select: none;
+}
+
 .specific_type {
     align-self: flex-start;
 }
@@ -41,6 +48,7 @@
 .specific_others {
     display: flex;
     margin-left: auto;
+    cursor: pointer;
 }
 
 .specific_others_icon {

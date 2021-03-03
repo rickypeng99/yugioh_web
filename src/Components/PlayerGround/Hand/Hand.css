@@ -70,12 +70,12 @@
 }
 
 .example-enter {
-    opacity: 0.01;
+    transform: translateX(1000px);
 }
   
 .example-enter.example-enter-active {
-    opacity: 1;
-    transition: opacity 500ms ease-in;
+    transform: translateX(0);
+    transition: transform 500ms ease-in;
 }
 
 .example-leave {

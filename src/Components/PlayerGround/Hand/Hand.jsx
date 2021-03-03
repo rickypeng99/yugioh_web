@@ -50,12 +50,13 @@ class Hand extends React.Component {
 
     render() {
         const {side, environment} = this.props;
+        let hand_array = []
         if (environment) {
-            const hand_array = side == SIDE.MINE ? environment[side][ENVIRONMENT.HAND].map((cardEnv, cardIndex) => {
+            hand_array = side == SIDE.MINE ? environment[side][ENVIRONMENT.HAND].map((cardEnv, cardIndex) => {
                 if (is_monster(cardEnv.card.card_type)) {
                     const hasOptions = cardIndex == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
                     const can_normal_summon = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
-                    const can_set = can_normal_summon ? "show_summon" : "no_hand_option"
+                    const can_set = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
                     const can_special_summon = cardEnv.card.can_special_summon(cardEnv.card, environment)? "show_summon" : "no_hand_option"
                     const info = {
                         side: side,
@@ -88,21 +89,18 @@ class Hand extends React.Component {
                     <img style={{width: '5%', marginRight: '10px'}} src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
                 )
             })
-            return(
-                
-                    <CSSTransitionGroup
-                        transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}
-                        className={side == SIDE.MINE ? "hand_container_mine" : "hand_container_opponent"}>
-                        {hand_array}
-                    </CSSTransitionGroup>
-                
-            )
-        } else {
-            return <p>loading</p>
         }
+        return(
+                
+            <CSSTransitionGroup
+                transitionName="example"
+                transitionEnterTimeout={500}
+                transitionLeaveTimeout={300}
+                className={side == SIDE.MINE ? "hand_container_mine" : "hand_container_opponent"}>
+                {hand_array}
+            </CSSTransitionGroup>
         
+        )
     }
 }
 
