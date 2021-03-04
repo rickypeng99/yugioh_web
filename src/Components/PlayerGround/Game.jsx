@@ -10,7 +10,7 @@ import Hand from './Hand/Hand.jsx';
 import Settings from './Settings/Settings.jsx';
 import PhaseSelector from './PhaseSelector/PhaseSelector'
 import HealthBar from './HealthBar/HealthBar'
-
+import CardSelector from './CardSelector/CardSelector'
 
 import './Game.css';
 /**
@@ -23,7 +23,9 @@ class Game extends React.Component {
             transformRotateX: '45deg', // rotateX(45deg)
             scale: 1.0, // scale(1.0)
             x_pos: 0, // translate(0px, 0px)
-            y_pos: -180
+            y_pos: -180,
+            show_card_selector: false,
+            card_selector_info: undefined,
         }
     }
 
@@ -139,12 +141,21 @@ class Game extends React.Component {
         }
     }
 
+    close_card_selector = () => {
+        this.setState({show_card_selector: false})
+    }
+
+    call_card_selector = (info) => {
+        this.setState({show_card_selector: true, card_selector_info: info})
+    }
+
     render() {
 
-        const { transformRotateX, scale, x_pos, y_pos } = this.state;
+        const { transformRotateX, scale, x_pos, y_pos, show_card_selector, card_selector_info } = this.state;
         return (
             <div className="game_container">
                 <div className="field_settings_container">
+                    <CardSelector key={"selector-" + Math.random()} show_card_selector={show_card_selector} close_card_selector={this.close_card_selector} card_selector_info={card_selector_info}/>
                     <HealthBar side='MINE' />
                     <HealthBar side='OPPONENT' />
                     <PhaseSelector />
@@ -153,7 +164,7 @@ class Game extends React.Component {
                         <div className="field_container">
                             <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} />
                         </div>
-                        <Hand side='MINE' />
+                        <Hand side='MINE' call_card_selector={this.call_card_selector}/>
                     </div>
                     <Settings onChangePosition={this.onChangePosition} onChangeSize={this.onChangeSize} getTransformRotateXValue={this.getTransformRotateXValue} />
                 </div>

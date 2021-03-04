@@ -37,3 +37,36 @@
     row-gap: 5px;
     transform: rotate(180deg);
 } 
+
+.side-enter {
+    opacity: 0.01;
+}
+  
+.side-enter.side-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.side-leave {
+    opacity: 1;
+}
+
+.side-leave.side-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
+
+.side_card_set {
+    width: 100%; 
+    transform: rotate(90deg);
+}
+
+.opponent_side {
+    transform: rotate(180deg);
+}
+
+.special_class {
+    width: 80%;
+    height: 80%;
+    margin: auto;
+}

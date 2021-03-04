@@ -6,3 +6,8 @@ export const PHASE = {
     MAIN_PHASE_2: 'MP2',
     END_PHASE: 'End'
 }
+
+
+export const CARD_SELECT_TYPE = {
+    CARD_SELECT_TRIBUTE_SUMMON: 'CARD_SELECT_TRIBUTE_SUMMON',
+}

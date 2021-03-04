@@ -1,17 +1,36 @@
 /**
  * Dictionaries that stores all monster's data
  */
-import { CARD_TYPE, ATTRIBUTE } from '../../utils/constant';
+import { CARD_TYPE, ATTRIBUTE, SIDE, ENVIRONMENT } from '../../utils/constant';
 import { card_meta } from '../../CardMeta';
 import initialize_monster_card from '../MonsterType';
+
+const get_my_monster_on_field = (environment) => {
+    const current_monsters = environment[SIDE.MINE][ENVIRONMENT.MONSTER_FIELD];
+    let count = 0;
+    for (const monster of current_monsters) {
+        if (monster.card) {
+            count++
+        }
+    }
+    return count
+}
 
 const model_can_normal_summon = (self, environment) => {
     if (environment.CAN_NOT_SUMMON) {
         return false;
     }
-    // Normal and effect monsters with level less than 4 can be summoned
+    // Normal and effect monsters with level less than 4 can be summoned, 5-6 can be summoned using 1 tribute, and 7 and higher needs 2
     if (self.level <= 4) {
         return true
+    } else if (self.level > 4 && self.level < 7) {
+        if (get_my_monster_on_field(environment) >= 1) {
+            return true
+        }
+    } else if (self.level >= 7) {
+        if (get_my_monster_on_field(environment) >= 2) {
+            return true
+        }
     }
 }
 

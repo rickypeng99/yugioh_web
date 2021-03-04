@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
+import { CARD_SELECT_TYPE } from '../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import CardView from '../../Card/CardView';
 import { normal_summon, set_summon } from '../../../Store/actions/environmentActions';
@@ -28,10 +29,29 @@ class Hand extends React.Component {
         this.setState({cardClicked: -1})
     }
 
-    normalSummonOnclick = (info) => event => {
+    normal_summon_final = (info, event) => {
         this.props.dispatch_normal_summon(info)
         this.setState({cardClicked: -1})
         event.stopPropagation();
+    }
+
+    normalSummonOnclick = (info) => event => {
+        if (info.card.card.level > 4) {
+            // tribute summon; Send a promise to call card selector
+            return new Promise((resolve, reject) => {
+                const info_card_selector = {
+                    resolve: resolve,
+                    reject: reject,
+                    cardEnv: info.card,
+                    type: CARD_SELECT_TYPE.CARD_SELECT_TRIBUTE_SUMMON
+                }
+                this.props.call_card_selector(info_card_selector)
+            }).then((result) => {
+                this.normal_summon_final(info, event)
+            })
+        } else {
+            this.normal_summon_final(info, event)
+        }
 
     }
 

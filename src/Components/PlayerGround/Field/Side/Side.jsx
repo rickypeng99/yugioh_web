@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import CardView from "../../../Card/CardView";
 import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
 import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
+import { CSSTransitionGroup } from 'react-transition-group' // ES6
 import './Side.css'
 
 
@@ -49,38 +50,41 @@ class Side extends React.Component {
             }
         }
 
-        const cardBoxStyle = (index) => {
-            const result = {};
-            if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
-                result.width = "80%";
-                result.height = "80%";
-                result.margin = "auto"
-            }
-            return Object.assign(result, {
-                transform: side === SIDE.MINE ? "rotate(0deg)" : "rotate(180deg)",
-                // marginRight: leftExtraIndex.includes(index) ? "5px" : "0px",
-                // marginLeft: rightExtraIndex.includes(index) ? "5px" : "0px",
-            })
-        };
-
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
-                        return <CardView card={cardEnv} />
-                    } else {
-                        return <img style={{width: '100%', transform: 'rotate(90deg)'}} src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
-
+                        return (
+                            <CardView card={cardEnv} key="side_card" />
+                        )
+                    } else if (cardEnv.current_pos == CARD_POS.SET) {
+                        return <img className="side_card_set" key="side_card_set" src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
                     }
                 }
             }
             const info = {
                 cardEnv: cardEnv
             }
+
+            const special_class = (index) => {
+                if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
+                    return ' special_class'
+                } else {
+                    return ''
+                }
+            }
+
             return (
-                <div className="card_box" key={"side-" + side + index} style={cardBoxStyle(index)} onMouseEnter={()=>this.onMouseEnterHandler(info)}>
-                    <div className="card_mask" style={{transform: cardEnv.current_pos == CARD_POS.SET ? 'rotate(90deg)' : 'rotate(0deg)'}}/>
-                    {cardView()}
+                <div className={"card_box" + (side === SIDE.MINE ? "" : " opponent_side") + special_class(index)} 
+                    key={"side-" + side + index} onMouseEnter={()=>this.onMouseEnterHandler(info)}>
+                    <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
+                    <CSSTransitionGroup
+                    transitionName="side"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}>
+                        {cardView()}
+                    </CSSTransitionGroup>
+
                 </div>
             );
         });

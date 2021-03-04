@@ -1,0 +1,14 @@
+.card_selector_content {
+    display: flex;
+}
+
+.selector_card_box {
+    width: 20%;
+    margin-right: 1.5rem;
+    border: 10px solid rgba(0,0,0,0);
+    cursor: pointer;
+}
+
+.selected {
+    border: 10px solid rgba(0,0,0,1);
+}
