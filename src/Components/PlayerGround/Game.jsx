@@ -60,13 +60,13 @@ class Game extends React.Component {
                 [ENVIRONMENT.SPELL_FIELD]:
                     make_placeholders(),
                 [ENVIRONMENT.GRAVEYARD]:
-                    {},
+                    [],
                 [ENVIRONMENT.DECK]:
                     raw_environment.decks[0].map((card_key) => {
                         return create_card(card_key)
                     }),
                 [ENVIRONMENT.EXTRA_DECK]:
-                    {},
+                    [],
             },
             [SIDE.OPPONENT]: {
                 [ENVIRONMENT.HAND]: 
@@ -80,13 +80,13 @@ class Game extends React.Component {
                 [ENVIRONMENT.SPELL_FIELD]:
                     make_placeholders(),
                 [ENVIRONMENT.GRAVEYARD]:
-                    {},
+                    [],
                 [ENVIRONMENT.DECK]:
                     raw_environment.decks[1].map((card_key) => {
                         return create_card(card_key)
                     }),
                 [ENVIRONMENT.EXTRA_DECK]:
-                    {},
+                    [],
             },
             monsters: {},
             spells: {},

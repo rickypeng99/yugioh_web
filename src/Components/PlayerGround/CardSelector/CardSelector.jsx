@@ -4,6 +4,8 @@ import CardView from '../../Card/CardView'
 import { CARD_SELECT_TYPE } from '../utils/constant'
 import { SIDE, ENVIRONMENT } from '../../Card/utils/constant'
 import { connect } from 'react-redux';
+import { normal_summon, set_summon, tribute } from '../../../Store/actions/environmentActions';
+
 import './CardSelector.css';
 
 
@@ -80,7 +82,10 @@ class CardSelector extends React.Component {
                 Cancel
             </Button>
             <Button positive onClick={() => {
-                
+                const info = {
+                    cardEnvs: Object.keys(this.state.selected_cards)
+                }
+                this.props.dispatch_tribute(info)
                 card_selector_info.resolve()
                 close_card_selector()
             }} disabled={!this.state.executable}>
@@ -100,6 +105,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
+    dispatch_tribute: (info) => dispatch(tribute(info))
 });
 
 export default connect(

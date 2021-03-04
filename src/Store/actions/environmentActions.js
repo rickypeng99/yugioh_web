@@ -1,4 +1,4 @@
-import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "./actionTypes";
+import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON, TRIBUTE } from "./actionTypes";
 /**
  * Initialize the environment, only called by Game.jsx
  * @param {*} environment 
@@ -20,6 +20,13 @@ export const normal_summon = info => ({
 
 export const set_summon = info => ({
     type: SET_SUMMON,
+    payload: {
+        info
+    }
+})
+
+export const tribute = info => ({
+    type: TRIBUTE,
     payload: {
         info
     }

@@ -4,7 +4,7 @@ import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
 import { CARD_SELECT_TYPE } from '../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import CardView from '../../Card/CardView';
-import { normal_summon, set_summon } from '../../../Store/actions/environmentActions';
+import { normal_summon, set_summon, tribute } from '../../../Store/actions/environmentActions';
 import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 

@@ -61,6 +61,7 @@ class Detail extends React.Component {
                         <h1 className="heading-name">{card.name}</h1>
                         {card_specific(card)}
                         <Divider variant="middle" />
+                        <br/>
                         <p>
                             {card.description}
                         </p>
