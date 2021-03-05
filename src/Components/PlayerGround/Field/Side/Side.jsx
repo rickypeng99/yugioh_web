@@ -43,6 +43,9 @@ class Side extends React.Component {
         
         for (let i = 0; i < 14; i++) {
             if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
+                if (i == 6) {
+                    field_cards.push(environment[side][ENVIRONMENT.GRAVEYARD])
+                }
                 field_cards.push(CARD_TYPE.PLACEHOLDER)
             } else {
                 field_cards.push(cards[count])
@@ -52,6 +55,11 @@ class Side extends React.Component {
 
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
+                if (index == 6 && cardEnv.length > 0) {
+                    return (
+                        <CardView card={cardEnv[cardEnv.length - 1]} key="side_card" />
+                    )
+                }
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
                         return (
