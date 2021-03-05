@@ -47,7 +47,8 @@ class Hand extends React.Component {
                 }
                 this.props.call_card_selector(info_card_selector)
             }).then((result) => {
-                this.normal_summon_final(info, event)
+                setTimeout(()=>this.normal_summon_final(info, event), 500)
+                
             })
         } else {
             this.normal_summon_final(info, event)
