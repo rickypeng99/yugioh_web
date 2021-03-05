@@ -45,8 +45,9 @@ class Side extends React.Component {
             if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
                 if (i == 6) {
                     field_cards.push(environment[side][ENVIRONMENT.GRAVEYARD])
+                } else {
+                    field_cards.push(CARD_TYPE.PLACEHOLDER)
                 }
-                field_cards.push(CARD_TYPE.PLACEHOLDER)
             } else {
                 field_cards.push(cards[count])
                 count++
