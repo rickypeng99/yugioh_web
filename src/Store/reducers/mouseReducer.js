@@ -7,7 +7,6 @@ export default function(state = initialState, action) {
 
     if (action.type == LEFT_PANEL_MOUSE) {
         const { info } = action.payload;
-        console.log(info)
         return {
             left_panel_cardEnv: info.cardEnv
         };

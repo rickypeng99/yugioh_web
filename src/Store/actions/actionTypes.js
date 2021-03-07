@@ -8,3 +8,7 @@ export const TRIBUTE = "TRIBUTE";
 
 //--- mouse actions
 export const LEFT_PANEL_MOUSE = "LEFT_PANEL_MOUSE";
+
+//--- server actions
+export const GET_OPPONENT_ID = "GET_OPPONENT_ID";
+export const GET_OPPONENT_DECK = "GET_OPPONENT_DECK";
