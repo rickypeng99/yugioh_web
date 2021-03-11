@@ -1,3 +1,4 @@
+export const PHASE_START = 'Game start'
 export const PHASE = {
     DRAW_PHASE: 'Draw',
     STANDBY_PHASE: 'Standby',

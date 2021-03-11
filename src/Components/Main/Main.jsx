@@ -3,6 +3,8 @@ import Game from '../PlayerGround/Game';
 import LeftPanel from './LeftPanel/LeftPanel';
 import { exchange_deck_with_opponent } from '../../Client/Sender'
 import { shuffle } from '../PlayerGround/utils/utils'
+import { PHASE_START } from '../PlayerGround/utils/constant'
+import { initialize_meta } from '../../Store/actions/gameMetaActions'
 import { connect } from 'react-redux';
 import './Main.css';
 
@@ -19,11 +21,12 @@ class Main extends React.Component {
 
         if (this.props.opponent_id && this.props.opponent_id != prevProps.opponent_id) {
             // matched with an opponent; Can right now exchange each other's environment
-            let heros = [20721928, 21844576, 58932615, 84327329, 89943723]
+            // test deck, contains 15 eheros.
+            let heros = [20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723]
             heros = shuffle(heros)
             this.my_deck = heros
-            console.log(this.my_deck)
             exchange_deck_with_opponent(this.my_deck, this.props.opponent_id)
+            console.log(this.props)
         }
 
         if (this.props.opponent_deck && this.props.opponent_deck != prevProps.opponent_deck) {
@@ -39,39 +42,23 @@ class Main extends React.Component {
                     this.props.opponent_deck.slice(0, 5)
                 ]
             };
-    
+            console.log(this.props)
+            this.raw_meta = {
+                [this.props.my_id]: {
+                    hp: 8000
+                },
+                [this.props.opponent_id]: {
+                    hp: 8000
+                },
+                current_turn: this.props.player_starts,
+                current_phase: PHASE_START
+            }
+            this.props.dispatch_initialize_meta(this.raw_meta)
             this.setState({loaded: true});
         }
 
     }
-    // componentDidMount() {
-    //     // for testings
-    //     // 5 different eheros
 
-    //     const heros = [20721928, 21844576, 58932615, 84327329, 89943723]
-    //     let deck_first_player = [];
-    //     let deck_second_player = [];
-    //     for (let i = 0; i < 10; i++) {
-    //         deck_first_player.push(heros[i%5]);
-    //         deck_second_player.push(heros[i%5]);
-    //     }
-
-    //     this.raw_environment = {
-    //         // put the cards and players in here
-    //         decks: [
-    //             deck_first_player.slice(5),
-    //             deck_second_player.slice(5)
-    //         ],
-    //         hands: [
-    //             deck_first_player.slice(0, 5),
-    //             deck_second_player.slice(0, 5)
-    //         ]
-    //     };
-
-    //     this.setState({loaded: true});
-    // }
-
-    //
     render() {
         const { loaded } = this.state;
         const raw_environment = this.raw_environment;
@@ -94,12 +81,14 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = state => {
-    const { opponent_id, opponent_deck } = state.serverReducer;
-    return { opponent_id, opponent_deck };
+    const { opponent_id, my_id, player_starts, opponent_deck } = state.serverReducer;
+    return { opponent_id, my_id, player_starts, opponent_deck };
 };
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
+    dispatch_initialize_meta: (game_meta) => dispatch(initialize_meta(game_meta))
+
 });
 
 export default connect(

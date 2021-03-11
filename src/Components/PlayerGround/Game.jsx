@@ -11,7 +11,7 @@ import Settings from './Settings/Settings.jsx';
 import PhaseSelector from './PhaseSelector/PhaseSelector'
 import HealthBar from './HealthBar/HealthBar'
 import CardSelector from './CardSelector/CardSelector'
-
+import PhaseAnimator from './PhaseSelector/PhaseAnimator'
 import './Game.css';
 /**
  * Highest component for one yugioh game
@@ -155,6 +155,7 @@ class Game extends React.Component {
         return (
             <div className="game_container">
                 <div className="field_settings_container">
+                    <PhaseAnimator />
                     <CardSelector key={"selector-" + Math.random()} show_card_selector={show_card_selector} close_card_selector={this.close_card_selector} card_selector_info={card_selector_info}/>
                     <HealthBar side='MINE' />
                     <HealthBar side='OPPONENT' />

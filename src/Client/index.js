@@ -27,7 +27,9 @@ socket.on("matched", (data) => {
     // })
     socket.opponent = data.opponent
     const info = {
-        opponent_id: socket.opponent  
+        my_id: data.my_id,
+        opponent_id: socket.opponent,
+        player_starts: data.player_starts
     }
     store.dispatch(get_opponent_id(info))
 })
