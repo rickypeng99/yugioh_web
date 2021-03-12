@@ -30,17 +30,20 @@
 /* Phase animator css */
 .phase_block {
     position: absolute;
-    transition: transform 2s;
+    transition: transform 1s;
     transform: translate(-50%, -50%);    
-    top: 50%;
+    top: 40%;
     left: 50%;
     z-index: 10;
 }
 .phase_before {
-    display: none;
     transform: translateX(-1000px);
 }
 
 .phase_after {
     transform: translateX(1000px);
+}
+
+.phase_invisible {
+    display: none;
 }
