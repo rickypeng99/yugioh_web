@@ -16,7 +16,7 @@
     display: flex;
     width: 100%;
     z-index: 3;
-    bottom: 50px;
+    bottom: 5%;
     justify-content: center;
     user-select: none;
 
@@ -27,7 +27,7 @@
     display: flex;
     width: 100%;
     z-index: 3;
-    top: 50px;
+    top: 5%;
     justify-content: center;
     user-select: none;
 

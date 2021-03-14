@@ -1,11 +1,13 @@
 .turn_selector_container {
-    position: relative;
+    position: absolute;
     z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .phase_button {
@@ -31,19 +33,38 @@
 .phase_block {
     position: absolute;
     transition: transform 1s;
-    transform: translate(-50%, -50%);    
+    transform: translate(-50%, -40%);    
     top: 40%;
     left: 50%;
     z-index: 10;
 }
+
+.phase_block > h1 {
+    color: white;
+    font-size: 5em;
+}
+
 .phase_before {
-    transform: translateX(-1000px);
+    transform: translate(calc(-150vh), -40%);
 }
 
 .phase_after {
-    transform: translateX(1000px);
+    transform: translate(calc(100vh), -40%);
 }
 
 .phase_invisible {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.phase_black_bar {
+    width: 100%;
+    height: 20%;
+    position: absolute;
+    transform: translate(-50%, -40%);    
+    top: 40%;
+    left: 50%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 9;
+    transition: visibility 1s, opacity 1s
 }

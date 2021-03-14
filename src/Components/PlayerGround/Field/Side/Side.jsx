@@ -57,10 +57,20 @@ class Side extends React.Component {
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
                 if (index == 6 && cardEnv.length > 0) {
+                    // graveyard
                     return (
                         <CardView card={cardEnv[cardEnv.length - 1]} key="side_card" />
                     )
                 }
+
+                if (index == 13) {
+                    return (
+                        <h1 className = "deck_remaining">
+                            {environment[side][ENVIRONMENT.DECK].length}
+                        </h1>
+                    )
+                }
+
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
                         return (
@@ -84,7 +94,7 @@ class Side extends React.Component {
             }
 
             return (
-                <div className={"card_box" + (side === SIDE.MINE ? "" : " opponent_side") + special_class(index)} 
+                <div className={"card_box"  + special_class(index)} 
                     key={"side-" + side + index} onMouseEnter={()=>this.onMouseEnterHandler(info)}>
                     <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
                     <CSSTransitionGroup

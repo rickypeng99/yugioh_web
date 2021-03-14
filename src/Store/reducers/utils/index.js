@@ -1,5 +1,4 @@
 import { normal_summon } from "../../actions/environmentActions";
-
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../../actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../../Components/Card/utils/constant';
 
@@ -26,7 +25,6 @@ export const summon = (info, type, environment) => {
 
 export const move_cards_to_graveyard = (cards, side, src, environment) => {
     const current_cards = environment[side][src]
-    console.log(current_cards)
     for (let i = 0; i < current_cards.length; i++) {
         if (!current_cards[i].card) {
             continue
@@ -35,6 +33,13 @@ export const move_cards_to_graveyard = (cards, side, src, environment) => {
             environment[side][ENVIRONMENT.GRAVEYARD].push(current_cards[i])
             environment[side][src][i] = CARD_TYPE.PLACEHOLDER
         }
+    }
+    return environment
+}
+
+export const draw_card_from_deck = (environment, info) => {
+    for (let i = 0; i < info.amount; i++) {
+        environment[info.side][ENVIRONMENT.HAND].push(environment[info.side][ENVIRONMENT.DECK].shift())
     }
     return environment
 }

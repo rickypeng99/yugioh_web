@@ -7,6 +7,7 @@ import { PHASE_START } from '../PlayerGround/utils/constant'
 import { initialize_meta } from '../../Store/actions/gameMetaActions'
 import { connect } from 'react-redux';
 import './Main.css';
+import { SIDE } from '../Card/utils/constant';
 
 class Main extends React.Component {
     constructor(props) {
@@ -26,23 +27,19 @@ class Main extends React.Component {
             heros = shuffle(heros)
             this.my_deck = heros
             exchange_deck_with_opponent(this.my_deck, this.props.opponent_id)
-            console.log(this.props)
         }
 
         if (this.props.opponent_deck && this.props.opponent_deck != prevProps.opponent_deck) {
 
             this.raw_environment = {
-                // put the cards and players in here
                 decks: [
-                    this.my_deck.slice(5),
-                    this.props.opponent_deck.slice(5)
+                    // put the cards and players in here
+                    this.props.my_id == this.props.player_starts ? this.my_deck : this.props.opponent_deck,
+                    this.props.opponent_id == this.props.player_starts ? this.my_deck : this.props.opponent_deck
                 ],
-                hands: [
-                    this.my_deck.slice(0, 5),
-                    this.props.opponent_deck.slice(0, 5)
-                ]
-            };
-            console.log(this.props)
+                first_side: this.props.my_id == this.props.player_starts ? SIDE.MINE : SIDE.OPPONENT
+            }
+            
             this.raw_meta = {
                 [this.props.my_id]: {
                     hp: 8000

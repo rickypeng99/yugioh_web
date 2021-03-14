@@ -32,7 +32,6 @@ class HealthBar extends React.Component {
             hp: this.props.game_meta ? (this.props.side == SIDE.MINE ? this.props.game_meta[this.props.my_id].hp : this.props.game_meta[this.props.opponent_id].hp) : 0 
                 
         }
-        console.log(this.props.game_meta)
         return (
             <div className={"health_bar health_bar_" + this.props.side}>
                 <div className={"health_bar_avatar_username_container"}>

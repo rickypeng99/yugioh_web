@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { initialize_environment } from '../../Store/actions/environmentActions';
-// import { monster_database } from '../Card/Monster/MonsterData/index';
-// import MonsterEnv from '../Card/Monster/MonsterEnv.js';
+
+/**
+ * redux functions
+ */
+import { initialize_environment, draw_card } from '../../Store/actions/environmentActions';
+import { change_phase } from '../../Store/actions/gameMetaActions'
+
 import { create_card, load_card_to_environment } from '../Card/utils/utils'
 import { CARD_TYPE, SIDE, ENVIRONMENT } from '../Card/utils/constant'
+import { PHASE, PHASE_START } from '../PlayerGround/utils/constant'
+
 import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
 import Settings from './Settings/Settings.jsx';
@@ -34,6 +40,30 @@ class Game extends React.Component {
         this.initializeEnvironment(this.props.raw_environment);
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.game_meta.current_phase == PHASE_START) {
+            setTimeout(() => {
+                // change to draw phase
+                const info = {
+                    next_phase: PHASE.DRAW_PHASE
+                }
+                this.props.dispatch_change_phase(info);
+            }, 4000);
+            
+        }
+
+        if (this.props.game_meta.current_phase != prevProps.game_meta.current_phase &&
+            this.props.game_meta.current_phase == PHASE.DRAW_PHASE) {
+                
+                const info = {
+                    side: this.props.my_id == this.props.game_meta.current_turn ? SIDE.MINE : SIDE.OPPONENT,
+                    amount: 1
+                }
+                console.log(this.props.my_id, this.props.game_meta.current_turn)
+                this.props.dispatch_draw_card(info);
+            }
+    }
+
 
 
     initializeEnvironment = (raw_environment) => {
@@ -44,17 +74,21 @@ class Game extends React.Component {
             }
             return placeholderArray;
         }
+
+        const loaded_card_env = raw_environment.decks.map(deck => {
+            return deck.map(card_key => {
+                return load_card_to_environment(create_card(card_key));
+            })
+        })
         
+        const mine_index = raw_environment.first_side == SIDE.MINE ? 0 : 1;
+        const opponent_index = raw_environment.first_side == SIDE.OPPONENT ? 0 : 1;
 
         let environment = {
 
             [SIDE.MINE]: {
                 [ENVIRONMENT.HAND]: 
-                    raw_environment.hands[0].map((card_key, index) => {
-                        // create an object based on id, inject it into monsterenv
-                        this.current_game_unique_count++;
-                        return load_card_to_environment(create_card(card_key));
-                    }),
+                   loaded_card_env[mine_index].slice(0, 5),
                 [ENVIRONMENT.MONSTER_FIELD]:
                     make_placeholders(),
                 [ENVIRONMENT.SPELL_FIELD]:
@@ -62,19 +96,13 @@ class Game extends React.Component {
                 [ENVIRONMENT.GRAVEYARD]:
                     [],
                 [ENVIRONMENT.DECK]:
-                    raw_environment.decks[0].map((card_key) => {
-                        return create_card(card_key)
-                    }),
+                    loaded_card_env[mine_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
                     [],
             },
             [SIDE.OPPONENT]: {
                 [ENVIRONMENT.HAND]: 
-                    raw_environment.hands[1].map((card_key, index) => {
-                        // create an object based on id, inject it into monsterenv
-                        this.current_game_unique_count++;
-                        return load_card_to_environment(create_card(card_key));
-                    }),
+                    loaded_card_env[opponent_index].slice(0, 5),
                 [ENVIRONMENT.MONSTER_FIELD]:
                     make_placeholders(),
                 [ENVIRONMENT.SPELL_FIELD]:
@@ -82,9 +110,7 @@ class Game extends React.Component {
                 [ENVIRONMENT.GRAVEYARD]:
                     [],
                 [ENVIRONMENT.DECK]:
-                    raw_environment.decks[1].map((card_key) => {
-                        return create_card(card_key)
-                    }),
+                    loaded_card_env[opponent_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
                     [],
             },
@@ -178,11 +204,15 @@ class Game extends React.Component {
 
 const mapStateToProps = state => {
     const { environment } = state.environmentReducer;
-    return { environment };
+    const { game_meta } = state.gameMetaReducer;
+    const { my_id } = state.serverReducer;
+    return { environment, game_meta, my_id};
 };
 
 const mapDispatchToProps = dispatch => ({
     initialize: (environment) => dispatch(initialize_environment(environment)),
+    dispatch_draw_card: (info) => dispatch(draw_card(info)),
+    dispatch_change_phase: (info) => dispatch(change_phase(info))
 });
 
 export default connect(

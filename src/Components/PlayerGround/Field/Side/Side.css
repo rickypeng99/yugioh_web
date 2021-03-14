@@ -61,12 +61,19 @@
     transform: rotate(90deg);
 }
 
-.opponent_side {
+/* .opponent_side {
     transform: rotate(180deg);
-}
+} */
 
 .special_class {
     width: 80%;
     height: 80%;
     margin: auto;
+}
+
+.deck_remaining {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
