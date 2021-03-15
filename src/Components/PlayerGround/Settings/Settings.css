@@ -3,13 +3,17 @@
 }
 
 .settings_container {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0px;
     z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    height: 50%;
 }
 
 .size_button {
@@ -30,7 +34,7 @@
     background-color: #ccc;
 }
 
-.translate_button_containe {
+.translate_button_container {
     margin: 10px;
 }
 

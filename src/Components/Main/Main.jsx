@@ -26,7 +26,7 @@ class Main extends React.Component {
             let heros = [20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723]
             heros = shuffle(heros)
             this.my_deck = heros
-            exchange_deck_with_opponent(this.my_deck, this.props.opponent_id)
+            exchange_deck_with_opponent(this.my_deck)
         }
 
         if (this.props.opponent_deck && this.props.opponent_deck != prevProps.opponent_deck) {

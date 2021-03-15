@@ -1,9 +1,11 @@
 import { normal_summon } from "../../actions/environmentActions";
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../../actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../../Components/Card/utils/constant';
+import { emit_summon } from '../../../Client/Sender'
+
 
 export const summon = (info, type, environment) => {
-    if (type == NORMAL_SUMMON) {
+    if (type != SET_SUMMON) {
         info.card.current_pos = CARD_POS.FACE;
     } else {
         info.card.current_pos = CARD_POS.SET;
@@ -20,6 +22,11 @@ export const summon = (info, type, environment) => {
 
     // remove the card from the hand
     environment[info.side][ENVIRONMENT.HAND].splice(info.index, 1);
+
+    if (info.side == SIDE.MINE) {
+        emit_summon(info, type)
+    }
+
     return environment;
 }
 

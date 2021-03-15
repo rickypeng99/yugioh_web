@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
 import store from '../Store/store';
 import { get_opponent_id, get_opponent_deck } from '../Store/actions/serverActions'
-
+import { NORMAL_SUMMON, SET_SUMMON } from '../Store/actions/actionTypes'
+import { normal_summon, set_summon } from '../Store/actions/environmentActions'
 /**
  * The address of the websocket server
  */
@@ -40,6 +41,19 @@ socket.on("receive_deck", (data) => {
         deck: data.deck,
     }
     store.dispatch(get_opponent_deck(info))
+})
+
+socket.on("opponent_summon", (data) => {
+    switch (data.data.type) {
+        case NORMAL_SUMMON:
+            store.dispatch(normal_summon(data.data))
+            break;
+        case SET_SUMMON:
+            store.dispatch(set_summon(data.data))
+            break;
+
+    }
+
 })
 
 export default socket;
