@@ -30,7 +30,7 @@ class Game extends React.Component {
         super(props);
         this.state = {
             transformRotateX: '45deg', // rotateX(45deg)
-            scale: 1.0, // scale(1.0)
+            scale: 0.6, // scale(1.0)
             x_pos: 0, // translate(0px, 0px)
             y_pos: -180,
             show_card_selector: false,
@@ -43,30 +43,39 @@ class Game extends React.Component {
         this.initializeEnvironment(this.props.raw_environment);
     }
 
+    auto_next_phase(next_phase) {
+
+        const WAIT_TIME = 4000
+        setTimeout(() => {
+            // change to next phase
+            const info = {
+                next_phase: next_phase
+            }
+            // this.props.dispatch_change_phase(info);
+            emit_change_phase(info);
+            this.props.dispatch_change_phase(info);
+        }, WAIT_TIME);
+    }
+
     componentDidUpdate(prevProps) {
-        if (this.props.game_meta.current_phase == PHASE_START) {
-            setTimeout(() => {
-                // change to draw phase
-                const info = {
-                    next_phase: PHASE.DRAW_PHASE
-                }
-                // this.props.dispatch_change_phase(info);
-                emit_change_phase(info);
-                this.props.dispatch_change_phase(info);
-            }, 4000);
-            
+        const current_phase = this.props.game_meta.current_phase
+        if (current_phase == PHASE_START) {
+            this.auto_next_phase(PHASE.DRAW_PHASE)
         }
 
-        if (this.props.game_meta.current_phase != prevProps.game_meta.current_phase &&
-            this.props.game_meta.current_phase == PHASE.DRAW_PHASE) {
-                
+        if (current_phase != prevProps.game_meta.current_phase) {
+            if(current_phase == PHASE.DRAW_PHASE) {
                 const info = {
                     side: this.props.my_id == this.props.game_meta.current_turn ? SIDE.MINE : SIDE.OPPONENT,
                     amount: 1
                 }
-                console.log(this.props.my_id, this.props.game_meta.current_turn)
                 this.props.dispatch_draw_card(info);
+                this.auto_next_phase(PHASE.STANDBY_PHASE)
+            } else if(current_phase == PHASE.STANDBY_PHASE) {
+                this.auto_next_phase(PHASE.MAIN_PHASE_1)
             }
+        }
+           
     }
 
 

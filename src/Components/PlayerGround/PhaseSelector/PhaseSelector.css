@@ -23,8 +23,36 @@
     user-select:none;
 }
 
-.phase_button:hover {
+.phase_button_current {
+    background-color: #a7fabe;
+}
+
+.phase_button_enabled:hover {
     cursor: pointer;
+    background-size: cover;
+    color: white;
+
+}
+
+.phase_button_enabled_MP1:hover {
+    background-image: url("black_magician_girl.jpg");
+    background-position: center;
+}
+
+.phase_button_enabled_Battle:hover {
+    background-image: url("neos.jpg");
+}
+
+.phase_button_enabled_MP2:hover {
+    background-image: url("star_dust_dragon.jpg");
+}
+
+.phase_button_enabled_End:hover {
+    background-image: url("utopia.png");
+}
+
+
+.phase_button_disabled {
     background-color: #ccc;
 }
 
