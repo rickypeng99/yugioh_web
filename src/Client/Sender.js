@@ -19,3 +19,9 @@ export const emit_summon = (info, type) => {
         type: type
     })
 }
+
+export const emit_change_phase = (info) => {
+    socket.emit('change_phase', {
+        ...info
+    })
+}

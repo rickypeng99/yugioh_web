@@ -129,7 +129,8 @@ class Hand extends React.Component {
 const mapStateToProps = state => {
     const { left_panel_cardEnv } = state.mouseReducer
     const { environment } = state.environmentReducer
-    return { left_panel_cardEnv, environment };
+    const { game_meta } = state.gameMetaReducer
+    return { left_panel_cardEnv, environment, game_meta };
 };
 
 const mapDispatchToProps = dispatch => ({

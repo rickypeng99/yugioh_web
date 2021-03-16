@@ -11,6 +11,9 @@ import { create_card, load_card_to_environment } from '../Card/utils/utils'
 import { CARD_TYPE, SIDE, ENVIRONMENT } from '../Card/utils/constant'
 import { PHASE, PHASE_START } from '../PlayerGround/utils/constant'
 
+// sender functions
+import { emit_change_phase } from '../../Client/Sender'
+
 import Field from './Field/Field.jsx';
 import Hand from './Hand/Hand.jsx';
 import Settings from './Settings/Settings.jsx';
@@ -47,6 +50,8 @@ class Game extends React.Component {
                 const info = {
                     next_phase: PHASE.DRAW_PHASE
                 }
+                // this.props.dispatch_change_phase(info);
+                emit_change_phase(info);
                 this.props.dispatch_change_phase(info);
             }, 4000);
             
@@ -68,10 +73,7 @@ class Game extends React.Component {
 
     initializeEnvironment = (raw_environment) => {
         const make_placeholders = () => {
-            let placeholderArray = []
-            for(let i = 0; i < 5; i++) {
-                placeholderArray.push(CARD_TYPE.PLACEHOLDER)
-            }
+            let placeholderArray = Array(5).fill(CARD_TYPE.PLACEHOLDER)
             return placeholderArray;
         }
 

@@ -3,6 +3,7 @@ import store from '../Store/store';
 import { get_opponent_id, get_opponent_deck } from '../Store/actions/serverActions'
 import { NORMAL_SUMMON, SET_SUMMON } from '../Store/actions/actionTypes'
 import { normal_summon, set_summon } from '../Store/actions/environmentActions'
+import { change_phase } from '../Store/actions/gameMetaActions'
 /**
  * The address of the websocket server
  */
@@ -54,6 +55,10 @@ socket.on("opponent_summon", (data) => {
 
     }
 
+})
+
+socket.on("opponent_change_phase", (data) => {
+    store.dispatch(change_phase(data.data))
 })
 
 export default socket;
