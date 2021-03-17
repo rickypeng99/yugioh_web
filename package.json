@@ -12,6 +12,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
+    "react-sky": "^1.1.0",
     "react-transition-group": "1.x",
     "redux": "^4.0.5",
     "semantic-ui-css": "^2.4.1",

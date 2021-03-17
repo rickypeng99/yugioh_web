@@ -8,6 +8,13 @@ import { initialize_meta } from '../../Store/actions/gameMetaActions'
 import { connect } from 'react-redux';
 import './Main.css';
 import { SIDE } from '../Card/utils/constant';
+import Sky from 'react-sky';
+
+// images
+import yugi_sky from './assets/yugi_sky.png'
+import jaden_sky from './assets/jaden_sky.png'
+import neos_sky from './assets/neos_sky.png'
+import yusei_sky from './assets/yusei_sky.png'
 
 class Main extends React.Component {
     constructor(props) {
@@ -65,6 +72,24 @@ class Main extends React.Component {
         if (loaded) {
             return(
                 <div className="main_container">
+                    <div style={{position: 'absolute', width: '100%', height: '100%', zIndex: '-1'}}>
+                        <Sky
+                            images={{
+                                /* FORMAT AS FOLLOWS */
+                                0: yugi_sky,  /* You can pass as many images as you want */
+                                1: jaden_sky,
+                                2: yusei_sky, /* you can pass images in any form: link, imported via webpack... */
+                                3: neos_sky
+                                /* 4: your other image... */
+                                /* 5: your other image... */
+                                /* ... */
+                            }}
+                            how={30} /* Pass the number of images Sky will render chosing randomly */
+                            time={20} /* time of animation */
+                            size={'200px'} /* size of the rendered images */
+                            background={'#f2f2f2'} /* color of background */
+                        />
+                    </div>
                     <LeftPanel />
                     <Game raw_environment={raw_environment} />
                 </div>
