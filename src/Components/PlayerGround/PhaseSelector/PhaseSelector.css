@@ -35,20 +35,20 @@
 }
 
 .phase_button_enabled_MP1:hover {
-    background-image: url("black_magician_girl.jpg");
+    background-image: url("assets/black_magician_girl.jpg");
     background-position: center;
 }
 
 .phase_button_enabled_Battle:hover {
-    background-image: url("neos.jpg");
+    background-image: url("assets/neos.jpg");
 }
 
 .phase_button_enabled_MP2:hover {
-    background-image: url("star_dust_dragon.jpg");
+    background-image: url("assets/star_dust_dragon.jpg");
 }
 
 .phase_button_enabled_End:hover {
-    background-image: url("utopia.png");
+    background-image: url("assets/utopia.png");
 }
 
 

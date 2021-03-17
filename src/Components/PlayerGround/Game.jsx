@@ -60,6 +60,7 @@ class Game extends React.Component {
     componentDidUpdate(prevProps) {
         const current_phase = this.props.game_meta.current_phase
         if (current_phase == PHASE_START) {
+            console.log(this.props.game_meta)
             this.auto_next_phase(PHASE.DRAW_PHASE)
         }
 
@@ -73,6 +74,8 @@ class Game extends React.Component {
                 this.auto_next_phase(PHASE.STANDBY_PHASE)
             } else if(current_phase == PHASE.STANDBY_PHASE) {
                 this.auto_next_phase(PHASE.MAIN_PHASE_1)
+            } else if(current_phase == PHASE.END_PHASE) {
+                this.auto_next_phase(PHASE_START)
             }
         }
            

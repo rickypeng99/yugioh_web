@@ -48,7 +48,9 @@ class Main extends React.Component {
                     hp: 8000
                 },
                 current_turn: this.props.player_starts,
-                current_phase: PHASE_START
+                current_phase: PHASE_START,
+                my_id: this.props.my_id,
+                opponent_id: this.props.opponent_id
             }
             this.props.dispatch_initialize_meta(this.raw_meta)
             this.setState({loaded: true});
