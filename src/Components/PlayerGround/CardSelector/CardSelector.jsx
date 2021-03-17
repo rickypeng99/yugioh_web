@@ -83,7 +83,8 @@ class CardSelector extends React.Component {
             </Button>
             <Button positive onClick={() => {
                 const info = {
-                    cardEnvs: Object.keys(this.state.selected_cards)
+                    cardEnvs: Object.keys(this.state.selected_cards),
+                    side: SIDE.MINE
                 }
                 this.props.dispatch_tribute(info)
                 card_selector_info.resolve()

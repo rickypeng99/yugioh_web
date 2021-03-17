@@ -20,6 +20,12 @@ export const emit_summon = (info, type) => {
     })
 }
 
+export const emit_tribute = (info) => {
+    socket.emit("tribute", {
+        ...info,
+    })
+}
+
 export const emit_change_phase = (info) => {
     socket.emit('change_phase', {
         ...info

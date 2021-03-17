@@ -1,7 +1,7 @@
 import { normal_summon } from "../../actions/environmentActions";
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../../actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../../Components/Card/utils/constant';
-import { emit_summon } from '../../../Client/Sender'
+import { emit_summon, emit_tribute } from '../../../Client/Sender'
 
 
 export const summon = (info, type, environment) => {
@@ -30,7 +30,21 @@ export const summon = (info, type, environment) => {
     return environment;
 }
 
-export const move_cards_to_graveyard = (cards, side, src, environment) => {
+
+export const tribute = (cards, side, src, environment) => {
+    const res = move_cards_to_graveyard(cards, side, src, environment)
+    if (side == SIDE.MINE) {
+        const info = {
+            cardEnvs: cards,
+            side: SIDE.OPPONENT,
+            src: src,
+        }
+        emit_tribute(info)
+    }
+    return res
+}
+
+const move_cards_to_graveyard = (cards, side, src, environment) => {
     const current_cards = environment[side][src]
     for (let i = 0; i < current_cards.length; i++) {
         if (!current_cards[i].card) {
