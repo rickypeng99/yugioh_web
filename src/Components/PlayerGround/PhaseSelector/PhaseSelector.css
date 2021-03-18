@@ -60,7 +60,7 @@
 /* Phase animator css */
 .phase_block {
     position: absolute;
-    transition: transform 1s;
+    transition: transform 0.5s;
     transform: translate(-50%, -40%);    
     top: 40%;
     left: 50%;
@@ -94,5 +94,5 @@
     left: 50%;
     background-color: rgba(0,0,0,0.4);
     z-index: 9;
-    transition: visibility 1s, opacity 1s
+    transition: visibility 0.5s, opacity 0.5s
 }

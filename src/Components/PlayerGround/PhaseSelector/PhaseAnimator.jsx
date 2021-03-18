@@ -16,9 +16,9 @@ class PhaseAnimator extends React.Component {
         this.setState({phaseClass: 'phase_before', phaseBlackBarClass: ''}, () => {
             setTimeout(() => this.setState({phaseClass: ''}, () => {
                 setTimeout(()=> this.setState({phaseClass: 'phase_after'}, () => {
-                    setTimeout(() => this.setState({phaseClass:'phase_before phase_invisible', phaseBlackBarClass: 'phase_invisible'}), 1000)
+                    setTimeout(() => this.setState({phaseClass:'phase_before phase_invisible', phaseBlackBarClass: 'phase_invisible'}), 500)
                 }), 1000)
-            }), 1000)
+            }), 500)
         })
     }
         

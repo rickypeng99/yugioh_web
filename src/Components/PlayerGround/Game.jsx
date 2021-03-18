@@ -45,7 +45,7 @@ class Game extends React.Component {
 
     auto_next_phase(next_phase) {
 
-        const WAIT_TIME = 4000
+        const WAIT_TIME = 2500
         setTimeout(() => {
             // change to next phase
             const info = {
@@ -203,7 +203,7 @@ class Game extends React.Component {
                     <div className="hand_field_container">
                         <Hand side='OPPONENT' />
                         <div className="field_container">
-                            <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} />
+                            <Field transformRotateX={transformRotateX} scale={scale} x_pos={x_pos} y_pos={y_pos} call_card_selector={this.call_card_selector}/>
                         </div>
                         <Hand side='MINE' call_card_selector={this.call_card_selector}/>
                     </div>
