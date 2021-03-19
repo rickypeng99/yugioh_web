@@ -1,24 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { Progress } from 'semantic-ui-react';
 import { SIDE } from '../../Card/utils/constant'
 import './HealthBar.css';
-
-const BorderLinearProgress = withStyles((theme) => ({
-  root: {
-    height: 20,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-  },
-  bar: {
-    backgroundColor: '#a7fabe',
-    transition: 'transform 1s'
-  },
-}))(LinearProgress);
-
 
 class HealthBar extends React.Component {
 
@@ -41,7 +25,7 @@ class HealthBar extends React.Component {
                         <p>Platinum</p>
                     </div>
                 </div>
-                <BorderLinearProgress variant="determinate" value={(display_data.hp)/8000*100} />
+                <Progress percent={(display_data.hp)/8000*100} indicating>{display_data.hp}</Progress>
             </div>
         )
     }
