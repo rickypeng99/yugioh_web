@@ -3,6 +3,7 @@ import store from '../Store/store';
 import { get_opponent_id, get_opponent_deck } from '../Store/actions/serverActions'
 import { NORMAL_SUMMON, SET_SUMMON } from '../Store/actions/actionTypes'
 import { normal_summon, set_summon, tribute } from '../Store/actions/environmentActions'
+import { opponent_attack_start, opponent_attack_ack } from '../Store/actions/battleMetaActions'
 import { change_phase } from '../Store/actions/gameMetaActions'
 /**
  * The address of the websocket server
@@ -65,5 +66,12 @@ socket.on("opponent_tribute", (data) => {
     store.dispatch(tribute(data.data))
 })
 
+socket.on("opponent_attack_start", (data) => {
+    store.dispatch(opponent_attack_start(data.data))
+})
+
+socket.on("opponent_attack_ack", (data) => {
+    store.dispatch(opponent_attack_ack())
+})
 
 export default socket;

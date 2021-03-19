@@ -9,6 +9,7 @@ import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 
 import './Hand.css'
+import { get_unique_id_from_ennvironment } from '../utils/utils';
 
 
 class Hand extends React.Component {
@@ -47,6 +48,7 @@ class Hand extends React.Component {
                 }
                 this.props.call_card_selector(info_card_selector)
             }).then((result) => {
+                this.props.dispatch_tribute(result)
                 setTimeout(()=>this.normal_summon_final(info, event), 500)
                 
             })
@@ -89,7 +91,10 @@ class Hand extends React.Component {
                         cardEnv: cardEnv
                     }
                     return (
-                        <div className = "hand_card" key = {"hand_card_" + cardEnv.card.key + "_" + cardEnv.unique_count} onClick={() => this.cardOnClickHandler(cardIndex)} onMouseLeave={() => this.cardMouseMoveHandler()} onMouseEnter={()=>this.onMouseEnterHandler(info_in)}>
+                        <div className = "hand_card" key = {"hand_card_" + get_unique_id_from_ennvironment(cardEnv)} 
+                        onClick={() => this.cardOnClickHandler(cardIndex)} 
+                        onMouseLeave={() => this.cardMouseMoveHandler()} 
+                        onMouseEnter={()=>this.onMouseEnterHandler(info_in)}>
                             <div className={hasOptions}>
                                 <div className={can_normal_summon} onClick={this.normalSummonOnclick(info)}>Summon</div>
                                 <div className={can_special_summon}>Special</div>
@@ -138,6 +143,7 @@ const mapDispatchToProps = dispatch => ({
     mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
     dispatch_normal_summon: (info) => dispatch(normal_summon(info)),
     dispatch_set_summon: (info) => dispatch(set_summon(info)),
+    dispatch_tribute: (info) => dispatch(tribute(info))
 });
 
 export default connect(

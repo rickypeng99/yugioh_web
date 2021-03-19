@@ -26,6 +26,16 @@ export const emit_tribute = (info) => {
     })
 }
 
+export const emit_attack_start = (info) => {
+    socket.emit("attack_start", {
+        ...info,
+    })
+}
+
+export const emit_attack_ack = () => {
+    socket.emit("attack_ack", {})
+}
+
 export const emit_change_phase = (info) => {
     socket.emit('change_phase', {
         ...info

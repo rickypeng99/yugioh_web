@@ -2,7 +2,7 @@ import { normal_summon } from "../../actions/environmentActions";
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../../actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../../Components/Card/utils/constant';
 import { emit_summon, emit_tribute } from '../../../Client/Sender'
-
+import { get_unique_id_from_ennvironment } from '../../../Components/PlayerGround/utils/utils'
 
 export const summon = (info, type, environment) => {
     if (type != SET_SUMMON) {
@@ -50,7 +50,7 @@ const move_cards_to_graveyard = (cards, side, src, environment) => {
         if (!current_cards[i].card) {
             continue
         }
-        if (cards.includes(current_cards[i].card.key + '_' + current_cards[i].unique_count)) {
+        if (cards.includes(get_unique_id_from_ennvironment(current_cards[i]))) {
             environment[side][ENVIRONMENT.GRAVEYARD].push(current_cards[i])
             environment[side][src][i] = CARD_TYPE.PLACEHOLDER
         }
@@ -58,9 +58,68 @@ const move_cards_to_graveyard = (cards, side, src, environment) => {
     return environment
 }
 
+const battle_to_graveyard = (card, side, index, environment) => {
+    environment[side][ENVIRONMENT.GRAVEYARD].push(card)
+    environment[side][ENVIRONMENT.MONSTER_FIELD][index] = CARD_TYPE.PLACEHOLDER
+    return environment
+}
+
 export const draw_card_from_deck = (environment, info) => {
     for (let i = 0; i < info.amount; i++) {
         environment[info.side][ENVIRONMENT.HAND].push(environment[info.side][ENVIRONMENT.DECK].shift())
     }
+    return environment
+}
+
+export const battle = (info, environment) => {
+    const { src_monster, dst, side } = info
+    console.log(info)
+    // side is the attacker's side
+    const getting_attacked_side = side == SIDE.MINE ? SIDE.OPPONENT : SIDE.MINE;
+    const current_cards_attacker = environment[side][ENVIRONMENT.MONSTER_FIELD]
+    const current_cards_getting_attacked = environment[getting_attacked_side][ENVIRONMENT.MONSTER_FIELD]
+    
+    let found = false
+
+    // I know this part of code is stupid but sorry i dont want to maintain a dictionary at the same time
+    for (let i = 0; i < current_cards_attacker.length; i++) {
+        if (found) {
+            break
+        }
+        const attacker_card = current_cards_attacker[i]
+        if (!attacker_card.card) {
+            continue
+        }
+        const attacker_id = get_unique_id_from_ennvironment(attacker_card)
+        if (attacker_id == src_monster) {
+            for (let j = 0; j < current_cards_getting_attacked.length; j++) {
+                const getting_attacked_card = current_cards_getting_attacked[j]
+                if (!getting_attacked_card.card) {
+                    continue
+                }
+                const getting_attacked_id = get_unique_id_from_ennvironment(getting_attacked_card)
+                if ( getting_attacked_id == dst) {
+                    found = true
+                
+                    // if attack is higher
+                    if (attacker_card.current_atk > getting_attacked_card.current_atk) {
+                        environment = battle_to_graveyard(getting_attacked_card, getting_attacked_side, j, environment)
+                        environment[getting_attacked_side].hp -= (attacker_card.current_atk - getting_attacked_card.current_atk)
+                    
+                    } else if (attacker_card.current_atk < getting_attacked_card.current_atk) {
+                        environment = battle_to_graveyard(attacker_card, side, i, environment)
+                        environment[side].hp -= (getting_attacked_card.current_atk - attacker_card.current_atk)
+
+                    } else {
+                        environment = battle_to_graveyard(getting_attacked_card, getting_attacked_side, j, environment)
+                        environment = battle_to_graveyard(attacker_card, side, i, environment)
+                    
+                    }
+                    break
+                }
+            }
+        }
+    }
+
     return environment
 }

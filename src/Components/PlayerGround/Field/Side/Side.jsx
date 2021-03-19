@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import CardView from "../../../Card/CardView";
 import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
+import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK, BATTLE_STEP } from '../../utils/constant'
 import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
+import { is_monster, is_spell, is_trap } from '../../../Card/utils/utils'
 import './Side.css'
 
+import { perform_attack } from '../../../../Store/actions/environmentActions'
+import { direct_attack, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
+import { emit_attack_ack, emit_change_phase } from '../../../../Client/Sender'
+import { get_unique_id_from_ennvironment } from "../../utils/utils";
 
 
 /**
@@ -14,12 +20,131 @@ import './Side.css'
 class Side extends React.Component {
     constructor (props) {
         super(props);
+        this.state = {
+            cardClicked: -1,
+        }
     }
 
     onMouseEnterHandler = (info) => {
         if (info.cardEnv.card) {
             this.props.mouse_in_view(info);
         }
+    }
+
+    
+    onCardClickHandler = (info, cardIndex) => {
+        // clicking the card on the field
+        if (!info.cardEnv.card) {
+            return
+        }
+
+        this.setState({cardClicked: cardIndex})
+    }
+    
+    cardMouseMoveHandler = () => {
+        this.setState({cardClicked: -1})
+    }
+
+    monsterAttackOnClick = (attack_type, info) => {
+
+        if (attack_type == MONSTER_ATTACK_TYPE.DIRECT_ATTACK) {
+            // direct attack
+            const info_battle = {
+                src_monster: get_unique_id_from_ennvironment(info.cardEnv),
+                dst: DST_DIRECT_ATTACK,
+            }
+            this.props.dispatch_direct_attack(info_battle)
+
+        } else {
+            return new Promise((resolve, reject) => {
+                const info_card_selector = {
+                    resolve: resolve,
+                    reject: reject,
+                    cardEnv: info.cardEnv,
+                    type: CARD_SELECT_TYPE.CARD_SELECT_BATTLE_SELECT
+                }
+                this.props.call_card_selector(info_card_selector)
+            }).then((result) => {
+                // battle start
+                const info_battle = {
+                    src_monster: get_unique_id_from_ennvironment(info.cardEnv),
+                    // monster can only attack one monster
+                    dst: result.cardEnvs[0],
+                }
+                console.log(info_battle)
+                this.props.dispatch_others_attack(info_battle)
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        // opponent is attacking
+        const current_battle_meta = this.props.battle_meta
+        const prev_battle_meta = prevProps.battle_meta
+
+        if (current_battle_meta && !prev_battle_meta
+            && current_battle_meta.battle_step == BATTLE_STEP.START_STEP
+            && current_battle_meta.side == SIDE.OPPONENT) {
+                // Started a battle because of the opponent
+                // TODO: Effects during battle starts will be triggered here
+                emit_attack_ack();
+                // TODO: switch the battle step to damage step
+                this.props.dispatch_change_to_damage_step();
+        }
+
+        if (current_battle_meta && prev_battle_meta
+            && current_battle_meta.battle_step == BATTLE_STEP.DAMAGE_STEP
+            && current_battle_meta.battle_step != prev_battle_meta.battle_step) {
+                // TODO: let the monster attack
+                // perform the battle animation
+
+                // update the props of environment
+                if (current_battle_meta.dst != DST_DIRECT_ATTACK) {
+                    // update props
+                    const info = {
+                        src_monster: current_battle_meta.src_monster,
+                        dst: current_battle_meta.dst,
+                        side: current_battle_meta.side
+                    }
+                    this.props.dispatch_perform_attack(info)
+                }
+
+            }
+
+
+    }
+
+    returnAttackStatus = (cardEnv) => {
+
+        const disabled_class = 'no_hand_option'
+        const enabled_class = 'show_summon'
+
+        // console.log(cardEnv.card)
+
+        // if it is not battle phase or the card is not a monster
+        if (!cardEnv.card || this.props.game_meta.current_phase != PHASE.BATTLE_PHASE || 
+            !is_monster(cardEnv.card.card_type)) {
+                return {
+                    can_direct_attack: disabled_class,
+                    can_others_attack: disabled_class
+                }
+        }
+
+        // if there is no monster on enemy's field
+        for (let monster of this.props.environment[SIDE.OPPONENT][ENVIRONMENT.MONSTER_FIELD]) {
+            if (monster != CARD_TYPE.PLACEHOLDER) {
+                return {
+                    can_direct_attack: disabled_class,
+                    can_others_attack: enabled_class
+                }
+            }
+        }
+
+        return {
+            can_direct_attack: enabled_class,
+            can_others_attack: disabled_class
+        }
+        
     }
 
 
@@ -85,6 +210,10 @@ class Side extends React.Component {
                 cardEnv: cardEnv
             }
 
+            const info_battle = {
+                cardEnv: cardEnv
+            }
+
             const special_class = (index) => {
                 if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
                     return ' special_class'
@@ -93,9 +222,29 @@ class Side extends React.Component {
                 }
             }
 
+            const hasOptions = index == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
+            const {can_direct_attack, can_others_attack} = this.returnAttackStatus(cardEnv)
+
+
+
             return (
                 <div className={"card_box"  + special_class(index)} 
-                    key={"side-" + side + index} onMouseEnter={()=>this.onMouseEnterHandler(info)}>
+                    key={"side-" + side + index} 
+                    onMouseEnter={()=>this.onMouseEnterHandler(info)}
+                    onClick={()=>this.onCardClickHandler(info, index)}
+                    onMouseLeave={() => this.cardMouseMoveHandler()}>
+                    
+                    <div className={hasOptions}>
+                        <div className={can_direct_attack} 
+                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.DIRECT_ATTAK, info_battle)}>
+                                Direct Attack
+                        </div>
+                        <div className={can_others_attack}
+                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.OTHERS_ATTACK, info_battle)}>
+                                Attack
+                        </div>
+                    </div>
+                    
                     <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
                     <CSSTransitionGroup
                     transitionName="side"
@@ -113,12 +262,19 @@ class Side extends React.Component {
 const mapStateToProps = state => {
     const { left_panel_cardEnv } = state.mouseReducer
     const { environment } = state.environmentReducer
-    return { left_panel_cardEnv, environment };
+    const { game_meta } = state.gameMetaReducer
+    const { battle_meta } = state.battleMetaReducer
+    return { left_panel_cardEnv, environment, game_meta, battle_meta};
 };
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
     mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
+    dispatch_direct_attack: (info) => dispatch(direct_attack(info)),
+    dispatch_others_attack: (info) => dispatch(others_attack(info)),
+    // opponent attack ack will change the battle step to damage step
+    dispatch_change_to_damage_step: () => dispatch(opponent_attack_ack()),
+    dispatch_perform_attack: (info) => dispatch(perform_attack(info))
 });
 
 export default connect(

@@ -77,3 +77,33 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+
+/* borrowed from hand.css, change later */
+.show_hand_option {
+    display: flex;
+    flex-direction: column;
+    border-width: 1.2rem;
+    border-color: black;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    width: 100%;
+    border-top: 2px solid black;
+}
+
+.no_hand_option {
+    display: none;
+}
+
+.show_summon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid black;
+    z-index: 10;
+
+}
+
+.show_summon:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}

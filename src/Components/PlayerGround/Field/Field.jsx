@@ -23,7 +23,7 @@ class Field extends React.Component {
                 <div className="field_box" style={fieldStyle}>
                     <Side side="OPPONENT"></Side>
                     <div style={{ height: "50px" }}></div>
-                    <Side side="MINE"></Side>
+                    <Side side="MINE" call_card_selector={this.props.call_card_selector}></Side>
                 </div>
             </div>
 

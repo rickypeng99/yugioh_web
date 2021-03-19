@@ -113,6 +113,7 @@ class Game extends React.Component {
                     loaded_card_env[mine_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
                     [],
+                hp: 8000,
             },
             [SIDE.OPPONENT]: {
                 [ENVIRONMENT.HAND]: 
@@ -127,6 +128,7 @@ class Game extends React.Component {
                     loaded_card_env[opponent_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
                     [],
+                hp: 8000
             },
             monsters: {},
             spells: {},

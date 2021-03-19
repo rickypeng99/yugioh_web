@@ -16,3 +16,7 @@ export function shuffle(array) {
 
     return array;
 }
+
+export const get_unique_id_from_ennvironment = (cardEnv) => {
+    return cardEnv.card.key + "_" + cardEnv.unique_count
+}

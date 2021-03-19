@@ -29,7 +29,7 @@ class HealthBar extends React.Component {
     render() {
         const display_data = {
             id: this.props.side == SIDE.MINE ? this.props.my_id : this.props.opponent_id,
-            hp: this.props.game_meta ? (this.props.side == SIDE.MINE ? this.props.game_meta[this.props.my_id].hp : this.props.game_meta[this.props.opponent_id].hp) : 0 
+            hp: this.props.environment ? this.props.environment[this.props.side].hp : 0
                 
         }
         return (

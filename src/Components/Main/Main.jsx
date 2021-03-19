@@ -48,12 +48,12 @@ class Main extends React.Component {
             }
             
             this.raw_meta = {
-                [this.props.my_id]: {
-                    hp: 8000
-                },
-                [this.props.opponent_id]: {
-                    hp: 8000
-                },
+                // [this.props.my_id]: {
+                //     hp: 8000
+                // },
+                // [this.props.opponent_id]: {
+                //     hp: 8000
+                // },
                 current_turn: this.props.player_starts,
                 current_phase: PHASE_START,
                 my_id: this.props.my_id,

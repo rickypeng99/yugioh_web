@@ -8,7 +8,22 @@ export const PHASE = {
     END_PHASE: 'End'
 }
 
+export const BATTLE_STEP = {
+    START_STEP: "START_STEP",
+    DAMAGE_STEP: "DAMAGE_STEP",
+    END_STEP: "END_STEP"
+}
+
 
 export const CARD_SELECT_TYPE = {
     CARD_SELECT_TRIBUTE_SUMMON: 'CARD_SELECT_TRIBUTE_SUMMON',
+    CARD_SELECT_BATTLE_SELECT: 'CARD_SELECT_BATTLE_SELECT'
 }
+
+export const MONSTER_ATTACK_TYPE = {
+    DIRECT_ATTACK: 'DIRECT_ATTACK',
+    OTHERS_OTHERS: 'OTHERS_ATTACK'
+}
+
+// to show that the dst is the player (instead of a monster)
+export const DST_DIRECT_ATTACK = "DST_DIRECT_ATTACK"
