@@ -1,7 +1,8 @@
 import { START_BATTLE_DIRECT_ATTACK, 
     START_BATTLE_OTHERS_ATTACK,
     OPPONENT_ATTACK_START,
-    OPPONENT_ATTACK_ACK } from "./actionTypes";
+    OPPONENT_ATTACK_ACK, 
+    END_BATTLE} from "./actionTypes";
 
 
 export const direct_attack = info => ({
@@ -33,3 +34,7 @@ export const opponent_attack_ack = info => ({
     }
 })
 
+export const end_battle = () => ({
+    type: END_BATTLE,
+    payload: {}
+})

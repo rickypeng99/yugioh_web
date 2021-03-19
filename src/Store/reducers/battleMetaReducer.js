@@ -1,4 +1,4 @@
-import { OPPONENT_ATTACK_START, OPPONENT_ATTACK_ACK, START_BATTLE_DIRECT_ATTACK, START_BATTLE_OTHERS_ATTACK } from "../actions/actionTypes";
+import { OPPONENT_ATTACK_START, OPPONENT_ATTACK_ACK, START_BATTLE_DIRECT_ATTACK, START_BATTLE_OTHERS_ATTACK, END_BATTLE } from "../actions/actionTypes";
 import { BATTLE_STEP } from '../../Components/PlayerGround/utils/constant'
 import { emit_attack_start, emit_attack_ack } from '../../Client/Sender'
 import { SIDE } from '../../Components/Card/utils/constant'
@@ -42,6 +42,10 @@ export default function(state = initialState, action) {
                 battle_step: BATTLE_STEP.DAMAGE_STEP
 
             }
+        }
+    } else if (action.type == END_BATTLE) {
+        return {
+            battle_meta: undefined
         }
     }
     

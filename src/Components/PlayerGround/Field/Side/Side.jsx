@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import CardView from "../../../Card/CardView";
 import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
-import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK, BATTLE_STEP } from '../../utils/constant'
+import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK } from '../../utils/constant'
 import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 import { is_monster, is_spell, is_trap } from '../../../Card/utils/utils'
 import './Side.css'
 
 import { perform_attack } from '../../../../Store/actions/environmentActions'
-import { direct_attack, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
-import { emit_attack_ack, emit_change_phase } from '../../../../Client/Sender'
+import { direct_attack, end_battle, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
 import { get_unique_id_from_ennvironment } from "../../utils/utils";
 
 
@@ -75,43 +74,6 @@ class Side extends React.Component {
                 this.props.dispatch_others_attack(info_battle)
             })
         }
-    }
-
-    componentDidUpdate(prevProps) {
-        // opponent is attacking
-        const current_battle_meta = this.props.battle_meta
-        const prev_battle_meta = prevProps.battle_meta
-
-        if (current_battle_meta && !prev_battle_meta
-            && current_battle_meta.battle_step == BATTLE_STEP.START_STEP
-            && current_battle_meta.side == SIDE.OPPONENT) {
-                // Started a battle because of the opponent
-                // TODO: Effects during battle starts will be triggered here
-                emit_attack_ack();
-                // TODO: switch the battle step to damage step
-                this.props.dispatch_change_to_damage_step();
-        }
-
-        if (current_battle_meta && prev_battle_meta
-            && current_battle_meta.battle_step == BATTLE_STEP.DAMAGE_STEP
-            && current_battle_meta.battle_step != prev_battle_meta.battle_step) {
-                // TODO: let the monster attack
-                // perform the battle animation
-
-                // update the props of environment
-                if (current_battle_meta.dst != DST_DIRECT_ATTACK) {
-                    // update props
-                    const info = {
-                        src_monster: current_battle_meta.src_monster,
-                        dst: current_battle_meta.dst,
-                        side: current_battle_meta.side
-                    }
-                    this.props.dispatch_perform_attack(info)
-                }
-
-            }
-
-
     }
 
     returnAttackStatus = (cardEnv) => {
@@ -274,7 +236,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch_others_attack: (info) => dispatch(others_attack(info)),
     // opponent attack ack will change the battle step to damage step
     dispatch_change_to_damage_step: () => dispatch(opponent_attack_ack()),
-    dispatch_perform_attack: (info) => dispatch(perform_attack(info))
+    dispatch_perform_attack: (info) => dispatch(perform_attack(info)),
+    dispatch_end_battle: () => dispatch(end_battle())
 });
 
 export default connect(
