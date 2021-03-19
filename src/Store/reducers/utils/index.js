@@ -1,6 +1,7 @@
 import { normal_summon } from "../../actions/environmentActions";
 import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON } from "../../actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../../Components/Card/utils/constant';
+import { DST_DIRECT_ATTACK } from '../../../Components/PlayerGround/utils/constant' 
 import { emit_summon, emit_tribute } from '../../../Client/Sender'
 import { get_unique_id_from_ennvironment } from '../../../Components/PlayerGround/utils/utils'
 
@@ -73,12 +74,15 @@ export const draw_card_from_deck = (environment, info) => {
 
 export const battle = (info, environment) => {
     const { src_monster, dst, side } = info
-    console.log(info)
+
     // side is the attacker's side
     const getting_attacked_side = side == SIDE.MINE ? SIDE.OPPONENT : SIDE.MINE;
+
+   
     const current_cards_attacker = environment[side][ENVIRONMENT.MONSTER_FIELD]
     const current_cards_getting_attacked = environment[getting_attacked_side][ENVIRONMENT.MONSTER_FIELD]
     
+
     let found = false
 
     // I know this part of code is stupid but sorry i dont want to maintain a dictionary at the same time
@@ -92,6 +96,14 @@ export const battle = (info, environment) => {
         }
         const attacker_id = get_unique_id_from_ennvironment(attacker_card)
         if (attacker_id == src_monster) {
+
+            // direct attack
+            if (dst == DST_DIRECT_ATTACK) {
+                environment[getting_attacked_side].hp -= attacker_card.current_atk
+                return environment
+            }
+
+            // others attack (attacking other monsters)
             for (let j = 0; j < current_cards_getting_attacked.length; j++) {
                 const getting_attacked_card = current_cards_getting_attacked[j]
                 if (!getting_attacked_card.card) {

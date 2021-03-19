@@ -22,7 +22,7 @@ export const CARD_SELECT_TYPE = {
 
 export const MONSTER_ATTACK_TYPE = {
     DIRECT_ATTACK: 'DIRECT_ATTACK',
-    OTHERS_OTHERS: 'OTHERS_ATTACK'
+    OTHERS_ATTACK: 'OTHERS_ATTACK'
 }
 
 // to show that the dst is the player (instead of a monster)

@@ -172,9 +172,6 @@ class Side extends React.Component {
                 cardEnv: cardEnv
             }
 
-            const info_battle = {
-                cardEnv: cardEnv
-            }
 
             const special_class = (index) => {
                 if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
@@ -198,11 +195,11 @@ class Side extends React.Component {
                     
                     <div className={hasOptions}>
                         <div className={can_direct_attack} 
-                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.DIRECT_ATTAK, info_battle)}>
+                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.DIRECT_ATTACK, info)}>
                                 Direct Attack
                         </div>
                         <div className={can_others_attack}
-                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.OTHERS_ATTACK, info_battle)}>
+                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.OTHERS_ATTACK, info)}>
                                 Attack
                         </div>
                     </div>

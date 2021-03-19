@@ -39,18 +39,13 @@ class Field extends React.Component {
                 // perform the battle animation
 
                 // update the props of environment
-                if (current_battle_meta.dst != DST_DIRECT_ATTACK) {
-                    // update props
-                    const info = {
-                        src_monster: current_battle_meta.src_monster,
-                        dst: current_battle_meta.dst,
-                        side: current_battle_meta.side
-                    }
-                    console.log('fuck1')
-                    this.props.dispatch_perform_attack(info)
-                    console.log('fuck2')
-                    this.props.dispatch_end_battle()
+                const info = {
+                    src_monster: current_battle_meta.src_monster,
+                    dst: current_battle_meta.dst,
+                    side: current_battle_meta.side
                 }
+                this.props.dispatch_perform_attack(info)
+                this.props.dispatch_end_battle()
 
             }
 
