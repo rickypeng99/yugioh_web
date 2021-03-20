@@ -45,7 +45,7 @@ class Game extends React.Component {
 
     auto_next_phase(next_phase) {
 
-        const WAIT_TIME = 2500
+        const WAIT_TIME = 2100
         setTimeout(() => {
             // change to next phase
             const info = {
