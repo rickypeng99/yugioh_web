@@ -9,10 +9,10 @@ class MonsterView extends React.Component {
     }
 
     render() {
-        const {card} = this.props;
+        const {card, style} = this.props;
         if (card) {
             return (
-                <img class="monster_card" src={'https://ygoprodeck.com/pics/' + card.card.key + '.jpg'}/>
+                <img style = {style} class="monster_card" src={'https://ygoprodeck.com/pics/' + card.card.key + '.jpg'}/>
             )
         } else {
             return (

@@ -16,33 +16,18 @@ class CardView extends React.Component {
     }
 
     render() {
-        const {card} = this.props;
+        const {card, style} = this.props;
         if (card) {
             const card_type = card.card.card_type // card is decorated with env\
             const info = {
                 cardEnv: card
             }
-            // const view = () => {
-            //     if (is_monster(card_type)) {
-            //         const info = {
-            //             cardEnv: card
-            //         }
-            //         return <MonsterView card={this.props.card}/>
-            //     } else {
-            //         return <p>Developing...</p>
-            //     }
-            // }
-            // return(
-            //     <div onMouseEnter={()=>this.onMouseEnterHandler(info)}>
-            //         {view()}
-            //     </div>
-            // )
 
             if (is_monster(card_type)) {
                 const info = {
                     cardEnv: card
                 }
-                return <MonsterView card={this.props.card}/>
+                return <MonsterView style={style} card={this.props.card}/>
             } else {
                 return <p>Developing...</p>
             }

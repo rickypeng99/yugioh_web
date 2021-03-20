@@ -71,7 +71,10 @@ socket.on("opponent_attack_start", (data) => {
 })
 
 socket.on("opponent_attack_ack", (data) => {
-    store.dispatch(opponent_attack_ack())
+    const info = {
+        environment: store.getState().environmentReducer.environment
+    }
+    store.dispatch(opponent_attack_ack(info))
 })
 
 export default socket;

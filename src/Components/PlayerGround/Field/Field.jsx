@@ -12,7 +12,8 @@ class Field extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            environment: {},
+            // update when needs child component to perform battle action
+            battle_animation: {},
         }
 
     }
@@ -28,24 +29,35 @@ class Field extends React.Component {
             && current_battle_meta.side == SIDE.OPPONENT) {
                 // Started a battle because of the opponent
                 // TODO: Effects during battle starts will be triggered here
+                const info = {
+                    environment: this.props.environment
+                }
                 emit_attack_ack();
-                this.props.dispatch_change_to_damage_step();
+                this.props.dispatch_change_to_damage_step(info);
         }
 
         if (current_battle_meta && prev_battle_meta
             && current_battle_meta.battle_step == BATTLE_STEP.DAMAGE_STEP
             && current_battle_meta.battle_step != prev_battle_meta.battle_step) {
-                // TODO: let the monster attack
-                // perform the battle animation
+                // Receive damage step, starting to let monster attack
+                // let the child components to perform animation
+                this.setState({
+                    battle_animation: {
+                        key: Math.random(),
+                        ...current_battle_meta                        
+                    }
+                })
 
                 // update the props of environment
-                const info = {
-                    src_monster: current_battle_meta.src_monster,
-                    dst: current_battle_meta.dst,
-                    side: current_battle_meta.side
-                }
-                this.props.dispatch_perform_attack(info)
-                this.props.dispatch_end_battle()
+
+                setTimeout(() => {
+                    const info = {
+                        ...current_battle_meta
+                    }
+                    this.props.dispatch_perform_attack(info)
+                    this.props.dispatch_end_battle()
+                }, 300)
+                
 
             }
 
@@ -53,7 +65,7 @@ class Field extends React.Component {
     }
 
     render() {
-
+        const { battle_animation } = this.state
         const {transformRotateX, scale, x_pos, y_pos} = this.props
 
         const fieldStyle = {
@@ -61,9 +73,9 @@ class Field extends React.Component {
         }
         return (
             <div className="field_box" style={fieldStyle}>
-                <Side side="OPPONENT"></Side>
+                <Side battle_animation = {battle_animation} side="OPPONENT"></Side>
                 <div style={{ height: "50px" }}></div>
-                <Side side="MINE" call_card_selector={this.props.call_card_selector}></Side>
+                <Side battle_animation = {battle_animation} side="MINE" call_card_selector={this.props.call_card_selector}></Side>
             </div>
 
         )
@@ -84,7 +96,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
     // opponent attack ack will change the battle step to damage step
-    dispatch_change_to_damage_step: () => dispatch(opponent_attack_ack()),
+    dispatch_change_to_damage_step: (info) => dispatch(opponent_attack_ack(info)),
     dispatch_perform_attack: (info) => dispatch(perform_attack(info)),
     dispatch_end_battle: () => dispatch(end_battle())
 });

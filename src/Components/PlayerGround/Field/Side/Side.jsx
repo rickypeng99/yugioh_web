@@ -7,11 +7,10 @@ import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 import { is_monster, is_spell, is_trap } from '../../../Card/utils/utils'
 import './Side.css'
-
+import { calculate_battle_style } from '../utils'
 import { perform_attack } from '../../../../Store/actions/environmentActions'
 import { direct_attack, end_battle, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
 import { get_unique_id_from_ennvironment } from "../../utils/utils";
-
 
 /**
  * Field for each player
@@ -21,6 +20,10 @@ class Side extends React.Component {
         super(props);
         this.state = {
             cardClicked: -1,
+            // change this style to make the card move
+            cardBattleStyle: {
+                cardIndex: -1
+            },
         }
     }
 
@@ -76,6 +79,28 @@ class Side extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        const current_battle_animation = this.props.battle_animation;
+        if (current_battle_animation.key && current_battle_animation.key != prevProps.battle_animation.key) {
+            // perform animation
+            this.setState({
+                cardBattleStyle: {
+                    ...calculate_battle_style(current_battle_animation),
+                    side: current_battle_animation.side
+                }
+            })
+        }
+
+        if (this.state.cardBattleStyle.style) {
+            setTimeout(() => this.setState({
+                cardBattleStyle: {
+                    cardIndex: -1
+                }
+            }), 300)
+            
+        }
+    }
+
     returnAttackStatus = (cardEnv) => {
 
         const disabled_class = 'no_hand_option'
@@ -115,6 +140,7 @@ class Side extends React.Component {
     }
 
     initializeSide = () => {
+        const { cardBattleStyle } = this.state;
         const { side, environment} = this.props;
 
         if (!environment) {
@@ -127,7 +153,7 @@ class Side extends React.Component {
 
         const cards = environment[side][ENVIRONMENT.MONSTER_FIELD].concat(environment[side][ENVIRONMENT.SPELL_FIELD])        
         let count = 0
-        
+        let styleIndex = -2
         for (let i = 0; i < 14; i++) {
             if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
                 if (i == 6) {
@@ -136,6 +162,9 @@ class Side extends React.Component {
                     field_cards.push(CARD_TYPE.PLACEHOLDER)
                 }
             } else {
+                if (count == cardBattleStyle.cardIndex && side == cardBattleStyle.side) {
+                    styleIndex = i
+                }
                 field_cards.push(cards[count])
                 count++
             }
@@ -161,7 +190,7 @@ class Side extends React.Component {
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
                         return (
-                            <CardView card={cardEnv} key="side_card" />
+                            <CardView style={index == styleIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
                         )
                     } else if (cardEnv.current_pos == CARD_POS.SET) {
                         return <img className="side_card_set" key="side_card_set" src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
