@@ -1,3 +1,7 @@
+<p align="center">
+<img src="screenshots/yugioh_screen.png" /><br>
+</p>
+
 # Yu-Gi-Oh multiplayer web game & framework - Developing
 A realization of the popular trading card game - yugioh on web using React.js. The project includes a completely remade engine, a multiplayer functionality (currently planning to utilize websocket) and interfaces to create custom cards using Javascript.
 
