@@ -17,6 +17,7 @@ That's right, no ygocore and its Lua card scripts but a completely new Yugioh si
  - Summoning monsters: Now supports normal, set and tribute summons!
  - Phase changing: Complete and synchronous phase changing between the two players
  - Health bar: Yea it's functioning during battles
+ - Battle: Complete support and animation of all kinds of battles
  - Effect: Developing (This is a hardass I will need to spend extensive time working on this one)
 
  (I am too lazy to prvide a Gif of the actual gameplay. You can access screenshots of early versions in the `screenshots` folder tho)
