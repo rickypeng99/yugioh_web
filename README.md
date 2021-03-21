@@ -20,4 +20,8 @@ That's right, no ygocore and its Lua card scripts but a completely new Yugioh si
  - Battle: Complete support and animation of all kinds of battles
  - Effect: Developing (This is a hardass I will need to spend extensive time working on this one)
 
- (I am too lazy to prvide a Gif of the actual gameplay. You can access screenshots of early versions in the `screenshots` folder tho)
+
+
+ ## Outdated recording of an early version
+  (I am too lazy to prvide a Gif of every aspect of the current gameplay. You can access more screenshots of early versions in the `screenshots` folder tho)
+  ![](screenshots/yugioh.gif)
