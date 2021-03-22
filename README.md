@@ -4,7 +4,7 @@
 
 # Yu-Gi-Oh multiplayer web game & framework - Developing
 
-Author: Ruiqi (Ricky) Peng - (Yes please if your team is hiring entry level front-end/full stack SDEs and you think that this project is cool please feel free to reach me at rickypeng99@gmail.com; I need a job pls thank you mister)
+Author: Ruiqi (Ricky) Peng
 
 A realization of the popular trading card game - yugioh on web using React + Node. The project includes a completely remade engine to contain the game logic, a multiplayer functionality using websocket, and interfaces to create custom cards using Javascript. 
 
