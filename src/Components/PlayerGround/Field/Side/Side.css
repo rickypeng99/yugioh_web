@@ -23,18 +23,18 @@
 /* 0, 6, 7, 13 */
 .side_box_MINE {
     display: grid;
-    grid-template-columns: 120px repeat(5, 120px) 120px;
-    grid-template-rows: repeat(2, 174px);
-    column-gap: 60px;
-    row-gap: 5px;
+    grid-template-columns: repeat(7, 10vw);
+    grid-template-rows: repeat(2, 14.5vw);
+    column-gap: 5vw;
+    row-gap: 1vw;
 } 
 
 .side_box_OPPONENT {
     display: grid;
-    grid-template-columns: 120px repeat(5, 120px) 120px;
-    grid-template-rows: repeat(2, 174px);
-    column-gap: 60px;
-    row-gap: 5px;
+    grid-template-columns: repeat(7, 10vw);
+    grid-template-rows: repeat(2, 14.5vw);
+    column-gap: 5vw;
+    row-gap: 1vw;
     transform: rotate(180deg);
 } 
 

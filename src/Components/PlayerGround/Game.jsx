@@ -30,7 +30,7 @@ class Game extends React.Component {
         super(props);
         this.state = {
             transformRotateX: '45deg', // rotateX(45deg)
-            scale: 0.6, // scale(1.0)
+            scale: 1.0, // scale(1.0)
             x_pos: 0, // translate(0px, 0px)
             y_pos: -180,
             show_card_selector: false,

@@ -91,6 +91,7 @@ class Side extends React.Component {
             })
         }
 
+        // when the animation has finished
         if (this.state.cardBattleStyle.style) {
             setTimeout(() => this.setState({
                 cardBattleStyle: {
