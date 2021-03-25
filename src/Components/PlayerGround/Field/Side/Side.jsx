@@ -137,7 +137,14 @@ class Side extends React.Component {
 
 
     render() {
-        return <div className={"side_box_" + this.props.side}>{this.initializeSide()}</div>;
+        let side_style = undefined
+        const { cardBattleStyle } = this.state
+        const { side } = this.props
+        if (cardBattleStyle && cardBattleStyle.side && cardBattleStyle.side == side) {
+            side_style = cardBattleStyle.side_style
+        }
+
+        return <div style={side_style} className={"side_box_" + side}>{this.initializeSide()}</div>;
     }
 
     initializeSide = () => {
@@ -145,7 +152,7 @@ class Side extends React.Component {
         const { side, environment} = this.props;
 
         if (!environment) {
-            return <p>Loading</p>
+            return
         }
         let leftExtraIndex = [0, 7];
         let rightExtraIndex = [6, 13];

@@ -72,7 +72,7 @@ class Main extends React.Component {
         if (loaded) {
             return(
                 <div className="main_container">
-                    <div style={{position: 'absolute', width: '100%', height: '100%', zIndex: '-1'}}>
+                    <div style={{position: 'absolute', width: '100%', height: '100%', zIndex: '-10'}}>
                         <Sky
                             images={{
                                 /* FORMAT AS FOLLOWS */

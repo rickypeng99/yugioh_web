@@ -1,6 +1,7 @@
 .field_box {
     transform: perspective(1000px) rotateX(45deg) scale(1.1,1.1);
     align-self: center;
+    position: relative;
 }
 
 .field_wrap {
