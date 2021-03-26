@@ -20,13 +20,11 @@ export default function(state = initialState, action) {
             side: SIDE.MINE
         }
         emit_attack_start(battle_meta)
-        console.log(battle_meta)
         return {
             battle_meta: battle_meta
         };
     } else if (action.type == OPPONENT_ATTACK_START) {
         const { info } = action.payload;
-        console.log(info)
         return{
             battle_meta: {
                 src_monster: info.src_monster,

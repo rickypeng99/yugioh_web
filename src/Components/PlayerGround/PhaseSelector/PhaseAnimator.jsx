@@ -35,11 +35,24 @@ class PhaseAnimator extends React.Component {
     }
 
     render() {
-        const { game_meta } = this.props; 
+        const { game_meta, my_id} = this.props; 
+
+        const broadcastText = () => {
+            if (game_meta.current_phase == PHASE_START) {
+                if (game_meta.current_turn == my_id) {
+                    return <h1>Your turn!</h1>
+                } else {
+                    return <h1>Opponent's turn!</h1>
+                }
+            } else {
+                return <h1>{game_meta.current_phase}</h1>
+            }
+        }
+
         return(
             <div className = {`phase_black_bar ${this.state.phaseBlackBarClass}`}>
                 <div className = {`phase_block ${this.state.phaseClass}`}>
-                    <h1>{game_meta.current_phase}</h1>
+                    {broadcastText()}
                 </div>
             </div>
            
@@ -50,7 +63,8 @@ class PhaseAnimator extends React.Component {
 const mapStateToProps = state => {
     const { environment } = state.environmentReducer;
     const { game_meta } = state.gameMetaReducer;
-    return { environment, game_meta};
+    const { my_id, opponent_id } = state.serverReducer;
+    return { environment, game_meta, my_id, opponent_id};
 };
 
 const mapDispatchToProps = dispatch => ({

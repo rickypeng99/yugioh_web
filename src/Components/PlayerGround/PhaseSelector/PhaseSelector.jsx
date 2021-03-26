@@ -64,7 +64,7 @@ class PhaseSelector extends React.Component {
             const res_phase_button_class = phase_button_class(PHASE[phase])
 
             return (
-                <div className = {`phase_button ${res_phase_button_class}`} 
+                <div className = {`phase_button ${res_phase_button_class}`} key = {`phase_button_${PHASE[phase]}`}
                     onClick={() => this.handlePhaseChange(PHASE[phase], res_phase_button_class)}>
                     {PHASE[phase]}
                 </div>

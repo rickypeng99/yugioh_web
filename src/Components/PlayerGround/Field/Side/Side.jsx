@@ -5,13 +5,12 @@ import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/const
 import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK } from '../../utils/constant'
 import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
-import { is_monster, is_spell, is_trap } from '../../../Card/utils/utils'
 import './Side.css'
 import { calculate_battle_style } from '../utils'
 import { perform_attack } from '../../../../Store/actions/environmentActions'
 import { direct_attack, end_battle, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
 import { get_unique_id_from_ennvironment } from "../../utils/utils";
-
+import { returnAttackStatus, constructFieldFromEnv } from '../utils';
 /**
  * Field for each player
  */
@@ -73,7 +72,6 @@ class Side extends React.Component {
                     // monster can only attack one monster
                     dst: result.cardEnvs[0],
                 }
-                console.log(info_battle)
                 this.props.dispatch_others_attack(info_battle)
             })
         }
@@ -102,38 +100,7 @@ class Side extends React.Component {
         }
     }
 
-    returnAttackStatus = (cardEnv) => {
-
-        const disabled_class = 'no_hand_option'
-        const enabled_class = 'show_summon'
-
-        // console.log(cardEnv.card)
-
-        // if it is not battle phase or the card is not a monster
-        if (!cardEnv.card || this.props.game_meta.current_phase != PHASE.BATTLE_PHASE || 
-            !is_monster(cardEnv.card.card_type)) {
-                return {
-                    can_direct_attack: disabled_class,
-                    can_others_attack: disabled_class
-                }
-        }
-
-        // if there is no monster on enemy's field
-        for (let monster of this.props.environment[SIDE.OPPONENT][ENVIRONMENT.MONSTER_FIELD]) {
-            if (monster != CARD_TYPE.PLACEHOLDER) {
-                return {
-                    can_direct_attack: disabled_class,
-                    can_others_attack: enabled_class
-                }
-            }
-        }
-
-        return {
-            can_direct_attack: enabled_class,
-            can_others_attack: disabled_class
-        }
-        
-    }
+    
 
 
     render() {
@@ -149,35 +116,13 @@ class Side extends React.Component {
 
     initializeSide = () => {
         const { cardBattleStyle } = this.state;
-        const { side, environment} = this.props;
+        const { side, environment, game_meta} = this.props;
 
         if (!environment) {
             return
         }
-        let leftExtraIndex = [0, 7];
-        let rightExtraIndex = [6, 13];
-        let field_cards = []
-
-
-        const cards = environment[side][ENVIRONMENT.MONSTER_FIELD].concat(environment[side][ENVIRONMENT.SPELL_FIELD])        
-        let count = 0
-        let styleIndex = -2
-        for (let i = 0; i < 14; i++) {
-            if (i == 0 || leftExtraIndex.includes(i) || rightExtraIndex.includes(i)) {
-                if (i == 6) {
-                    field_cards.push(environment[side][ENVIRONMENT.GRAVEYARD])
-                } else {
-                    field_cards.push(CARD_TYPE.PLACEHOLDER)
-                }
-            } else {
-                if (count == cardBattleStyle.cardIndex && side == cardBattleStyle.side) {
-                    styleIndex = i
-                }
-                field_cards.push(cards[count])
-                count++
-            }
-        }
-
+        
+        const { field_cards, styleIndex } = constructFieldFromEnv(side, environment, cardBattleStyle)
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
                 if (index == 6 && cardEnv.length > 0) {
@@ -209,23 +154,15 @@ class Side extends React.Component {
                 cardEnv: cardEnv
             }
 
-
-            const special_class = (index) => {
-                if (leftExtraIndex.includes(index) || rightExtraIndex.includes(index)) {
-                    return ' special_class'
-                } else {
-                    return ''
-                }
-            }
-
             const hasOptions = index == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
-            const {can_direct_attack, can_others_attack} = this.returnAttackStatus(cardEnv)
+
+            const {can_direct_attack, can_others_attack} = returnAttackStatus(cardEnv, game_meta, environment)
 
 
 
             return (
-                <div className={"card_box"  + special_class(index)} 
-                    key={"side-" + side + index} 
+                <div className={`card_box`} 
+                    key={"side_" + side + index} 
                     onMouseEnter={()=>this.onMouseEnterHandler(info)}
                     onClick={()=>this.onCardClickHandler(info, index)}
                     onMouseLeave={() => this.cardMouseMoveHandler()}>

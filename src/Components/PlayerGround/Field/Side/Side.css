@@ -23,19 +23,19 @@
 .side_box_MINE {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(7, 10vw);
-    grid-template-rows: repeat(2, 14.5vw);
-    column-gap: 5vw;
-    row-gap: 1vw;
+    grid-template-columns: repeat(7, 7vw);
+    grid-template-rows: repeat(2, 10.15vw);
+    column-gap: 3.5vw;
+    row-gap: 0.7vw;
 } 
 
 .side_box_OPPONENT {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(7, 10vw);
-    grid-template-rows: repeat(2, 14.5vw);
-    column-gap: 5vw;
-    row-gap: 1vw;
+    grid-template-columns: repeat(7, 7vw);
+    grid-template-rows: repeat(2, 10.15vw);
+    column-gap: 3.5vw;
+    row-gap: 0.7vw;
     transform: rotate(180deg);
 } 
 
@@ -66,11 +66,11 @@
     transform: rotate(180deg);
 } */
 
-.special_class {
+/* .special_class {
     width: 80%;
     height: 80%;
     margin: auto;
-}
+} */
 
 .deck_remaining {
     position: absolute;

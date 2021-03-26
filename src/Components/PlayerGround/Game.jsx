@@ -32,7 +32,7 @@ class Game extends React.Component {
             transformRotateX: '45deg', // rotateX(45deg)
             scale: 1.0, // scale(1.0)
             x_pos: 0, // translate(0px, 0px)
-            y_pos: -180,
+            y_pos: -100,
             show_card_selector: false,
             card_selector_info: undefined,
         }
@@ -60,7 +60,6 @@ class Game extends React.Component {
     componentDidUpdate(prevProps) {
         const current_phase = this.props.game_meta.current_phase
         if (current_phase == PHASE_START) {
-            console.log(this.props.game_meta)
             this.auto_next_phase(PHASE.DRAW_PHASE)
         }
 
