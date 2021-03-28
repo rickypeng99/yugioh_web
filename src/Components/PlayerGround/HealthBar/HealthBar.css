@@ -1,5 +1,7 @@
 .health_bar {
-    padding: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: white;

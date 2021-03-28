@@ -1,10 +1,18 @@
+.card_outer_box {
+    height: 100%;
+    width: 100%;
+    border: 5px solid rgba(255, 0, 0, 0) ;
+    border-radius: 5px;
+    user-select: none;
+}
 .card_box {
+    position: relative;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
-    position: relative;
-    user-select: none;
-    
+    height: 100%;
+    width: 100%;
+
 }
 
 .card_mask {
@@ -107,4 +115,14 @@
 
 .show_summon:hover {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.card_flashing {
+    animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        border-color: rgba(255, 0, 0, 1);
+    }
 }

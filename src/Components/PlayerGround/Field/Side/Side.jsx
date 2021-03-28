@@ -10,7 +10,9 @@ import { calculate_battle_style } from '../utils'
 import { perform_attack } from '../../../../Store/actions/environmentActions'
 import { direct_attack, end_battle, opponent_attack_ack, others_attack } from "../../../../Store/actions/battleMetaActions";
 import { get_unique_id_from_ennvironment } from "../../utils/utils";
-import { returnAttackStatus, constructFieldFromEnv } from '../utils';
+import { returnAttackStatus, constructFieldFromEnv, get_styled_index_from_environment, calculate_aim_style} from '../utils';
+import { BATTLE_SELECT, ANIMATION_TYPE } from '../utils/constant'
+
 /**
  * Field for each player
  */
@@ -26,10 +28,36 @@ class Side extends React.Component {
         }
     }
 
+
+    // mouse enter
     onMouseEnterHandler = (info) => {
         if (info.cardEnv.card) {
             this.props.mouse_in_view(info);
+        } else {
+            return
         }
+
+        const { battle_selection, side } = this.props
+
+        if (side == SIDE.OPPONENT && battle_selection?.cards) {
+            const info_battle_select = {
+                mouse_in: info.cardIndex
+            }
+            this.props.updateBattleSelection(BATTLE_SELECT.MOUSE_IN_SELECT, info_battle_select)
+        } 
+
+    }
+
+    // mouse leave
+    cardMouseMoveHandler = () => {
+        const { battle_selection, side } = this.props
+        if (side == SIDE.OPPONENT && battle_selection?.cards) {
+            const info_battle_select = {
+                mouse_in: -1
+            }
+            this.props.updateBattleSelection(BATTLE_SELECT.MOUSE_IN_SELECT, info_battle_select)
+        }
+        this.setState({cardClicked: -1})
     }
 
     
@@ -39,63 +67,100 @@ class Side extends React.Component {
             return
         }
 
+        if (this.props?.battle_selection?.cards) {
+            if (this.props.side == SIDE.OPPONENT) {
+                // wait to pick a monster
+                const info_battle_select = {
+                    selection: get_unique_id_from_ennvironment(info.cardEnv)
+                }
+                this.props.updateBattleSelection(BATTLE_SELECT.CONFIRM_SELECT, info_battle_select)
+            } 
+            return
+        }
+
+        
+
         this.setState({cardClicked: cardIndex})
     }
     
-    cardMouseMoveHandler = () => {
-        this.setState({cardClicked: -1})
-    }
 
     monsterAttackOnClick = (attack_type, info) => {
 
+        const src_monster_id = get_unique_id_from_ennvironment(info.cardEnv)
+        
         if (attack_type == MONSTER_ATTACK_TYPE.DIRECT_ATTACK) {
             // direct attack
             const info_battle = {
-                src_monster: get_unique_id_from_ennvironment(info.cardEnv),
+                src_monster: src_monster_id,
                 dst: DST_DIRECT_ATTACK,
             }
             this.props.dispatch_direct_attack(info_battle)
 
         } else {
-            return new Promise((resolve, reject) => {
-                const info_card_selector = {
-                    resolve: resolve,
-                    reject: reject,
-                    cardEnv: info.cardEnv,
-                    type: CARD_SELECT_TYPE.CARD_SELECT_BATTLE_SELECT
-                }
-                this.props.call_card_selector(info_card_selector)
-            }).then((result) => {
-                // battle start
-                const info_battle = {
-                    src_monster: get_unique_id_from_ennvironment(info.cardEnv),
-                    // monster can only attack one monster
-                    dst: result.cardEnvs[0],
-                }
-                this.props.dispatch_others_attack(info_battle)
-            })
+            const info_battle_select = {
+                src_monster: src_monster_id,
+                src_monster_index: info.cardIndex
+            }
+            this.props.updateBattleSelection(BATTLE_SELECT.START_SELECT, info_battle_select)
         }
     }
 
     componentDidUpdate(prevProps) {
-        const current_battle_animation = this.props.battle_animation;
-        if (current_battle_animation.key && current_battle_animation.key != prevProps.battle_animation.key) {
+        const { battle_animation, side, battle_selection } = this.props;
+        if (battle_animation.key && battle_animation.key != prevProps.battle_animation.key) {
             // perform animation
             this.setState({
                 cardBattleStyle: {
-                    ...calculate_battle_style(current_battle_animation),
-                    side: current_battle_animation.side
+                    ...calculate_battle_style(battle_animation),
+                    side: battle_animation.side,
+                    type: ANIMATION_TYPE.ATTACK_ANIMATION
                 }
             })
         }
 
-        // when the animation has finished
-        if (this.state.cardBattleStyle.style) {
+        // when the attack animation has finished
+        if (this.state.cardBattleStyle.style && this.state.cardBattleStyle.type == ANIMATION_TYPE.ATTACK_ANIMATION) {
             setTimeout(() => this.setState({
                 cardBattleStyle: {
                     cardIndex: -1
                 }
             }), 300)
+            
+        }
+
+        if (side == SIDE.MINE && battle_selection?.selection 
+            && (battle_selection.selection != prevProps.battle_selection?.selection)) {
+
+            this.props.updateBattleSelection(BATTLE_SELECT.END_SELECT)
+            const info_battle = {
+                src_monster: battle_selection.src_monster,
+                // monster can only attack one monster
+                dst: battle_selection.selection
+            }
+            this.props.dispatch_others_attack(info_battle)
+        }
+
+        if (side == SIDE.MINE && battle_selection?.mouse_in && !battle_selection?.selection
+                && (battle_selection?.mouse_in != prevProps.battle_selection?.mouse_in)) {
+
+            if (battle_selection.mouse_in != -1) {
+                const info = {
+                    src_index: battle_selection.src_monster_index,
+                    dst_index: battle_selection.mouse_in
+                }
+                this.setState({cardBattleStyle: {
+                    // cardIndex: battle_selection.src_monster_index,
+                    // style: {
+                    //     transform: 'rotate(45deg)'
+                    // },
+                    ...calculate_aim_style(info),
+                    type: ANIMATION_TYPE.AIM_ANIMATION
+                }})
+            } else {
+                this.setState({cardBattleStyle: {
+                    cardIndex: -1
+                }})
+            }
             
         }
     }
@@ -116,13 +181,14 @@ class Side extends React.Component {
 
     initializeSide = () => {
         const { cardBattleStyle } = this.state;
-        const { side, environment, game_meta} = this.props;
+        const { side, environment, game_meta, battle_selection} = this.props;
 
         if (!environment) {
             return
         }
         
-        const { field_cards, styleIndex } = constructFieldFromEnv(side, environment, cardBattleStyle)
+        const field_cards = constructFieldFromEnv(side, environment)
+        const highlightIndexes = side == SIDE.OPPONENT ? get_styled_index_from_environment(battle_selection?.cards) : undefined
         return field_cards.map((cardEnv, index) => {
             const cardView = () => {
                 if (index == 6 && cardEnv.length > 0) {
@@ -143,7 +209,7 @@ class Side extends React.Component {
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
                         return (
-                            <CardView style={index == styleIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
+                            <CardView style={side == SIDE.MINE && index == cardBattleStyle.cardIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
                         )
                     } else if (cardEnv.current_pos == CARD_POS.SET) {
                         return <img className="side_card_set" key="side_card_set" src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
@@ -151,7 +217,8 @@ class Side extends React.Component {
                 }
             }
             const info = {
-                cardEnv: cardEnv
+                cardEnv: cardEnv,
+                cardIndex: index
             }
 
             const hasOptions = index == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
@@ -161,31 +228,33 @@ class Side extends React.Component {
 
 
             return (
-                <div className={`card_box`} 
+                <div 
+                    className={`card_outer_box ${highlightIndexes?.includes(index) ? 'card_flashing' : ''}`}
                     key={"side_" + side + index} 
                     onMouseEnter={()=>this.onMouseEnterHandler(info)}
                     onClick={()=>this.onCardClickHandler(info, index)}
                     onMouseLeave={() => this.cardMouseMoveHandler()}>
-                    
-                    <div className={hasOptions}>
-                        <div className={can_direct_attack} 
-                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.DIRECT_ATTACK, info)}>
-                                Direct Attack
+                    <div className={`card_box`}>
+                        <div className={hasOptions}>
+                            <div className={can_direct_attack} 
+                                onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.DIRECT_ATTACK, info)}>
+                                    Direct Attack
+                            </div>
+                            <div className={can_others_attack}
+                                onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.OTHERS_ATTACK, info)}>
+                                    Attack
+                            </div>
                         </div>
-                        <div className={can_others_attack}
-                            onClick={()=>this.monsterAttackOnClick(MONSTER_ATTACK_TYPE.OTHERS_ATTACK, info)}>
-                                Attack
-                        </div>
-                    </div>
-                    
-                    <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
-                    <CSSTransitionGroup
-                    transitionName="side"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300}>
-                        {cardView()}
-                    </CSSTransitionGroup>
+                        
+                        <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
+                        <CSSTransitionGroup
+                        transitionName="side"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={300}>
+                            {cardView()}
+                        </CSSTransitionGroup>
 
+                    </div>
                 </div>
             );
         });

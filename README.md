@@ -18,6 +18,7 @@ That's right, no ygocore and its Lua card scripts but a completely new Yugioh si
  - Phase changing: Complete and synchronous phase changing between the two players
  - Health bar: Yea it's functioning during battles
  - Battle: Complete support and animation of all kinds of battles
+ ![](screenshots/yugioh5.gif)
  - Effect: Developing (This is a hardass I will need to spend extensive time working on this one)
 
 

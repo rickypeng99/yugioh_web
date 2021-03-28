@@ -1,6 +1,5 @@
-import { ENVIRONMENT, SIDE } from '../../Components/Card/utils/constant';
+import { ENVIRONMENT, SIDE, CARD_TYPE} from '../../Components/Card/utils/constant';
 import { DST_DIRECT_ATTACK } from '../../Components/PlayerGround/utils/constant' 
-import { battle_to_graveyard } from '../utils'
 
 
 const battle = (info, environment) => {
@@ -38,6 +37,12 @@ const battle = (info, environment) => {
         environment = battle_to_graveyard(attacker_card, side, src_index, environment)
     }
 
+    return environment
+}
+
+const battle_to_graveyard = (card, side, index, environment) => {
+    environment[side][ENVIRONMENT.GRAVEYARD].push(card)
+    environment[side][ENVIRONMENT.MONSTER_FIELD][index] = CARD_TYPE.PLACEHOLDER
     return environment
 }
 

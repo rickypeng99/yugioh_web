@@ -2,11 +2,38 @@ import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/const
 import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK } from '../../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../../Card/utils/utils'
 
+export const calculate_aim_style = (info) => {
+    let {src_index, dst_index } = info;
+    console.log(info)
+    const res = {
+        cardIndex: src_index,
+        style: {}
+    }
+    src_index -= 1
+    dst_index -= 1
+    const new_dst_index = 4 - dst_index
+    const neg = src_index > new_dst_index ? -1 : 1;
+    const diff = Math.abs(src_index - new_dst_index)
+
+
+    if (diff == 1) {
+        res.style.transform = `rotate(${neg * 45}deg)`
+    } else if (diff == 2) {
+        res.style.transform = `rotate(${neg * 55}deg)`
+    } else if (diff == 3) {
+        res.style.transform = `rotate(${neg * 65}deg)`
+    } else if (diff == 4) {
+        res.style.transform = `rotate(${neg * 71}deg)`
+    }
+
+    return res
+}
+
 export const calculate_battle_style = (info) => {
     const {src_index, dst_index } = info;
 
     const res = {
-        cardIndex: src_index,
+        cardIndex: get_styled_index_from_environment(src_index),
         style: {
             transform: 'translateY(calc(-200% - 60px))'
         },
@@ -34,20 +61,20 @@ export const calculate_battle_style = (info) => {
         if (diff == 0) {
             res.style.transform = `translateY(calc(-100% - 50px))`
         } else if (diff == 1) {
-            res.style.transform = `rotate(${neg * 38}deg) translateY(-300px)`
+            res.style.transform = `rotate(${neg * 45}deg) translateY(calc(-10vw - 100px))`
         } else if (diff == 2) {
-            res.style.transform = `rotate(${neg * 50}deg) translateY(-420px)`
+            res.style.transform = `rotate(${neg * 55}deg) translateY(calc(-10vw - 200px))`
         } else if (diff == 3) {
-            res.style.transform = `rotate(${neg * 67}deg) translateY(-600px)`
+            res.style.transform = `rotate(${neg * 65}deg) translateY(calc(-10vw - 350px))`
         } else if (diff == 4) {
-            res.style.transform = `rotate(${neg * 74}deg) translateY(-760px)`
+            res.style.transform = `rotate(${neg * 71}deg) translateY(calc(-10vw - 480px))`
         }
 
     }
     return res
 }
 
-export const constructFieldFromEnv = (side, environment, cardBattleStyle) => {
+export const constructFieldFromEnv = (side, environment) => {
     const field_size = 14
     const env_magic_index = 0
     const graveyard_index = 6
@@ -56,8 +83,6 @@ export const constructFieldFromEnv = (side, environment, cardBattleStyle) => {
     const special_indexes = [env_magic_index, graveyard_index, extra_deck_index, deck_index]
 
     const cards = environment[side][ENVIRONMENT.MONSTER_FIELD].concat(environment[side][ENVIRONMENT.SPELL_FIELD])
-
-    let index_to_perform_action = -2
 
     // render the environment onto the field
     let count = -1
@@ -70,16 +95,10 @@ export const constructFieldFromEnv = (side, environment, cardBattleStyle) => {
             return CARD_TYPE.PLACEHOLDER
         } else {
             count++
-            if (count == cardBattleStyle.cardIndex && cardBattleStyle.side == side) {
-                index_to_perform_action = index
-            }
             return cards[count]
         }
     });
-    return {
-        field_cards,
-        styleIndex: index_to_perform_action
-    }
+    return field_cards
 
 }
 
@@ -113,6 +132,26 @@ export const returnAttackStatus = (cardEnv, game_meta, environment) => {
     return {
         can_direct_attack: enabled_class,
         can_others_attack: disabled_class
+    }
+    
+}
+
+
+
+export const get_styled_index_from_environment = (indexes) => {
+
+    if (!indexes) return
+
+    if (indexes == -1) {
+        return -2
+    }
+
+    if (typeof indexes === 'number') {
+        return indexes + 1
+    } else {
+        return indexes.map((value) => {
+            return value + 1
+        })
     }
     
 }

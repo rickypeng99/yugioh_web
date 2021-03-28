@@ -6,6 +6,9 @@ import { emit_attack_ack } from '../../../Client/Sender'
 import { SIDE } from '../../Card/utils/constant';
 import { DST_DIRECT_ATTACK, BATTLE_STEP } from '../utils/constant'
 import { perform_attack } from '../../../Store/actions/environmentActions'
+import Core from '../../../Core'
+
+import { BATTLE_SELECT } from './utils/constant'
 
 import './Field.css';
 class Field extends React.Component {
@@ -14,8 +17,45 @@ class Field extends React.Component {
         this.state = {
             // update when needs child component to perform battle action
             battle_animation: {},
+            // update when needs child component to select monster to battle
+            battle_selection: {},
         }
 
+    }
+
+    updateBattleSelection = (type, info) => {
+        // for both sides to call to update battle selection
+        // find the monsters that are able to be selected to battle agianst
+        if (type == BATTLE_SELECT.START_SELECT) {
+            const { environment } = this.props 
+
+            const battle_selection = {
+                cards: Core.Utils.get_monsters_to_be_attacked(environment),
+                src_monster: info.src_monster,
+                src_monster_index: info.src_monster_index
+            }
+    
+            this.setState({battle_selection: battle_selection})
+        } else if (type == BATTLE_SELECT.MOUSE_IN_SELECT) {
+
+            const battle_selection = {
+                ...this.state.battle_selection,
+                mouse_in: info.mouse_in
+            }
+
+            this.setState({battle_selection: battle_selection})
+        } else if (type == BATTLE_SELECT.CONFIRM_SELECT) {
+
+            const battle_selection = {
+                ...this.state.battle_selection,
+                selection: info.selection 
+            }
+    
+            this.setState({battle_selection: battle_selection})
+        } else {
+            this.setState({battle_selection: {}})
+        }
+        
     }
 
     componentDidUpdate(prevProps) {
@@ -65,17 +105,22 @@ class Field extends React.Component {
     }
 
     render() {
-        const { battle_animation } = this.state
+        const { battle_animation, battle_selection } = this.state
         const {transformRotateX, scale, x_pos, y_pos} = this.props
 
         const fieldStyle = {
-            transform: transformRotateX && scale && x_pos != undefined && y_pos !== undefined ? "perspective(1000px) rotateX(" + transformRotateX + ") scale(" + scale + ") translate(" + x_pos + "px, " + y_pos + "px)" : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
+            transform: transformRotateX && scale && x_pos != undefined && y_pos !== undefined ? "perspective(1000px) rotateX(" + transformRotateX + ") scale(" + scale + ") translate(" + x_pos + "px, " + y_pos + "px)" 
+                : "perspective(1000px) rotateX(45deg) scale(1.0) translate(0px, 0px)",
         }
         return (
             <div className="field_box" style={fieldStyle}>
-                <Side battle_animation = {battle_animation} side="OPPONENT"></Side>
+                <Side battle_animation = {battle_animation} side="OPPONENT" 
+                    battle_selection={battle_selection} 
+                    updateBattleSelection={this.updateBattleSelection}></Side>
                 <div style={{ height: "50px" }}></div>
-                <Side battle_animation = {battle_animation} side="MINE" call_card_selector={this.props.call_card_selector}></Side>
+                <Side battle_animation = {battle_animation} side="MINE" call_card_selector={this.props.call_card_selector} 
+                    battle_selection={battle_selection} 
+                    updateBattleSelection={this.updateBattleSelection}></Side>
             </div>
 
         )
