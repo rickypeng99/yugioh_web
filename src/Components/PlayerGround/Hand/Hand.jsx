@@ -4,12 +4,14 @@ import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
 import { CARD_SELECT_TYPE } from '../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import CardView from '../../Card/CardView';
-import { normal_summon, set_summon, tribute } from '../../../Store/actions/environmentActions';
 import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
 import { CSSTransitionGroup } from 'react-transition-group' // ES6
 
+import Core from '../../../Core'
+
 import './Hand.css'
 import { get_unique_id_from_ennvironment } from '../utils/utils';
+import { NORMAL_SUMMON, SET_SUMMON } from '../../../Store/actions/actionTypes';
 
 
 class Hand extends React.Component {
@@ -31,12 +33,14 @@ class Hand extends React.Component {
     }
 
     normal_summon_final = (info, event) => {
-        this.props.dispatch_normal_summon(info)
+        const { environment } = this.props
+        Core.Summon.summon(info, NORMAL_SUMMON, environment)
         this.setState({cardClicked: -1})
         event.stopPropagation();
     }
 
     normalSummonOnclick = (info) => event => {
+        const { environment } = this.props
         if (info.card.card.level > 4) {
             // tribute summon; Send a promise to call card selector
             return new Promise((resolve, reject) => {
@@ -48,7 +52,7 @@ class Hand extends React.Component {
                 }
                 this.props.call_card_selector(info_card_selector)
             }).then((result) => {
-                this.props.dispatch_tribute(result)
+                Core.Summon.tribute(result.cardEnvs, SIDE.MINE, ENVIRONMENT.MONSTER_FIELD, environment)
                 setTimeout(()=>this.normal_summon_final(info, event), 500)
                 
             })
@@ -59,7 +63,8 @@ class Hand extends React.Component {
     }
 
     setSummonOnclick = (info) => event =>{
-        this.props.dispatch_set_summon(info)
+        const { environment } = this.props
+        Core.Summon.summon(info, SET_SUMMON, environment)
         this.setState({cardClicked: -1})
         event.stopPropagation();
 
@@ -67,7 +72,7 @@ class Hand extends React.Component {
 
     onMouseEnterHandler = (info) => {
         if (info.cardEnv.card) {
-            this.props.mouse_in_view(info);
+            this.props.dispatch_mouse_in_view(info);
         }
     }
 
@@ -84,7 +89,8 @@ class Hand extends React.Component {
                     const info = {
                         side: side,
                         card: cardEnv,
-                        index: cardIndex
+                        index: cardIndex,
+                        src_location: ENVIRONMENT.HAND
                     }
 
                     const info_in = {
@@ -140,10 +146,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
-    mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
-    dispatch_normal_summon: (info) => dispatch(normal_summon(info)),
-    dispatch_set_summon: (info) => dispatch(set_summon(info)),
-    dispatch_tribute: (info) => dispatch(tribute(info))
+    dispatch_mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
 });
 
 export default connect(

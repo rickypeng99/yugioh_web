@@ -1,9 +1,12 @@
-import { SET_SUMMON } from "../../Store/actions/actionTypes";
+import { SET_SUMMON, UPDATE_ENVIRONMENT } from "../../Store/actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../Components/Card/utils/constant';
 import { emit_summon, emit_tribute } from '../../Client/Sender'
 import { move_cards_to_graveyard } from '../utils'
+import store from "../../Store/store";
+import { update_environment } from "../../Store/actions/environmentActions";
 
 const summon = (info, type, environment) => {
+    // TODO: make summon function more generic
     if (type != SET_SUMMON) {
         info.card.current_pos = CARD_POS.FACE;
     } else {
@@ -20,11 +23,13 @@ const summon = (info, type, environment) => {
     environment[info.side][ENVIRONMENT.MONSTER_FIELD] = current_monsters
 
     // remove the card from the hand
-    environment[info.side][ENVIRONMENT.HAND].splice(info.index, 1);
+    environment[info.side][info.src_location].splice(info.index, 1);
 
     if (info.side == SIDE.MINE) {
         emit_summon(info, type)
     }
+
+    store.dispatch(update_environment(environment))
 
     return environment;
 }
@@ -38,6 +43,8 @@ const tribute = (cards, side, src, environment) => {
         }
         emit_tribute(info)
     }
+
+    store.dispatch(update_environment(res))
     return res
 }
 

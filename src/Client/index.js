@@ -5,12 +5,18 @@ import { NORMAL_SUMMON, SET_SUMMON } from '../Store/actions/actionTypes'
 import { normal_summon, set_summon, tribute } from '../Store/actions/environmentActions'
 import { opponent_attack_start, opponent_attack_ack } from '../Store/actions/battleMetaActions'
 import { change_phase } from '../Store/actions/gameMetaActions'
+import Core from "../Core";
+import { ENVIRONMENT, SIDE } from "../Components/Card/utils/constant";
 /**
  * The address of the websocket server
  */
 const ENDPOINT = "http://127.0.0.1:4001";
 
 const socket = io(ENDPOINT);
+
+const getCurrentEnvironment = () => {
+    return store.getState().environmentReducer.environment
+}
 
 socket.on("connect", () => {
     socket.send(`Hello from ${socket.id}!`);
@@ -46,24 +52,19 @@ socket.on("receive_deck", (data) => {
 })
 
 socket.on("opponent_summon", (data) => {
-    switch (data.data.type) {
-        case NORMAL_SUMMON:
-            store.dispatch(normal_summon(data.data))
-            break;
-        case SET_SUMMON:
-            store.dispatch(set_summon(data.data))
-            break;
+    const environment = getCurrentEnvironment()
+    Core.Summon.summon(data.data, data.data.type, environment)
+})
 
-    }
+socket.on("opponent_tribute", (data) => {
 
+    const { cardEnvs, side, src } = data.data
+    const environment = getCurrentEnvironment()
+    Core.Summon.tribute(cardEnvs, side, src, environment)
 })
 
 socket.on("opponent_change_phase", (data) => {
     store.dispatch(change_phase(data.data))
-})
-
-socket.on("opponent_tribute", (data) => {
-    store.dispatch(tribute(data.data))
 })
 
 socket.on("opponent_attack_start", (data) => {

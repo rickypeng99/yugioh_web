@@ -5,6 +5,9 @@ export const TRIBUTE = "TRIBUTE";
 export const DRAW_CARD = "DRAW_CARD";
 export const PERFORM_ATTACK = "PERFORM_ATTACK"
 
+// generically updating environment
+export const UPDATE_ENVIRONMENT = "UPDATE_ENVIRONMENT"
+
 
 //--- mouse actions
 export const LEFT_PANEL_MOUSE = "LEFT_PANEL_MOUSE";

@@ -1,4 +1,4 @@
-import { INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON, TRIBUTE, DRAW_CARD, PERFORM_ATTACK } from "../actions/actionTypes";
+import { UPDATE_ENVIRONMENT, INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON, TRIBUTE, DRAW_CARD, PERFORM_ATTACK } from "../actions/actionTypes";
 import { SIDE, ENVIRONMENT } from '../../Components/Card/utils/constant';
 
 import Core from '../../Core'
@@ -9,7 +9,17 @@ const initialState = {
 
 export default function(state = initialState, action) {
 
-    if (action.type == INITIALIZE_ENVIRONMENT) {
+
+    if (action.type == UPDATE_ENVIRONMENT) {
+        const { environment } = action.payload;
+        return {
+            environment: {
+                ...environment
+            }
+        };
+    }
+
+    else if (action.type == INITIALIZE_ENVIRONMENT) {
         const { environment } = action.payload;
         return {
             environment: {
