@@ -109,6 +109,7 @@ class Side extends React.Component {
         const { battle_animation, side, battle_selection } = this.props;
         if (battle_animation.key && battle_animation.key != prevProps.battle_animation.key) {
             // perform animation
+            console.log(battle_animation)
             this.setState({
                 cardBattleStyle: {
                     ...calculate_battle_style(battle_animation),
@@ -172,7 +173,7 @@ class Side extends React.Component {
         let side_style = undefined
         const { cardBattleStyle } = this.state
         const { side } = this.props
-        if (cardBattleStyle && cardBattleStyle.side && cardBattleStyle.side == side) {
+        if (cardBattleStyle?.side == side) {
             side_style = cardBattleStyle.side_style
         }
 
@@ -209,7 +210,7 @@ class Side extends React.Component {
                 if (cardEnv.card) {
                     if (cardEnv.current_pos == CARD_POS.FACE) {
                         return (
-                            <CardView style={side == SIDE.MINE && index == cardBattleStyle.cardIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
+                            <CardView style={side == cardBattleStyle.side && index == cardBattleStyle.cardIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
                         )
                     } else if (cardEnv.current_pos == CARD_POS.SET) {
                         return <img className="side_card_set" key="side_card_set" src={'https://ms.yugipedia.com//f/fd/Back-Anime-ZX-2.png'}/>
