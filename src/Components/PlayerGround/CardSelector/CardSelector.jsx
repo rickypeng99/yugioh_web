@@ -38,17 +38,21 @@ class CardSelector extends React.Component {
         })
     }
 
-    get_all_monsters = (side, environment, num_needs_selected) => {
-        const cards = environment[side][ENVIRONMENT.MONSTER_FIELD].filter(cardEnv => cardEnv.card).map((cardEnv) => {
+    build_up_selections = (cards, num_needs_selected) => {
+        return cards.map(cardEnv => {
             const card_unique_key = get_unique_id_from_ennvironment(cardEnv)
             return(                
-            <div className={"selector_card_box" + (card_unique_key in this.state.selected_cards ? " selected" : 
-            "")} key={"select_card_" + card_unique_key} onClick={()=>{this.cardOnClickHandler(card_unique_key, num_needs_selected)}}>
-                <CardView card={cardEnv} />
-            </div>
+                <div className={"selector_card_box" + (card_unique_key in this.state.selected_cards ? " selected" : 
+                "")} key={"select_card_" + card_unique_key} onClick={()=>{this.cardOnClickHandler(card_unique_key, num_needs_selected)}}>
+                    <CardView card={cardEnv} />
+                </div>
             )
         })
-        return cards
+    }
+
+
+    get_all_monsters = (side, location, environment) => {
+        return environment[side][location].filter(cardEnv => cardEnv.card)
     }
 
     get_card_selector_content = (card_selector_info, environment) => {
@@ -66,7 +70,7 @@ class CardSelector extends React.Component {
                 title: get_title(num_needs_selected),
                 content: (
                     <div className="card_selector_content">
-                        {this.get_all_monsters(SIDE.MINE, environment, num_needs_selected)}
+                        {this.build_up_selections(this.get_all_monsters(SIDE.MINE, ENVIRONMENT.MONSTER_FIELD, environment), num_needs_selected)}
                     </div>
                 )
             }
@@ -76,7 +80,27 @@ class CardSelector extends React.Component {
                 title: get_title(num_needs_selected),
                 content: (
                     <div className="card_selector_content">
-                        {this.get_all_monsters(SIDE.OPPONENT, environment, num_needs_selected)}
+                        {this.build_up_selections(this.get_all_monsters(SIDE.OPPONENT, ENVIRONMENT.MONSTER_FIELD, environment), num_needs_selected)}
+                    </div>
+                )
+            }
+        } else if (selector_type == CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_TARGET) {
+            const num_needs_selected = 1
+            return {
+                title: get_title(num_needs_selected),
+                content: (
+                    <div className="card_selector_content">
+                        {this.build_up_selections(this.get_all_monsters(SIDE.MINE, ENVIRONMENT.EXTRA_DECK, environment), num_needs_selected)}
+                    </div>
+                )
+            }
+        } else if (selector_type == CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_MATERIALS) {
+            const num_needs_selected = card_selector_info.num_to_select
+            return {
+                title: get_title(num_needs_selected),
+                content: (
+                    <div className="card_selector_content">
+                        {this.build_up_selections(card_selector_info.materials, num_needs_selected)}
                     </div>
                 )
             }

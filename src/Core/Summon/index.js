@@ -4,6 +4,7 @@ import { emit_summon, emit_tribute } from '../../Client/Sender'
 import { move_cards_to_graveyard } from '../utils'
 import store from "../../Store/store";
 import { update_environment } from "../../Store/actions/environmentActions";
+import { get_unique_id_from_ennvironment } from "../../Components/PlayerGround/utils/utils";
 
 const summon = (info, type, environment) => {
     // TODO: make summon function more generic
@@ -23,7 +24,7 @@ const summon = (info, type, environment) => {
     environment[info.side][ENVIRONMENT.MONSTER_FIELD] = current_monsters
 
     // remove the card from the hand
-    environment[info.side][info.src_location].splice(info.index, 1);
+    environment[info.side][info.src_location].splice(environment[info.side][info.src_location].findIndex((cardEnv) => get_unique_id_from_ennvironment(cardEnv) == get_unique_id_from_ennvironment(info.card)), 1);
 
     if (info.side == SIDE.MINE) {
         emit_summon(info, type)

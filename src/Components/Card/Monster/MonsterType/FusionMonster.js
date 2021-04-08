@@ -1,8 +1,13 @@
-class FusionMonster {
+import Monster from './Monster'
+import { CARD_TYPE, ENVIRONMENT } from '../../utils/constant';
+class FusionMonster extends Monster{
     constructor(options){
-        for (let key of Object.keys.options) {
-            this[key] = options[key];
-        }
+        super(options);
+        this.card_type = CARD_TYPE.MONSTER.FUSION;
+        this.positon = ENVIRONMENT.DECK;
+        
+        this.fusion_materials = options.fusion_materials
+    
     }
 }
 

@@ -3,6 +3,7 @@ import { is_monster, is_spell, is_trap } from './utils/utils'
 import { left_panel_mouse_in } from '../../Store/actions/mouseActions';
 import { connect } from 'react-redux';
 import MonsterView from './Monster/MonsterView'
+import SpellView from './Spell/SpellView'
 /**
  * View container for a card
  */
@@ -24,10 +25,9 @@ class CardView extends React.Component {
             }
 
             if (is_monster(card_type)) {
-                const info = {
-                    cardEnv: card
-                }
                 return <MonsterView style={style} card={this.props.card}/>
+            } else if (is_spell(card_type)) {
+                return <SpellView style={style} card={this.props.card}/>
             } else {
                 return <p>Developing...</p>
             }

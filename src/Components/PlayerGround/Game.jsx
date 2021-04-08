@@ -89,7 +89,13 @@ class Game extends React.Component {
         }
 
         const loaded_card_env = raw_environment.decks.map(deck => {
-            return deck.map(card_key => {
+            return deck.deck.map(card_key => {
+                return load_card_to_environment(create_card(card_key));
+            })
+        })
+
+        const load_extra_card_env = raw_environment.decks.map(deck => {
+            return deck.extra_deck.map(card_key => {
                 return load_card_to_environment(create_card(card_key));
             })
         })
@@ -111,7 +117,7 @@ class Game extends React.Component {
                 [ENVIRONMENT.DECK]:
                     loaded_card_env[mine_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
-                    [],
+                    load_extra_card_env[mine_index].slice(0, 3),
                 hp: 8000,
             },
             [SIDE.OPPONENT]: {
@@ -126,7 +132,7 @@ class Game extends React.Component {
                 [ENVIRONMENT.DECK]:
                     loaded_card_env[opponent_index].slice(5),
                 [ENVIRONMENT.EXTRA_DECK]:
-                    [],
+                    load_extra_card_env[opponent_index].slice(3),
                 hp: 8000
             },
             monsters: {},

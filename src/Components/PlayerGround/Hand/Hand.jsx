@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ENVIRONMENT, CARD_TYPE, SIDE} from '../../Card/utils/constant';
-import { CARD_SELECT_TYPE } from '../utils/constant'
+import { CARD_SELECT_TYPE, PHASE } from '../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import CardView from '../../Card/CardView';
 import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
@@ -32,14 +32,14 @@ class Hand extends React.Component {
         this.setState({cardClicked: -1})
     }
 
-    normal_summon_final = (info, event) => {
+    summon_final = (info, type, event) => {
         const { environment } = this.props
-        Core.Summon.summon(info, NORMAL_SUMMON, environment)
+        Core.Summon.summon(info, type, environment)
         this.setState({cardClicked: -1})
         event.stopPropagation();
     }
 
-    normalSummonOnclick = (info) => event => {
+    summonOnclick = (info, type) => event => {
         const { environment } = this.props
         if (info.card.card.level > 4) {
             // tribute summon; Send a promise to call card selector
@@ -53,21 +53,35 @@ class Hand extends React.Component {
                 this.props.call_card_selector(info_card_selector)
             }).then((result) => {
                 Core.Summon.tribute(result.cardEnvs, SIDE.MINE, ENVIRONMENT.MONSTER_FIELD, environment)
-                setTimeout(()=>this.normal_summon_final(info, event), 500)
+                setTimeout(()=>this.summon_final(info, type, event), 500)
                 
             })
         } else {
-            this.normal_summon_final(info, event)
+            this.summon_final(info, type, event)
         }
-
     }
 
-    setSummonOnclick = (info) => event =>{
-        const { environment } = this.props
-        Core.Summon.summon(info, SET_SUMMON, environment)
-        this.setState({cardClicked: -1})
-        event.stopPropagation();
+    activateOnClick = (cardEnv) => event => {
 
+        const { environment, call_card_selector} = this.props
+        const tools = {
+            call_card_selector: call_card_selector
+        }
+
+        for (const effect of cardEnv.card.effects) {
+            if (effect.condition(environment)) {
+
+                // TODO: ACTIVATE THE CARD (put it on the field)
+                // TODO: WAIT for ack from the opponent
+
+                effect.operation(environment, tools)
+
+                // TODO: remove the card from field to the graveyard
+            }
+        }
+
+
+        event.stopPropagation()
     }
 
     onMouseEnterHandler = (info) => {
@@ -77,44 +91,64 @@ class Hand extends React.Component {
     }
 
     render() {
-        const {side, environment} = this.props;
+        const {side, environment, game_meta} = this.props;
         let hand_array = []
         if (environment) {
             hand_array = side == SIDE.MINE ? environment[side][ENVIRONMENT.HAND].map((cardEnv, cardIndex) => {
-                if (is_monster(cardEnv.card.card_type)) {
-                    const hasOptions = cardIndex == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
-                    const can_normal_summon = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
-                    const can_set = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
-                    const can_special_summon = cardEnv.card.can_special_summon(cardEnv.card, environment)? "show_summon" : "no_hand_option"
-                    const info = {
-                        side: side,
-                        card: cardEnv,
-                        index: cardIndex,
-                        src_location: ENVIRONMENT.HAND
+                const hasOptions = cardIndex == this.state.cardClicked ? "show_hand_option" : "no_hand_option"
+                const info_in = {
+                    cardEnv: cardEnv
+                }
+                const get_hand_card_view = () => {
+                    if (is_monster(cardEnv.card.card_type)) {
+                        const can_normal_summon = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
+                        const can_set = cardEnv.card.can_normal_summon(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
+                        const can_special_summon = cardEnv.card.can_special_summon(cardEnv.card, environment)? "show_summon" : "no_hand_option"
+                        const info = {
+                            side: side,
+                            card: cardEnv,
+                            src_location: ENVIRONMENT.HAND
+                        }
+                        return (
+                                <div>
+                                    <div className={hasOptions}>
+                                        <div className={can_normal_summon} onClick={this.summonOnclick(info, NORMAL_SUMMON)}>Summon</div>
+                                        <div className={can_special_summon}>Special</div>
+                                        <div className={can_set} onClick={this.summonOnclick(info, SET_SUMMON)}>Set</div>
+                                    </div>
+                                    <CardView card={cardEnv} />
+                                </div>
+                        )
+                    } else if (is_spell(cardEnv.card.card_type)) {
+                        //TODO: can activate the spell or not
+                        const can_activate = Core.Effect.can_activate(cardEnv.card, environment) ? "show_summon" : "no_hand_option"
+                        const can_set = game_meta.current_phase == PHASE.MAIN_PHASE_1 ? "show_summon" : "no_hand_option"
+                        return (
+                            <div>
+                                <div className={hasOptions}>
+                                    <div className={can_activate} onClick={this.activateOnClick(cardEnv)}>Activate</div>
+                                    <div className={can_set}>Set</div>
+                                </div>
+                                <CardView card={cardEnv} />
+                            </div>
+                        )
+                    } else {
+                        //traps
+                        return <p>fuck</p>
                     }
+    
+                }
 
-                    const info_in = {
-                        cardEnv: cardEnv
-                    }
-                    return (
-                        <div className = "hand_card" key = {"hand_card_" + get_unique_id_from_ennvironment(cardEnv)} 
+                return (
+                    <div className = "hand_card" key = {"hand_card_" + get_unique_id_from_ennvironment(cardEnv)} 
                         onClick={() => this.cardOnClickHandler(cardIndex)} 
                         onMouseLeave={() => this.cardMouseMoveHandler()} 
                         onMouseEnter={()=>this.onMouseEnterHandler(info_in)}>
-                            <div className={hasOptions}>
-                                <div className={can_normal_summon} onClick={this.normalSummonOnclick(info)}>Summon</div>
-                                <div className={can_special_summon}>Special</div>
-                                <div className={can_set} onClick={this.setSummonOnclick(info)}>Set</div>
-                            </div>
-                            <CardView card={cardEnv} />
-                        </div>
-                    )
-                } else if (is_spell(cardEnv.card.card_type)) {
-                    return <p>fuck</p>
-                } else {
-                    //traps
-                    return <p>fuck</p>
-                }
+                            {get_hand_card_view()}
+                    </div>
+                )
+
+
             }) : environment[side][ENVIRONMENT.HAND].map(() => {
                 return (
                     // back side for the opponent's

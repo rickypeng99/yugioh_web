@@ -1,11 +1,11 @@
-import Monster from './Monster'
+import Spell from './Spell'
 import { CARD_TYPE, ENVIRONMENT } from '../../utils/constant';
-class NormalMonster extends Monster {
+class NormalSpell extends Spell {
     constructor(options){
        super(options);
-       this.card_type = CARD_TYPE.MONSTER.NORMAL;
+       this.card_type = CARD_TYPE.SPELL.NORMAL;
        this.positon = ENVIRONMENT.DECK;
     }
 }
 
-export default NormalMonster;
+export default NormalSpell;

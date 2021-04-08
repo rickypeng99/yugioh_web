@@ -20,6 +20,12 @@ const model_can_normal_summon = (self, environment) => {
     if (environment.CAN_NOT_SUMMON) {
         return false;
     }
+    // monsters in extra deck can't be normal summoned
+    if (self.card_type == CARD_TYPE.MONSTER.FUSION) {
+        return false;
+    }
+
+
     // Normal and effect monsters with level less than 4 can be summoned, 5-6 can be summoned using 1 tribute, and 7 and higher needs 2
     if (self.level <= 4) {
         return true
@@ -112,6 +118,22 @@ export const monster_database = {
             description: 'A new Elemental HERO has arrived from Neo-Space! When he initiates a Contact Fusion with a Neo-Spacian his unknown powers are unleashed.',
             can_normal_summon: model_can_normal_summon,
             can_special_summon: model_can_special_summon
+        }
+        return initialize_monster_card[card_meta[options.key].card_type](options);
+    },
+    35809262: () => {
+        let options = {
+            key: 35809262,
+            atk: 2100,
+            def: 1200,
+            name: 'Elemental HERO Neos',
+            level: 6,
+            attribute: ATTRIBUTE.WIND,
+            race: 'Warrior',
+            description: '\"Elemental HERO Avian\" + \"Elemental HERO Burstinatrix\"\nMust be Fusion Summoned and cannot be Special Summoned by other ways. When this card destroys a monster by battle and sends it to the Graveyard: Inflict damage to your opponent equal to the ATK of the destroyed monster in the Graveyard.',
+            can_normal_summon: model_can_normal_summon,
+            can_special_summon: model_can_special_summon,
+            fusion_materials: [21844576, 58932615]
         }
         return initialize_monster_card[card_meta[options.key].card_type](options);
     }

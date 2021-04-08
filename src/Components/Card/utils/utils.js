@@ -1,7 +1,11 @@
 import { monster_database } from '../Monster/MonsterData';
 import MonsterEnv from '../Monster/MonsterEnv.js';
+
+import { spell_database } from '../Spell/SpellData'
+
 import { card_meta } from '../CardMeta';
 import { CARD_TYPE } from '../utils/constant'
+import SpellEnv from '../Spell/SpellEnv';
 
 let current_game_unique_count = 0
 
@@ -23,7 +27,7 @@ export const load_card_to_environment = function (card) {
     if (is_monster(card_type)) {
         return new MonsterEnv(card, current_game_unique_count);
     } else if (is_spell(card_type)) {
-        return;
+        return new SpellEnv(card, current_game_unique_count);
     } else {
         return;
     }
@@ -34,7 +38,7 @@ export const create_card = (card_key) => {
     if (is_monster(card_type)) {
         return monster_database[card_key]();
     } else if (is_spell(card_type)) {
-        return;
+        return spell_database[card_key]();
     } else {
         return;
     }

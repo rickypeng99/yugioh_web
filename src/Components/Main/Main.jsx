@@ -30,9 +30,12 @@ class Main extends React.Component {
         if (this.props.opponent_id && this.props.opponent_id != prevProps.opponent_id) {
             // matched with an opponent; Can right now exchange each other's environment
             // test deck, contains 15 eheros.
-            let heros = [20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723]
+            let heros = [24094653, 24094653, 24094653, 24094653, 24094653, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723]
             heros = shuffle(heros)
-            this.my_deck = heros
+            this.my_deck = {
+                deck: heros,
+                extra_deck: [35809262, 35809262, 35809262]
+            }
             exchange_deck_with_opponent(this.my_deck)
         }
 
@@ -48,12 +51,6 @@ class Main extends React.Component {
             }
             
             this.raw_meta = {
-                // [this.props.my_id]: {
-                //     hp: 8000
-                // },
-                // [this.props.opponent_id]: {
-                //     hp: 8000
-                // },
                 current_turn: this.props.player_starts,
                 current_phase: PHASE_START,
                 my_id: this.props.my_id,
