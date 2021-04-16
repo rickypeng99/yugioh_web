@@ -5,6 +5,8 @@ import { get_all_cards_on_field, get_cardEnv_by_unique_id } from "../utils"
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../Components/Card/utils/constant';
 import { update_environment } from "../../Store/actions/environmentActions";
 import { get_unique_id_from_ennvironment } from "../../Components/PlayerGround/utils/utils";
+import { move_cards_to_graveyard } from '../Misc'
+
 
 
 class Effect {
@@ -78,7 +80,14 @@ const operate = (data, environment) => {
     const local_card = get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
     // get tools
     local_card.card.effects[0].operation(environment, undefined)
-    emit_card_finish_operate()
+
+    const info = {
+        cardEnv: cardEnv,
+        src_location: src_location
+    }
+
+    emit_card_finish_operate(info)
+    move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.MINE, ENVIRONMENT.SPELL_FIELD, environment)
 }
 
 
@@ -103,13 +112,13 @@ const opponent_effect_ack = (data, environment) => {
     emit_effect_ack()
 }
 
-// const opponent_operate = (data, environment) => {
-//     console.log(environment)
-//     const activated_card = data.data.cardEnv
-//     const src_location = data.data.src_location
-//     const local_card = get_cardEnv_by_unique_id(environment, SIDE.OPPONENT, src_location, get_unique_id_from_ennvironment(activated_card))
-//     local_card.card.effects[0].operation(environment, undefined, data.targets)
-// }
+const opponent_operate = (data, environment) => {
+    const { cardEnv, src_location } = data.data
+    // TODO: change to a generic location
+    const local_card = get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
+    move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.OPPONENT, ENVIRONMENT.SPELL_FIELD, environment)
+
+}
 
 const get_cards_to_chain = (prev, environment) => {
     const all_cards = get_all_cards_on_field(environment)
@@ -133,6 +142,6 @@ export default {
     activate,
     operate,
     opponent_activate,
-    // opponent_operate,
+    opponent_operate,
     opponent_effect_ack
 }

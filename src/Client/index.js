@@ -89,11 +89,10 @@ socket.on("card_operate", (data) => {
     Core.Effect.operate(data, environment)
 })
 
-// socket.on("opponent_card_operate", (data) => {
-//     console.log("fuck")
-//     const environment = getCurrentEnvironment()
-//     Core.Effect.opponent_operate(data, environment)
-// })
+socket.on("opponent_card_operate", (data) => {
+    const environment = getCurrentEnvironment()
+    Core.Effect.opponent_operate(data, environment)
+})
 
 socket.on("opponent_effect_ack", (data) => {
     const environment = getCurrentEnvironment()

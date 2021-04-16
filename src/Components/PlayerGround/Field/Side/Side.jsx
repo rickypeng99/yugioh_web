@@ -12,6 +12,7 @@ import { direct_attack, end_battle, opponent_attack_ack, others_attack } from ".
 import { get_unique_id_from_ennvironment } from "../../utils/utils";
 import { returnAttackStatus, constructFieldFromEnv, get_styled_index_from_environment, calculate_aim_style} from '../utils';
 import { BATTLE_SELECT, ANIMATION_TYPE } from '../utils/constant'
+import { is_spell } from "../../../Card/utils/utils";
 
 /**
  * Field for each player
@@ -208,7 +209,7 @@ class Side extends React.Component {
                 }
 
                 if (cardEnv.card) {
-                    if (cardEnv.current_pos == CARD_POS.FACE) {
+                    if (cardEnv.current_pos == CARD_POS.FACE || is_spell(cardEnv.card.card_type)) {
                         return (
                             <CardView style={side == cardBattleStyle.side && index == cardBattleStyle.cardIndex? cardBattleStyle.style : undefined} card={cardEnv} key="side_card" />
                         )
