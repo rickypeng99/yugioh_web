@@ -10,7 +10,8 @@ import { CARD_SELECT_TYPE } from '../../../PlayerGround/utils/constant';
 import store from '../../../../Store/store';
 
 import {update_environment} from '../../../../Store/actions/environmentActions'
-import { NORMAL_SUMMON } from '../../../../Store/actions/actionTypes';
+import { NORMAL_SUMMON, TOOL_TYPE } from '../../../../Store/actions/actionTypes';
+import { show_tool } from '../../../../Store/actions/toolActions';
 
 export const spell_database = {
     // Polymerization
@@ -27,7 +28,11 @@ export const spell_database = {
         effect1.category = undefined;
         effect1.type = Core.Constant.effect_constant.EFFECT_TYPE_ACTIVATE;
         effect1.chain = 'EVENT_FREE_CHAIN'
-        effect1.condition = (environment) => {
+        effect1.condition = (environment, prev) => {
+            if (prev) {
+                // cant chain
+                return false
+            }
             // filter all fusion monsters out of the extra deck
             for (let fusion_monster_env of Core.Utils.get_cards_by_filter_and_location(environment, ENVIRONMENT.EXTRA_DECK, Core.Utils.is_fusion_monster)) {
                 // returns true if the fustion materials are existed 
@@ -35,51 +40,68 @@ export const spell_database = {
             }
         }
 
-        effect1.target = (environment, src, tools) => {
+        effect1.target = (environment, src) => {
 
             return new Promise((resolve, reject) => {
                 const info_card_selector = {
-                    resolve: resolve,
-                    reject: reject,
-                    type: CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_MATERIALS,
-                    materials: Core.Utils.get_fusion_material(environment, src),
-                    // TODO: CHANGE TO actual num
-                    num_to_select: 2
+                    tool_type: TOOL_TYPE.CARD_SELECTOR,
+                    info: {
+                        resolve: resolve,
+                        reject: reject,
+                        type: CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_MATERIALS,
+                        materials: Core.Utils.get_fusion_material(environment, src),
+                        // TODO: CHANGE TO actual num
+                        num_to_select: 2
+                    }
+                    
                 }
-                tools.call_card_selector(info_card_selector)
+                // tools.call_card_selector(info_card_selector)
+                store.dispatch(show_tool(info_card_selector))
             })
         }
 
-        effect1.operation = (environment, tools) => {
-            // call card selector
-            return new Promise((resolve, reject) => {
-                const info_card_selector = {
-                    resolve: resolve,
-                    reject: reject,
-                    type: CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_TARGET
+        effect1.operation = (environment, targets) => {
+
+            const core_operation = (targets, side, other) => {
+                for (const material of targets.cardEnvs) {
+                    // const { unique_id, location } = material
+                    environment = Core.Misc.move_cards_to_graveyard([material], side, ENVIRONMENT.HAND, environment)
                 }
-                tools.call_card_selector(info_card_selector)
-            }).then((result) => {
-                effect1.target(environment, result.cardEnvs[0], tools).then((fusion_materials) => {
-                    for (const material of fusion_materials.cardEnvs) {
-                        // const { unique_id, location } = material
-                        console.log(material)
-                        environment = Core.Utils.move_cards_to_graveyard([material], SIDE.MINE, ENVIRONMENT.HAND, environment)
+                //force update
+                store.dispatch(update_environment(environment))
+
+                const info = {
+                    card: Core.Utils.get_cardEnv_by_unique_id(environment, side, ENVIRONMENT.EXTRA_DECK, other.cardEnvs[0]),
+                    src_location: ENVIRONMENT.EXTRA_DECK,
+                    side: side
+                }
+
+                // TODO: change to fusion summon
+                Core.Summon.summon(info, NORMAL_SUMMON, environment)
+            }
+
+            if (!targets) {
+                // call card selector
+                return new Promise((resolve, reject) => {
+                    const info_card_selector = {
+                        tool_type: TOOL_TYPE.CARD_SELECTOR,
+                        info: {
+                            resolve: resolve,
+                            reject: reject,
+                            type: CARD_SELECT_TYPE.CARD_SELECT_SPECIAL_SUMMON_TARGET
+                        }
                     }
-                    //force update
-                    console.log(environment)
-                    store.dispatch(update_environment(environment))
-    
-                    const info = {
-                        card: Core.Utils.get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.EXTRA_DECK, result.cardEnvs[0]),
-                        src_location: ENVIRONMENT.EXTRA_DECK,
-                        side: SIDE.MINE
-                    }
-    
-                    // TODO: change to fusion summon
-                    Core.Summon.summon(info, NORMAL_SUMMON, environment)
+                    // tools.call_card_selector(info_card_selector)
+                    store.dispatch(show_tool(info_card_selector))
+                }).then((result) => {
+                    effect1.target(environment, result.cardEnvs[0]).then((targets) => {
+                        core_operation(targets, SIDE.MINE, result)
+                    })
                 })
-            })
+            } else {
+                core_operation(targets, SIDE.OPPONENT)
+            }
+            
         }
 
         spell.effects.push(effect1)

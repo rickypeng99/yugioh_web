@@ -11,8 +11,8 @@ import Core from '../../../Core'
 
 import './Hand.css'
 import { get_unique_id_from_ennvironment } from '../utils/utils';
-import { NORMAL_SUMMON, SET_SUMMON } from '../../../Store/actions/actionTypes';
-
+import { NORMAL_SUMMON, SET_SUMMON, TOOL_TYPE } from '../../../Store/actions/actionTypes';
+import { show_tool } from '../../../Store/actions/toolActions';
 
 class Hand extends React.Component {
     constructor(props) {
@@ -33,8 +33,10 @@ class Hand extends React.Component {
     }
 
     summon_final = (info, type, event) => {
-        const { environment } = this.props
+        const { environment, side } = this.props
+
         Core.Summon.summon(info, type, environment)
+
         this.setState({cardClicked: -1})
         event.stopPropagation();
     }
@@ -44,13 +46,17 @@ class Hand extends React.Component {
         if (info.card.card.level > 4) {
             // tribute summon; Send a promise to call card selector
             return new Promise((resolve, reject) => {
-                const info_card_selector = {
-                    resolve: resolve,
-                    reject: reject,
-                    cardEnv: info.card,
-                    type: CARD_SELECT_TYPE.CARD_SELECT_TRIBUTE_SUMMON
+                const info_show_tool = {
+                    tool_type: TOOL_TYPE.CARD_SELECTOR,
+                    info: {
+                        resolve: resolve,
+                        reject: reject,
+                        cardEnv: info.card,
+                        type: CARD_SELECT_TYPE.CARD_SELECT_TRIBUTE_SUMMON
+                    }
                 }
-                this.props.call_card_selector(info_card_selector)
+                // this.props.call_card_selector(info_card_selector)
+                this.props.dispatch_show_tool(info_show_tool)
             }).then((result) => {
                 Core.Summon.tribute(result.cardEnvs, SIDE.MINE, ENVIRONMENT.MONSTER_FIELD, environment)
                 setTimeout(()=>this.summon_final(info, type, event), 500)
@@ -71,16 +77,13 @@ class Hand extends React.Component {
         for (const effect of cardEnv.card.effects) {
             if (effect.condition(environment)) {
 
-                // TODO: ACTIVATE THE CARD (put it on the field)
-                // TODO: WAIT for ack from the opponent
-
-                effect.operation(environment, tools)
+                Core.Effect.activate(cardEnv, ENVIRONMENT.HAND, SIDE.MINE, environment)
 
                 // TODO: remove the card from field to the graveyard
             }
         }
 
-
+        this.setState({cardClicked: -1})
         event.stopPropagation()
     }
 
@@ -181,6 +184,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
     dispatch_mouse_in_view: (info) => dispatch(left_panel_mouse_in(info)),
+    dispatch_show_tool: (info) => dispatch(show_tool(info))
 });
 
 export default connect(

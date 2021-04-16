@@ -20,8 +20,14 @@ export const emit_summon = (info, type) => {
     })
 }
 
-export const emit_tribute = (info) => {
-    socket.emit("tribute", {
+// export const emit_tribute = (info) => {
+//     socket.emit("tribute", {
+//         ...info,
+//     })
+// }
+
+export const emit_move_cards_to_graveyard = (info) => {
+    socket.emit("move_card_to_graveyard", {
         ...info,
     })
 }
@@ -38,6 +44,25 @@ export const emit_attack_ack = () => {
 
 export const emit_change_phase = (info) => {
     socket.emit('change_phase', {
+        ...info
+    })
+}
+
+// effect related
+export const emit_activate_effect = (info) => {
+    socket.emit('activate_effect', {
+        ...info
+    })
+}
+
+export const emit_effect_ack = (info) => {
+    socket.emit('effect_ack', {
+        ...info
+    })
+}
+
+export const emit_card_finish_operate = (info) => {
+    socket.emit('card_finish_operate', {
         ...info
     })
 }

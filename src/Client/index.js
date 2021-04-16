@@ -28,12 +28,6 @@ socket.on('message', (data) => {
 
 socket.on("matched", (data) => {
     console.log(`Matched with ${data.opponent}`)
-    // send the deck info of this player to the server
-    // for testing
-    // const heros = [20721928, 21844576, 58932615, 84327329, 89943723]
-    // socket.to(data.opponent).emit("exchanging_deck", {
-    //     deck: heros
-    // })
     socket.opponent = data.opponent
     const info = {
         my_id: data.my_id,
@@ -56,12 +50,19 @@ socket.on("opponent_summon", (data) => {
     Core.Summon.summon(data.data, data.data.type, environment)
 })
 
-socket.on("opponent_tribute", (data) => {
+// socket.on("opponent_tribute", (data) => {
 
-    const { cardEnvs, side, src } = data.data
+//     const { cardEnvs, side, src } = data.data
+//     const environment = getCurrentEnvironment()
+//     Core.Summon.tribute(cardEnvs, side, src, environment)
+// })
+
+socket.on("opponent_move_card_to_graveyard", (data) => {
+    const { cards, side, src } = data.data
     const environment = getCurrentEnvironment()
-    Core.Summon.tribute(cardEnvs, side, src, environment)
+    Core.Misc.move_cards_to_graveyard(cards, side, src, environment)
 })
+
 
 socket.on("opponent_change_phase", (data) => {
     store.dispatch(change_phase(data.data))
@@ -76,6 +77,27 @@ socket.on("opponent_attack_ack", (data) => {
         environment: store.getState().environmentReducer.environment
     }
     store.dispatch(opponent_attack_ack(info))
+})
+
+socket.on("opponent_card_activate", (data) => {
+    const environment = getCurrentEnvironment()
+    Core.Effect.opponent_activate(data, environment)
+})
+
+socket.on("card_operate", (data) => {
+    const environment = getCurrentEnvironment()
+    Core.Effect.operate(data, environment)
+})
+
+// socket.on("opponent_card_operate", (data) => {
+//     console.log("fuck")
+//     const environment = getCurrentEnvironment()
+//     Core.Effect.opponent_operate(data, environment)
+// })
+
+socket.on("opponent_effect_ack", (data) => {
+    const environment = getCurrentEnvironment()
+    Core.Effect.opponent_effect_ack(data, environment)
 })
 
 export default socket;

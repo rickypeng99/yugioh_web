@@ -22,6 +22,7 @@ import HealthBar from './HealthBar/HealthBar'
 import CardSelector from './CardSelector/CardSelector'
 import PhaseAnimator from './PhaseSelector/PhaseAnimator'
 import './Game.css';
+import { TOOL_TYPE } from '../../Store/actions/actionTypes';
 /**
  * Highest component for one yugioh game
  */
@@ -188,22 +189,23 @@ class Game extends React.Component {
         }
     }
 
-    close_card_selector = () => {
-        this.setState({show_card_selector: false})
-    }
+    // close_card_selector = () => {
+    //     this.setState({show_card_selector: false})
+    // }
 
-    call_card_selector = (info) => {
-        this.setState({show_card_selector: true, card_selector_info: info})
-    }
+    // call_card_selector = (info) => {
+    //     this.setState({show_card_selector: true, card_selector_info: info})
+    // }
 
     render() {
 
-        const { transformRotateX, scale, x_pos, y_pos, show_card_selector, card_selector_info } = this.state;
+        const { transformRotateX, scale, x_pos, y_pos} = this.state;
+        const { tools } = this.props;
         return (
             <div className="game_container">
                 <div className="field_settings_container">
                     <PhaseAnimator />
-                    <CardSelector key={"selector-" + Math.random()} show_card_selector={show_card_selector} close_card_selector={this.close_card_selector} card_selector_info={card_selector_info}/>
+                    <CardSelector key={"selector-" + Math.random()} show_card_selector={tools[TOOL_TYPE.CARD_SELECTOR].status} card_selector_info={tools[TOOL_TYPE.CARD_SELECTOR].info}/>
                     <HealthBar side='MINE' />
                     <HealthBar side='OPPONENT' />
                     <PhaseSelector />
@@ -227,7 +229,8 @@ const mapStateToProps = state => {
     const { environment } = state.environmentReducer;
     const { game_meta } = state.gameMetaReducer;
     const { my_id } = state.serverReducer;
-    return { environment, game_meta, my_id};
+    const { tools } = state.toolReducer;
+    return { environment, game_meta, my_id, tools};
 };
 
 const mapDispatchToProps = dispatch => ({

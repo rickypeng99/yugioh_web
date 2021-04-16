@@ -18,27 +18,6 @@ export const initialize_environment = environment => ({
     }
 });
 
-export const normal_summon = info => ({
-    type: NORMAL_SUMMON,
-    payload: {
-        info
-    }
-})
-
-export const set_summon = info => ({
-    type: SET_SUMMON,
-    payload: {
-        info
-    }
-})
-
-export const tribute = info => ({
-    type: TRIBUTE,
-    payload: {
-        info
-    }
-})
-
 export const perform_attack = info => ({
     type: PERFORM_ATTACK,
     payload: {

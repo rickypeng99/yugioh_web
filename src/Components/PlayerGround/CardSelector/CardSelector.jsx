@@ -4,10 +4,11 @@ import CardView from '../../Card/CardView'
 import { CARD_SELECT_TYPE } from '../utils/constant'
 import { SIDE, ENVIRONMENT } from '../../Card/utils/constant'
 import { connect } from 'react-redux';
-import { normal_summon, set_summon, tribute } from '../../../Store/actions/environmentActions';
 
 import './CardSelector.css';
 import { get_unique_id_from_ennvironment } from '../utils/utils'
+import { close_tool } from '../../../Store/actions/toolActions'
+import { TOOL_TYPE } from '../../../Store/actions/actionTypes'
 
 
 class CardSelector extends React.Component {
@@ -108,10 +109,13 @@ class CardSelector extends React.Component {
     }
 
     render() {
-        const {show_card_selector, close_card_selector, card_selector_info, environment} = this.props
+        const {show_card_selector, card_selector_info, environment} = this.props
         let card_selector_content = {}
         if (show_card_selector) {
             card_selector_content = this.get_card_selector_content(card_selector_info, environment)
+        }
+        const close_info = {
+            tool_type: TOOL_TYPE.CARD_SELECTOR
         }
         return (
             <Modal
@@ -122,7 +126,7 @@ class CardSelector extends React.Component {
                 {card_selector_content.content}
             </Modal.Content>
             <Modal.Actions>
-            <Button negative onClick={() => close_card_selector()}>
+            <Button negative onClick={() => this.props.dispatch_close_tool(close_info)}>
                 Cancel
             </Button>
             <Button positive onClick={() => {
@@ -131,7 +135,8 @@ class CardSelector extends React.Component {
                     side: SIDE.MINE
                 }
                 card_selector_info.resolve(info)
-                close_card_selector()
+                // close_card_selector()
+                this.props.dispatch_close_tool(close_info)
             }} disabled={!this.state.executable}>
                 Confirm
             </Button>
@@ -149,7 +154,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     // initialize: (environment) => dispatch(initialize_environment(environment)),
-    dispatch_tribute: (info) => dispatch(tribute(info))
+    dispatch_close_tool: (info) => dispatch(close_tool(info))
 });
 
 export default connect(

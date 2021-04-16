@@ -1,5 +1,4 @@
-import { UPDATE_ENVIRONMENT, INITIALIZE_ENVIRONMENT, NORMAL_SUMMON, SET_SUMMON, TRIBUTE, DRAW_CARD, PERFORM_ATTACK } from "../actions/actionTypes";
-import { SIDE, ENVIRONMENT } from '../../Components/Card/utils/constant';
+import { UPDATE_ENVIRONMENT, INITIALIZE_ENVIRONMENT, DRAW_CARD, PERFORM_ATTACK } from "../actions/actionTypes";
 
 import Core from '../../Core'
 
@@ -17,32 +16,13 @@ export default function(state = initialState, action) {
                 ...environment
             }
         };
-    }
-
-    else if (action.type == INITIALIZE_ENVIRONMENT) {
+    } else if (action.type == INITIALIZE_ENVIRONMENT) {
         const { environment } = action.payload;
         return {
             environment: {
                 ...environment
             }
         };
-    } else if (action.type == NORMAL_SUMMON || action.type == SET_SUMMON) {
-        const { info } = action.payload;
-        const new_environment = Core.Summon.summon(info, action.type, state.environment)
-        return {
-            environment: {
-                ...new_environment
-            }
-        }
-    }  else if (action.type == TRIBUTE) {
-        const { info } = action.payload;
-        const tributed_monsters = info.cardEnvs
-        const new_environment = Core.Summon.tribute(tributed_monsters, info.side, ENVIRONMENT.MONSTER_FIELD, state.environment)
-        return {
-            environment: {
-                ...new_environment
-            }
-        }
     } else if (action.type == DRAW_CARD) {
         const { info } = action.payload;
         const new_environment = Core.Misc.draw_card_from_deck(state.environment, info);

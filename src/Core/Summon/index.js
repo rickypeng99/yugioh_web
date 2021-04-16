@@ -1,7 +1,7 @@
 import { SET_SUMMON, UPDATE_ENVIRONMENT } from "../../Store/actions/actionTypes";
 import { ENVIRONMENT, CARD_TYPE, CARD_POS, SIDE } from '../../Components/Card/utils/constant';
 import { emit_summon, emit_tribute } from '../../Client/Sender'
-import { move_cards_to_graveyard } from '../utils'
+import { move_cards_to_graveyard } from '../Misc'
 import store from "../../Store/store";
 import { update_environment } from "../../Store/actions/environmentActions";
 import { get_unique_id_from_ennvironment } from "../../Components/PlayerGround/utils/utils";
@@ -36,14 +36,14 @@ const summon = (info, type, environment) => {
 }
 const tribute = (cards, side, src, environment) => {
     const res = move_cards_to_graveyard(cards, side, src, environment)
-    if (side == SIDE.MINE) {
-        const info = {
-            cardEnvs: cards,
-            side: SIDE.OPPONENT,
-            src: src,
-        }
-        emit_tribute(info)
-    }
+    // if (side == SIDE.MINE) {
+    //     const info = {
+    //         cardEnvs: cards,
+    //         side: SIDE.OPPONENT,
+    //         src: src,
+    //     }
+    //     emit_tribute(info)
+    // }
 
     store.dispatch(update_environment(res))
     return res

@@ -29,3 +29,10 @@ export const OPPONENT_ATTACK_START = "OPPONENT_ATTACK_START"
 export const OPPONENT_ATTACK_ACK = "OPPONENT_ATTACK_ACK"
 
 export const END_BATTLE = "END_BATTLE"
+
+//--- tool actions
+export const SHOW_TOOL = "SHOW_TOOL";
+export const CLOSE_TOOL = "CLOSE_TOOL";
+export const TOOL_TYPE = {
+    CARD_SELECTOR: 'TOOL_TYPE_CARD_SELECTOR'
+}

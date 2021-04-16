@@ -31,6 +31,10 @@ class Main extends React.Component {
             // matched with an opponent; Can right now exchange each other's environment
             // test deck, contains 15 eheros.
             let heros = [24094653, 24094653, 24094653, 24094653, 24094653, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723, 20721928, 21844576, 58932615, 84327329, 89943723]
+            
+            // for fusion tests
+            // let heros = [24094653, 24094653, 24094653, 58932615, 58932615, 58932615, 21844576, 21844576, 21844576]
+            
             heros = shuffle(heros)
             this.my_deck = {
                 deck: heros,
