@@ -115,7 +115,7 @@ const opponent_effect_ack = (data, environment) => {
 const opponent_operate = (data, environment) => {
     const { cardEnv, src_location } = data.data
     // TODO: change to a generic location
-    const local_card = get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
+    const local_card = get_cardEnv_by_unique_id(environment, SIDE.OPPONENT, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
     move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.OPPONENT, ENVIRONMENT.SPELL_FIELD, environment)
 
 }

@@ -126,7 +126,7 @@ export const monster_database = {
             key: 35809262,
             atk: 2100,
             def: 1200,
-            name: 'Elemental HERO Neos',
+            name: 'Elemental HERO Flame Wingman',
             level: 6,
             attribute: ATTRIBUTE.WIND,
             race: 'Warrior',
