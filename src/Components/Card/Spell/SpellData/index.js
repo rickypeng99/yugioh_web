@@ -12,6 +12,7 @@ import store from '../../../../Store/store';
 import {update_environment} from '../../../../Store/actions/environmentActions'
 import { NORMAL_SUMMON, TOOL_TYPE } from '../../../../Store/actions/actionTypes';
 import { show_tool } from '../../../../Store/actions/toolActions';
+import { SubwayRounded } from '@material-ui/icons';
 
 export const spell_database = {
     // Polymerization
@@ -61,26 +62,7 @@ export const spell_database = {
         }
 
         effect1.operation = (environment, targets) => {
-
-            const core_operation = (targets, side, other) => {
-                for (const material of targets.cardEnvs) {
-                    // const { unique_id, location } = material
-                    environment = Core.Misc.move_cards_to_graveyard([material], side, ENVIRONMENT.HAND, environment)
-                }
-                //force update
-                store.dispatch(update_environment(environment))
-
-                const info = {
-                    card: Core.Utils.get_cardEnv_by_unique_id(environment, side, ENVIRONMENT.EXTRA_DECK, other.cardEnvs[0]),
-                    src_location: ENVIRONMENT.EXTRA_DECK,
-                    side: side
-                }
-
-                // TODO: change to fusion summon
-                Core.Summon.summon(info, NORMAL_SUMMON, environment)
-            }
-
-            if (!targets) {
+            return new Promise((operation_resolve, operation_reject) => {
                 // call card selector
                 return new Promise((resolve, reject) => {
                     const info_card_selector = {
@@ -95,13 +77,25 @@ export const spell_database = {
                     store.dispatch(show_tool(info_card_selector))
                 }).then((result) => {
                     effect1.target(environment, result.cardEnvs[0]).then((targets) => {
-                        core_operation(targets, SIDE.MINE, result)
+                        for (const material of targets.cardEnvs) {
+                            // const { unique_id, location } = material
+                            environment = Core.Misc.move_cards_to_graveyard([material], SIDE.MINE, ENVIRONMENT.HAND, environment)
+                        }
+                        //force update
+                        store.dispatch(update_environment(environment))
+        
+                        const info = {
+                            card: Core.Utils.get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.EXTRA_DECK, result.cardEnvs[0]),
+                            src_location: ENVIRONMENT.EXTRA_DECK,
+                            side: SIDE.MINE
+                        }
+        
+                        // TODO: change to fusion summon
+                        Core.Summon.summon(info, NORMAL_SUMMON, environment)
+                        operation_resolve();
                     })
                 })
-            } else {
-                core_operation(targets, SIDE.OPPONENT)
-            }
-            
+            })
         }
 
         spell.effects.push(effect1)

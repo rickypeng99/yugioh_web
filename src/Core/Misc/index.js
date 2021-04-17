@@ -2,6 +2,8 @@
 import { emit_move_cards_to_graveyard } from '../../Client/Sender';
 import { ENVIRONMENT, CARD_TYPE, SIDE } from '../../Components/Card/utils/constant';
 import { get_unique_id_from_ennvironment } from '../../Components/PlayerGround/utils/utils'
+import { update_environment } from '../../Store/actions/environmentActions';
+import store from '../../Store/store';
 
 export const draw_card_from_deck = (environment, info) => {
     for (let i = 0; i < info.amount; i++) {
@@ -33,6 +35,7 @@ export const move_cards_to_graveyard = (cards, side, src, environment) => {
         src: src,
     }
 
+    store.dispatch(update_environment(environment))
     emit_move_cards_to_graveyard(info)
 
     return environment

@@ -51,7 +51,6 @@ const activate = (cardEnv, src_location, side, environment) => {
 
     if (src_location == ENVIRONMENT.HAND) {
         let current_field = environment[side][ENVIRONMENT.SPELL_FIELD];
-        console.log(current_field)
         const summon_priorities = [2, 3, 1, 4, 0]
         for (let i = 0; i < summon_priorities.length; i++) {
             if (current_field[summon_priorities[i]] == CARD_TYPE.PLACEHOLDER) {
@@ -74,12 +73,12 @@ const activate = (cardEnv, src_location, side, environment) => {
     return environment;
 }
 
-const operate = (data, environment) => {
+const operate = async (data, environment) => {
     const { cardEnv, src_location } = data.data
     // TODO: change to a generic location
     const local_card = get_cardEnv_by_unique_id(environment, SIDE.MINE, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
     // get tools
-    local_card.card.effects[0].operation(environment, undefined)
+    await local_card.card.effects[0].operation(environment)
 
     const info = {
         cardEnv: cardEnv,
@@ -87,7 +86,7 @@ const operate = (data, environment) => {
     }
 
     emit_card_finish_operate(info)
-    move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.MINE, ENVIRONMENT.SPELL_FIELD, environment)
+    move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.MINE, ENVIRONMENT.SPELL_FIELD, environment)    
 }
 
 
@@ -112,12 +111,11 @@ const opponent_effect_ack = (data, environment) => {
     emit_effect_ack()
 }
 
-const opponent_operate = (data, environment) => {
+const opponent_operated = (data, environment) => {
     const { cardEnv, src_location } = data.data
     // TODO: change to a generic location
     const local_card = get_cardEnv_by_unique_id(environment, SIDE.OPPONENT, ENVIRONMENT.SPELL_FIELD, get_unique_id_from_ennvironment(cardEnv))
-    move_cards_to_graveyard([get_unique_id_from_ennvironment(local_card)], SIDE.OPPONENT, ENVIRONMENT.SPELL_FIELD, environment)
-
+    move_activated_card_to_graveyard(local_card, ENVIRONMENT.SPELL_FIELD, SIDE.OPPONENT, environment)
 }
 
 const get_cards_to_chain = (prev, environment) => {
@@ -135,6 +133,12 @@ const get_cards_to_chain = (prev, environment) => {
     return card_able_to_chain
 }
 
+const move_activated_card_to_graveyard = (cardEnv, src_location, side, environment) => {
+    setTimeout(() => {
+        move_cards_to_graveyard([get_unique_id_from_ennvironment(cardEnv)], side, src_location, environment)
+    }, 3000)
+}
+
 
 export default {
     createEffect,
@@ -142,6 +146,6 @@ export default {
     activate,
     operate,
     opponent_activate,
-    opponent_operate,
+    opponent_operated,
     opponent_effect_ack
 }
