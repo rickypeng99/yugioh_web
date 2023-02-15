@@ -10,6 +10,20 @@ A realization of the popular trading card game - yugioh on web using React + Nod
 
 That's right, no ygocore and its Lua card scripts but a completely new Yugioh simulator written in Javascript. You can also access its desktop version just by wrapping the source code with some simple tweaks using Electron (just git checkout the `electron` branch lol)!
 
+## Installation & How to run
+```
+git clone https://github.com/rickypeng99/yugioh_web_server.git
+cd /yugioh_web_server
+node index.js
+
+git clone https://github.com/rickypeng99/yugioh_web.git
+```
+Open two terminal windows up and run the following in each of them
+```
+npm start
+```
+GLHF!
+
 ## Works done (As of April 17th 2021):
  - Multiplayer: You can play this game against other players online! (Not actually cuz I haven't deployed my node.js code yet but you can checkout [ygo_web_server](https://github.com/rickypeng99/yugioh_web_server))
  - Playmat: You can flip the playmat around x-axis, move it to different directions and change its size.
