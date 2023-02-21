@@ -21,14 +21,14 @@ That's right, no ygocore and its Lua card scripts but a completely new Yugioh si
 ## Running Server
 1. Open two terminal windows up and run the following in each of them
 2. Change directories to `./yugioh_web_server`
-3. `node index.js`
+3. Command: `node index.js`
 
 ## Running the web app
 1. Open two terminal windows up and run the following in each of them
 2. Change directories to `./yugioh_web`
 3. Command: `npm start`
 
-## Updates (As of February 21th 2023):
+## Updates (As of February 21st 2023):
 - Updated dependencies for the file to work correctly.
 
 ## Tech Stack
