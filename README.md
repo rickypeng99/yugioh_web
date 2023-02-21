@@ -19,7 +19,7 @@ That's right, no ygocore and its Lua card scripts but a completely new Yugioh si
 5. Command: `npm install`
 
 ## Running Server
-1. Open two terminal windows up and run the following in each of them
+1. Open terminal window
 2. Change directories to `./yugioh_web_server`
 3. Command: `node index.js`
 
