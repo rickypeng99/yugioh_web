@@ -1,7 +1,7 @@
 import React from 'react';
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
-import Divider from '@material-ui/core/Divider';
-import Chip from '@material-ui/core/Chip';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 import './LeftPanel.css';
 
 const card_type_to_show = {

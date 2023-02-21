@@ -2,23 +2,6 @@
   "name": "yugioh",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
-    "react-scripts": "3.4.1",
-    "react-sky": "^1.1.0",
-    "react-transition-group": "1.x",
-    "redux": "^4.0.5",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3",
-    "socket.io-client": "^3.1.2"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -39,5 +22,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-scripts": "^5.0.1",
+    "react-sky": "^1.1.0",
+    "react-transition-group": "^4.4.5",
+    "redux": "^4.2.1",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.4",
+    "socket.io-client": "^4.6.1"
   }
 }
