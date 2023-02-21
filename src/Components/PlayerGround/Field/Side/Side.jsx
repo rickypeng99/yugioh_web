@@ -4,7 +4,7 @@ import CardView from "../../../Card/CardView";
 import { ENVIRONMENT, CARD_TYPE, SIDE, CARD_POS} from '../../../Card/utils/constant';
 import { CARD_SELECT_TYPE, MONSTER_ATTACK_TYPE, PHASE, DST_DIRECT_ATTACK } from '../../utils/constant'
 import { left_panel_mouse_in } from '../../../../Store/actions/mouseActions';
-import { CSSTransitionGroup } from 'react-transition-group' // ES6
+import { TransitionGroup } from 'react-transition-group' // ES6
 import './Side.css'
 import { calculate_battle_style } from '../utils'
 import { perform_attack } from '../../../../Store/actions/environmentActions'
@@ -249,12 +249,12 @@ class Side extends React.Component {
                         </div>
                         
                         <div className={"card_mask" + (cardEnv.current_pos != CARD_POS.SET ? "" : " side_card_set")}/>
-                        <CSSTransitionGroup
+                        <TransitionGroup
                         transitionName="side"
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}>
                             {cardView()}
-                        </CSSTransitionGroup>
+                        </TransitionGroup>
 
                     </div>
                 </div>

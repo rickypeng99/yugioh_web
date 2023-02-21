@@ -5,7 +5,7 @@ import { CARD_SELECT_TYPE, PHASE } from '../utils/constant'
 import { is_monster, is_spell, is_trap } from '../../Card/utils/utils'
 import CardView from '../../Card/CardView';
 import { left_panel_mouse_in } from '../../../Store/actions/mouseActions';
-import { CSSTransitionGroup } from 'react-transition-group' // ES6
+import { TransitionGroup } from 'react-transition-group' // ES6
 
 import Core from '../../../Core'
 
@@ -161,13 +161,13 @@ class Hand extends React.Component {
         }
         return(
                 
-            <CSSTransitionGroup
+            <TransitionGroup
                 transitionName="example"
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={300}
                 className={side == SIDE.MINE ? "hand_container_mine" : "hand_container_opponent"}>
                 {hand_array}
-            </CSSTransitionGroup>
+            </TransitionGroup>
         
         )
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import './Settings.css';
-import Slider from '@material-ui/core/Slider';
+import Slider from '@mui/material/Slider';
 
 class Settings extends React.Component {
     constructor (props) {

@@ -10,19 +10,43 @@ A realization of the popular trading card game - yugioh on web using React + Nod
 
 That's right, no ygocore and its Lua card scripts but a completely new Yugioh simulator written in Javascript. You can also access its desktop version just by wrapping the source code with some simple tweaks using Electron (just git checkout the `electron` branch lol)!
 
-## Installation & How to run
-```
-git clone https://github.com/rickypeng99/yugioh_web_server.git
-cd /yugioh_web_server
-node index.js
+## Installation for Development
+1. `git clone https://github.com/rickypeng99/yugioh_web_server.git`
+2. Change directories to `./yugioh_web_server`
+3. Command: `npm install`
+4. `git clone https://github.com/BBeretta/yugioh_web.git`
+4. Change directories to `./yugioh_web`
+5. Command: `npm install`
 
-git clone https://github.com/rickypeng99/yugioh_web.git
-```
-Open two terminal windows up and run the following in each of them
-```
-npm start
-```
-GLHF!
+## Running Server
+1. Open two terminal windows up and run the following in each of them
+2. Change directories to `./yugioh_web_server`
+3. `node index.js`
+
+## Running the web app
+1. Open two terminal windows up and run the following in each of them
+2. Change directories to `./yugioh_web`
+3. Command: `npm start`
+
+## Updates (As of February 21th 2023):
+- Updated dependencies for the file to work correctly.
+
+## Tech Stack
+| Software Tool | Target Version |
+| --- | --- |
+| Node.js | 18.12.1 |
+| npm | 9.1.2 |
+| mui/material | 5.11.10 |
+| react | 18.2.0 |
+| react-dom | 18.2.0 |
+| react-redux | 8.0.5 |
+| react-scripts | 5.0.1 |
+| react-sky | 1.1.0 | --force (not compatible for React^18)
+| react-transition-group | 4.4.5 |
+| redux | 4.2.1 |
+| semantic-ui-css | 2.5.0 |
+| semantic-ui-react | 2.1.4 |
+| socket.io-client | 4.6.1 |
 
 ## Works done (As of April 17th 2021):
  - Multiplayer: You can play this game against other players online! (Not actually cuz I haven't deployed my node.js code yet but you can checkout [ygo_web_server](https://github.com/rickypeng99/yugioh_web_server))
